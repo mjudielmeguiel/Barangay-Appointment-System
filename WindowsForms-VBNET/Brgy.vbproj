@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9B0B0FF2-67C7-45FA-8F2C-7B1F44B82305}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>LoginSystem.My.MyApplication</StartupObject>
+    <RootNamespace>LoginSystem</RootNamespace>
+    <AssemblyName>LoginSystem</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>LoginSystem.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>LoginSystem.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>packages\BouncyCastle.Cryptography.2.6.2\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.32.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>packages\Google.Protobuf.3.32.0\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>packages\K4os.Compression.LZ4.1.3.8\lib\net462\K4os.Compression.LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4.Streams, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>packages\K4os.Compression.LZ4.Streams.1.3.8\lib\net462\K4os.Compression.LZ4.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
+      <HintPath>packages\K4os.Hash.xxHash.1.0.8\lib\net462\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=8.0.0.2, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.2\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=8.0.0.2, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Logging.Abstractions.8.0.2\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=9.7.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>packages\MySql.Data.9.7.0\lib\net48\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Configuration.ConfigurationManager.8.0.0\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Pipelines, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.Pipelines.5.0.2\lib\net461\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="Tesseract, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Tesseract.5.2.0\lib\net48\Tesseract.dll</HintPath>
+    </Reference>
+    <Reference Include="ZstdSharp, Version=0.8.6.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
+      <HintPath>packages\ZstdSharp.Port.0.8.6\lib\net462\ZstdSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="frmActivityLogs.Designer.vb">
+      <DependentUpon>frmActivityLogs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmActivityLogs.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAppointmentHistory.Designer.vb">
+      <DependentUpon>frmAppointmentHistory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAppointmentHistory.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChange_Password.Designer.vb">
+      <DependentUpon>frmChange_Password.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmChange_Password.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConfirmPasswordDelete.Designer.vb">
+      <DependentUpon>frmConfirmPasswordDelete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmConfirmPasswordDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCreateEvent.Designer.vb">
+      <DependentUpon>frmCreateEvent.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCreateEvent.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReportGeneration.Designer.vb">
+      <DependentUpon>frmReportGeneration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmReportGeneration.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.vb">
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSpecificAppointments.Designer.vb">
+      <DependentUpon>frmSpecificAppointments.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSpecificAppointments.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSystemSettings.Designer.vb">
+      <DependentUpon>frmSystemSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSystemSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RESIDENCE RECORD\Barangay_Residences.Designer.vb">
+      <DependentUpon>Barangay_Residences.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RESIDENCE RECORD\Barangay_Residences.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADMIN\frmAdmin_Dashboard.Designer.vb">
+      <DependentUpon>frmAdmin_Dashboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\frmAdmin_Dashboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADMIN\User Manager\frmUserInformation.Designer.vb">
+      <DependentUpon>frmUserInformation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\User Manager\frmUserInformation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DBconnection.vb" />
+    <Compile Include="ADMIN\frmDocumentServices.Designer.vb">
+      <DependentUpon>frmDocumentServices.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\frmDocumentServices.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RESIDENCE RECORD\frmResidence_Records.Designer.vb">
+      <DependentUpon>frmResidence_Records.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RESIDENCE RECORD\frmResidence_Records.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RESIDENCE RECORD\ResidenceList.Designer.vb">
+      <DependentUpon>ResidenceList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RESIDENCE RECORD\ResidenceList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmAppointmentDetails.Designer.vb">
+      <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmAppointmentDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmBarangayCalendar.Designer.vb">
+      <DependentUpon>frmBarangayCalendar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmBarangayCalendar.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmCouponView.Designer.vb">
+      <DependentUpon>frmCouponView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmCouponView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmCreateAppointment.Designer.vb">
+      <DependentUpon>frmCreateAppointment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmCreateAppointment.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmDayAppointmentsList.Designer.vb">
+      <DependentUpon>frmDayAppointmentsList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmDayAppointmentsList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmPayments.Designer.vb">
+      <DependentUpon>frmPayments.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmPayments.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\frmUser_Dashboard.Designer.vb">
+      <DependentUpon>frmUser_Dashboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmUser_Dashboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADMIN\User Manager\frmManage_Users.Designer.vb">
+      <DependentUpon>frmManage_Users.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\User Manager\frmManage_Users.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmcreateadmin.Designer.vb">
+      <DependentUpon>frmcreateadmin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmcreateadmin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADMIN\User Manager\frmcreateuser.Designer.vb">
+      <DependentUpon>frmcreateuser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ADMIN\User Manager\frmcreateuser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmlogin.Designer.vb">
+      <DependentUpon>frmlogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmlogin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.vb">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmActivityLogs.resx">
+      <DependentUpon>frmActivityLogs.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAppointmentHistory.resx">
+      <DependentUpon>frmAppointmentHistory.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChange_Password.resx">
+      <DependentUpon>frmChange_Password.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmConfirmPasswordDelete.resx">
+      <DependentUpon>frmConfirmPasswordDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCreateEvent.resx">
+      <DependentUpon>frmCreateEvent.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReportGeneration.resx">
+      <DependentUpon>frmReportGeneration.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSpecificAppointments.resx">
+      <DependentUpon>frmSpecificAppointments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSystemSettings.resx">
+      <DependentUpon>frmSystemSettings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RESIDENCE RECORD\Barangay_Residences.resx">
+      <DependentUpon>Barangay_Residences.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADMIN\frmAdmin_Dashboard.resx">
+      <DependentUpon>frmAdmin_Dashboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADMIN\User Manager\frmUserInformation.resx">
+      <DependentUpon>frmUserInformation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADMIN\frmDocumentServices.resx">
+      <DependentUpon>frmDocumentServices.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RESIDENCE RECORD\frmResidence_Records.resx">
+      <DependentUpon>frmResidence_Records.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RESIDENCE RECORD\ResidenceList.resx">
+      <DependentUpon>ResidenceList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmAppointmentDetails.resx">
+      <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmBarangayCalendar.resx">
+      <DependentUpon>frmBarangayCalendar.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmCouponView.resx">
+      <DependentUpon>frmCouponView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmCreateAppointment.resx">
+      <DependentUpon>frmCreateAppointment.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmDayAppointmentsList.resx">
+      <DependentUpon>frmDayAppointmentsList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmPayments.resx">
+      <DependentUpon>frmPayments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmUser_Dashboard.resx">
+      <DependentUpon>frmUser_Dashboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADMIN\User Manager\frmManage_Users.resx">
+      <DependentUpon>frmManage_Users.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmcreateadmin.resx">
+      <DependentUpon>frmcreateadmin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADMIN\User Manager\frmcreateuser.resx">
+      <DependentUpon>frmcreateuser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmlogin.resx">
+      <DependentUpon>frmlogin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="USERS\Book Apointment\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="packages\Tesseract.5.2.0\build\Tesseract.targets" Condition="Exists('packages\Tesseract.5.2.0\build\Tesseract.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Tesseract.5.2.0\build\Tesseract.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Tesseract.5.2.0\build\Tesseract.targets'))" />
+  </Target>
+</Project>
