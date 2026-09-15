@@ -1,27 +1,39 @@
-﻿Imports System.Data.SqlClient
-Imports MySql.Data.MySqlClient
+﻿Imports MySql.Data.MySqlClient
+Imports System.IO
+Imports System.Drawing.Drawing2D
+Imports System.Drawing.Text
 
 Public Class frmPayments
 
     Public Property SelectedControlNo As String
     Private totalAmount As Decimal = 0
+    Private isFirstTimeJobSeeker As Boolean = False
 
     Private Sub frmPayments_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ClearError()
-        LoadAppointmentInfo()
+        StyleDataGridView(dgvPayments)
+        LoadUnpaidAppointmentsGrid()
     End Sub
 
-    ' Helper method to show error in red text
+    ' --- ERROR & SUCCESS LABEL HELPERS ---
     Private Sub ShowError(msg As String)
         If lblError IsNot Nothing Then
-            lblError.Text = msg
+            lblError.Text = "⚠ " & msg
             lblError.ForeColor = Color.Red
-            lblError.Font = New Font(lblError.Font, FontStyle.Bold)
+            lblError.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
             lblError.Visible = True
         End If
     End Sub
 
-    ' Helper method to clear error message
+    Private Sub ShowSuccess(msg As String)
+        If lblError IsNot Nothing Then
+            lblError.Text = "✔ " & msg
+            lblError.ForeColor = Color.FromArgb(16, 124, 65)
+            lblError.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
+            lblError.Visible = True
+        End If
+    End Sub
+
     Private Sub ClearError()
         If lblError IsNot Nothing Then
             lblError.Text = ""
@@ -29,172 +41,204 @@ Public Class frmPayments
         End If
     End Sub
 
-    Private Sub LoadAppointmentInfo()
-        ClearError()
-
-        If String.IsNullOrWhiteSpace(SelectedControlNo) Then
-            ShowError("No appointment selected!")
-            Return
-        End If
-
-        DBconnection.connection()
-
+    ' --- LOAD UNPAID APPOINTMENTS INTO THE DATAGRIDVIEW ---
+    Public Sub LoadUnpaidAppointmentsGrid()
         Try
-            ' JOIN appointments with document_services to get exact document Amount
-            DBconnection.sql = "SELECT a.ControlNo, a.FullName, a.RequestType, a.Status, " &
-                               "       COALESCE(ds.Amount, a.Amount, 0.00) AS DocAmount, " &
-                               "       a.PaymentStatus, a.OfficialReceiptNo " &
+            DBconnection.connection()
+
+            DBconnection.sql = "SELECT a.AppointmentID, a.ControlNo AS 'Control No.', a.RequestType AS 'Request Type', " &
+                               "a.Purpose, a.Department, a.DateSubmitted AS 'Date Submitted', " &
+                               "COALESCE(ds.Amount, a.Amount, 0.00) AS DocAmount, " &
+                               "a.PaymentStatus, a.Status " &
                                "FROM appointments a " &
                                "LEFT JOIN document_services ds ON a.RequestType = ds.ServiceName " &
-                               "WHERE a.ControlNo = @ControlNo LIMIT 1"
+                               "WHERE a.Status = 'APPROVED' " &
+                               "AND (a.PaymentStatus = 'UNPAID' OR a.PaymentStatus IS NULL OR a.PaymentStatus = '') " &
+                               "ORDER BY a.AppointmentID DESC"
 
             DBconnection.cmd = New MySqlCommand(DBconnection.sql, DBconnection.cn)
-            DBconnection.cmd.Parameters.AddWithValue("@ControlNo", SelectedControlNo)
-            DBconnection.dr = DBconnection.cmd.ExecuteReader()
+            Dim da As New MySqlDataAdapter(DBconnection.cmd)
+            Dim dt As New DataTable()
+            da.Fill(dt)
 
-            If DBconnection.dr.Read() Then
-                lblControlNo.Text = DBconnection.dr("ControlNo").ToString()
-                lblFullName.Text = DBconnection.dr("FullName").ToString()
-                lblDocument.Text = DBconnection.dr("RequestType").ToString()
+            dgvPayments.DataSource = dt
 
-                ' Get the fetched document fee amount
-                totalAmount = Convert.ToDecimal(DBconnection.dr("DocAmount"))
-                lblAmount.Text = "₱ " & totalAmount.ToString("N2")
+            If dgvPayments.Columns.Contains("AppointmentID") Then
+                dgvPayments.Columns("AppointmentID").Visible = False
+            End If
+            If dgvPayments.Columns.Contains("DocAmount") Then
+                dgvPayments.Columns("DocAmount").Visible = False
+            End If
 
-                Dim payStatus = DBconnection.dr("PaymentStatus").ToString()
-                lblPaymentStatus.Text = payStatus
+        Catch ex As Exception
+            ShowError("Error loading unpaid list: " & ex.Message)
+        Finally
+            DBconnection.CloseConnection()
+        End Try
+    End Sub
 
-                If Not IsDBNull(DBconnection.dr("OfficialReceiptNo")) Then
-                    txtORNo.Text = DBconnection.dr("OfficialReceiptNo").ToString()
-                End If
+    ' --- FETCH APPOINTMENT DETAILS & CHECK FIRST-TIME JOBSEEKER ---
+    Private Sub LoadAppointmentDetails(row As DataGridViewRow)
+        ClearError()
+        SelectedControlNo = row.Cells("Control No.").Value.ToString()
+        totalAmount = Convert.ToDecimal(row.Cells("DocAmount").Value)
 
-                If payStatus = "PAID" Then
-                    lblPaymentStatus.ForeColor = Color.Green
-                    btnMarkPaid.Enabled = False
-                    btnWaive.Enabled = False
-                    txtORNo.ReadOnly = True
-                    txtAmountPaid.ReadOnly = True
-                ElseIf payStatus = "WAIVED" Then
-                    lblPaymentStatus.ForeColor = Color.Orange
-                    btnMarkPaid.Enabled = False
-                    btnWaive.Enabled = False
-                    txtORNo.ReadOnly = True
-                    txtAmountPaid.ReadOnly = True
-                Else
-                    lblPaymentStatus.ForeColor = Color.Red
-                End If
+        Dim reqType As String = row.Cells("Request Type").Value.ToString().ToUpper()
+        Dim purposeText As String = row.Cells("Purpose").Value.ToString().ToUpper()
+
+        If reqType.Contains("JOBSEEKER") OrElse purposeText.Contains("JOBSEEKER") OrElse reqType.Contains("FIRST TIME") Then
+            isFirstTimeJobSeeker = True
+            totalAmount = 0.00
+        Else
+            isFirstTimeJobSeeker = False
+        End If
+
+        UpdatePaymentButtonText()
+    End Sub
+
+    ' --- DYNAMIC BUTTON TEXT UPDATER ---
+    Private Sub UpdatePaymentButtonText()
+        Dim paid As Decimal = 0
+        If txtAmountPaid IsNot Nothing Then
+            Decimal.TryParse(txtAmountPaid.Text.Trim(), paid)
+        End If
+
+        If isFirstTimeJobSeeker Then
+            btnMarkPaid.Text = "Waive Fee (Free)"
+        ElseIf paid > totalAmount Then
+            Dim change = paid - totalAmount
+            btnMarkPaid.Text = $"Change: ₱ {change.ToString("N2")}"
+        Else
+            If totalAmount > 0 Then
+                btnMarkPaid.Text = $"Pay: ₱ {totalAmount.ToString("N2")}"
             Else
-                ShowError("Appointment record not found!")
+                btnMarkPaid.Text = "Proceed to Check Out"
             End If
+        End If
+    End Sub
+
+    ' --- HANDLE CELL CLICKS TO SELECT ROW DETAILS ---
+    Private Sub dgvPayments_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dgvPayments.CellMouseClick
+        If e.RowIndex >= 0 Then
+            Dim selectedRow As DataGridViewRow = dgvPayments.Rows(e.RowIndex)
+            LoadAppointmentDetails(selectedRow)
+        End If
+    End Sub
+
+    ' --- CANCEL APPOINTMENT BUTTON EVENT CONNECTED TO frmCancelReason ---
+    Private Sub btnCancelAppointment_Click(sender As Object, e As EventArgs) Handles btnCancelAppointment.Click
+        If String.IsNullOrWhiteSpace(SelectedControlNo) Then
+            ShowError("Please select an appointment from the list first.")
+            Return
+        End If
+
+        ' Open frmCancelReason dialog and pull reason text
+        Using reasonForm As New frmCancelReason()
+            If reasonForm.ShowDialog() = DialogResult.OK Then
+                Dim cancelReason As String = reasonForm.ReasonText
+                ExecuteCancellation(SelectedControlNo, cancelReason)
+            End If
+        End Using
+    End Sub
+
+    ' --- EXECUTE CANCELLATION WITH AUTOMATIC USER LOOKUP ---
+    ' --- EXECUTE CANCELLATION WITH AUTOMATIC USER LOOKUP ---
+    Private Sub ExecuteCancellation(ctrlNo As String, reason As String)
+        DBconnection.connection()
+        Try
+            ' -----------------------------------------------------------------
+            ' FIX FOR BC30451: 
+            ' Replace "Administrator" below with whatever variable or form control 
+            ' holds your logged-in user's username (e.g., frmLogin.txtUsername.Text)
+            ' -----------------------------------------------------------------
+            Dim currentUsername As String = "Administrator"
+
+            ' Automatically query full name formatted as "Lastname, Firstname" from admin or users table
+            Dim fullName As String = "System Administrator"
+
+            DBconnection.sql = "SELECT CONCAT(Lastname, ', ', Firstname) AS FullName FROM admin WHERE Username = @Username " &
+                               "UNION " &
+                               "SELECT CONCAT(Lastname, ', ', Firstname) AS FullName FROM users WHERE Username = @Username LIMIT 1"
+
+            Using nameCmd As New MySqlCommand(DBconnection.sql, DBconnection.cn)
+                nameCmd.Parameters.AddWithValue("@Username", currentUsername)
+                Dim result = nameCmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                    fullName = result.ToString()
+                End If
+            End Using
+
+            ' Update appointment with cancellation status, reason, and formatted name
+            DBconnection.sql = "UPDATE appointments " &
+                               "SET Status = 'CANCELLED', " &
+                               "    CancellationReason = @Reason, " &
+                               "    CancelledBy = @CancelledBy, " &
+                               "    UpdatedAt = NOW() " &
+                               "WHERE ControlNo = @ControlNo"
+
+            Using updateCmd As New MySqlCommand(DBconnection.sql, DBconnection.cn)
+                updateCmd.Parameters.AddWithValue("@Reason", reason)
+                updateCmd.Parameters.AddWithValue("@CancelledBy", fullName)
+                updateCmd.Parameters.AddWithValue("@ControlNo", ctrlNo)
+                updateCmd.ExecuteNonQuery()
+            End Using
+
+            ShowSuccess("Appointment successfully cancelled.")
+
+            ' Clear selection and refresh grid so the canceled row automatically hides
+            SelectedControlNo = ""
+            LoadUnpaidAppointmentsGrid()
 
         Catch ex As Exception
-            ShowError("Database error: " & ex.Message)
+            ShowError("Error cancelling appointment: " & ex.Message)
         Finally
-            If DBconnection.dr IsNot Nothing AndAlso Not DBconnection.dr.IsClosed Then
-                DBconnection.dr.Close()
-            End If
             DBconnection.CloseConnection()
         End Try
     End Sub
 
-    ' --- MARK AS PAID BUTTON ---
-    Private Sub btnMarkPaid_Click(sender As Object, e As EventArgs) Handles btnMarkPaid.Click
-        ClearError()
+    ' --- DATAGRIDVIEW STYLING ---
+    Private Sub StyleDataGridView(dgv As DataGridView)
+        dgv.EnableHeadersVisualStyles = False
+        dgv.BorderStyle = BorderStyle.None
+        dgv.BackgroundColor = Color.White
+        dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal
+        dgv.GridColor = Color.FromArgb(220, 224, 230)
+        dgv.RowHeadersVisible = False
+        dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        dgv.MultiSelect = False
+        dgv.AllowUserToResizeRows = False
 
-        ' 1. Validate Official Receipt Number
-        If String.IsNullOrWhiteSpace(txtORNo.Text.Trim()) Then
-            ShowError("⚠ Please enter Official Receipt Number!")
-            txtORNo.Focus()
-            Return
-        End If
+        Dim headerStyle As New DataGridViewCellStyle()
+        headerStyle.BackColor = Color.FromArgb(10, 25, 85)
+        headerStyle.ForeColor = Color.White
+        headerStyle.Font = New Font("Segoe UI", 10.0F, FontStyle.Bold)
+        headerStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        headerStyle.Padding = New Padding(10, 8, 10, 8)
+        dgv.ColumnHeadersDefaultCellStyle = headerStyle
+        dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
+        dgv.ColumnHeadersHeight = 40
+        dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
 
-        ' 2. Validate Amount Paid Input
-        Dim paidAmount As Decimal = 0
-        If Not Decimal.TryParse(txtAmountPaid.Text.Trim(), paidAmount) OrElse paidAmount <= 0 Then
-            ShowError("⚠ Please enter a valid amount paid!")
-            txtAmountPaid.Focus()
-            Return
-        End If
+        Dim defaultRowStyle As New DataGridViewCellStyle()
+        defaultRowStyle.BackColor = Color.White
+        defaultRowStyle.ForeColor = Color.FromArgb(50, 50, 60)
+        defaultRowStyle.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular)
+        defaultRowStyle.SelectionBackColor = Color.FromArgb(210, 215, 240)
+        defaultRowStyle.SelectionForeColor = Color.Black
+        defaultRowStyle.Padding = New Padding(10, 4, 10, 4)
 
-        ' 3. Block Submission if Payment is Insufficient
-        If totalAmount > 0 AndAlso paidAmount < totalAmount Then
-            ShowError($"⚠ Insufficient payment! Required: ₱{totalAmount:N2} | Paid: ₱{paidAmount:N2}")
-            txtAmountPaid.Focus()
-            Return
-        End If
+        Dim alternatingRowStyle As New DataGridViewCellStyle(defaultRowStyle)
+        alternatingRowStyle.BackColor = Color.FromArgb(235, 237, 255)
 
-        ' 4. Process Payment into Database
-        DBconnection.connection()
-        Try
-            DBconnection.sql = "UPDATE appointments " &
-                               "SET Amount = @Amount, " &
-                               "    PaymentStatus = 'PAID', " &
-                               "    Status = 'COMPLETED', " &
-                               "    PaymentDate = NOW(), " &
-                               "    OfficialReceiptNo = @ORNo, " &
-                               "    UpdatedAt = NOW() " &
-                               "WHERE ControlNo = @ControlNo"
-
-            DBconnection.cmd = New MySqlCommand(DBconnection.sql, DBconnection.cn)
-            DBconnection.cmd.Parameters.AddWithValue("@Amount", totalAmount)
-            DBconnection.cmd.Parameters.AddWithValue("@ORNo", txtORNo.Text.Trim())
-            DBconnection.cmd.Parameters.AddWithValue("@ControlNo", SelectedControlNo)
-            DBconnection.cmd.ExecuteNonQuery()
-
-            MessageBox.Show("Payment successfully processed! Appointment moved to COMPLETED." & vbCrLf & "O.R. Number: " & txtORNo.Text.Trim(), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Me.DialogResult = DialogResult.OK
-            Me.Close()
-
-        Catch ex As Exception
-            ShowError("Error updating payment: " & ex.Message)
-        Finally
-            DBconnection.CloseConnection()
-        End Try
-    End Sub
-
-    ' --- WAIVE FEE BUTTON ---
-    Private Sub btnWaive_Click(sender As Object, e As EventArgs) Handles btnWaive.Click
-        ClearError()
-
-        Dim result = MessageBox.Show("Are you sure you want to waive the fee for this document?", "Confirm Waive", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        If result <> DialogResult.Yes Then Return
-
-        DBconnection.connection()
-        Try
-            DBconnection.sql = "UPDATE appointments " &
-                               "SET Amount = 0.00, " &
-                               "    PaymentStatus = 'WAIVED', " &
-                               "    Status = 'COMPLETED', " &
-                               "    PaymentDate = NOW(), " &
-                               "    OfficialReceiptNo = 'WAIVED', " &
-                               "    UpdatedAt = NOW() " &
-                               "WHERE ControlNo = @ControlNo"
-
-            DBconnection.cmd = New MySqlCommand(DBconnection.sql, DBconnection.cn)
-            DBconnection.cmd.Parameters.AddWithValue("@ControlNo", SelectedControlNo)
-            DBconnection.cmd.ExecuteNonQuery()
-
-            MessageBox.Show("Fee waived successfully! Appointment moved to COMPLETED.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Me.DialogResult = DialogResult.OK
-            Me.Close()
-
-        Catch ex As Exception
-            ShowError("Error waiving fee: " & ex.Message)
-        Finally
-            DBconnection.CloseConnection()
-        End Try
+        dgv.DefaultCellStyle = defaultRowStyle
+        dgv.AlternatingRowsDefaultCellStyle = alternatingRowStyle
+        dgv.RowTemplate.Height = 38
+        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
     End Sub
 
     Private Sub txtAmountPaid_TextChanged(sender As Object, e As EventArgs) Handles txtAmountPaid.TextChanged
         ClearError()
-
-        Dim paid As Decimal
-        If Decimal.TryParse(txtAmountPaid.Text.Trim(), paid) AndAlso paid >= 0 Then
-            Dim sukli = paid - totalAmount
-            lblChange.Text = If(sukli >= 0, "₱ " & sukli.ToString("N2"), "Insufficient Amount")
-        Else
-            lblChange.Text = "₱ 0.00"
-        End If
+        UpdatePaymentButtonText()
     End Sub
 
     Private Sub txtORNo_TextChanged(sender As Object, e As EventArgs) Handles txtORNo.TextChanged

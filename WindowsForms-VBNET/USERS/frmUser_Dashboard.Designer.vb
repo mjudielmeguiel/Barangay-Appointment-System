@@ -53,7 +53,6 @@ Partial Class frmUser_Dashboard
         Me.Panel2.SuspendLayout()
         CType(Me.dgvRequests, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picUserProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel5.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
@@ -236,9 +235,6 @@ Partial Class frmUser_Dashboard
         Me.Panel5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel5.Controls.Add(Me.lblUncompletedTasks)
-        Me.Panel5.Controls.Add(Me.lblDailyTasks)
-        Me.Panel5.Controls.Add(Me.lblTotalTasks)
         Me.Panel5.Location = New System.Drawing.Point(44, 251)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(315, 484)
@@ -249,7 +245,7 @@ Partial Class frmUser_Dashboard
         Me.lblUncompletedTasks.AutoSize = True
         Me.lblUncompletedTasks.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblUncompletedTasks.ForeColor = System.Drawing.Color.Navy
-        Me.lblUncompletedTasks.Location = New System.Drawing.Point(23, 273)
+        Me.lblUncompletedTasks.Location = New System.Drawing.Point(865, 226)
         Me.lblUncompletedTasks.Name = "lblUncompletedTasks"
         Me.lblUncompletedTasks.Size = New System.Drawing.Size(20, 22)
         Me.lblUncompletedTasks.TabIndex = 537
@@ -260,7 +256,7 @@ Partial Class frmUser_Dashboard
         Me.lblDailyTasks.AutoSize = True
         Me.lblDailyTasks.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDailyTasks.ForeColor = System.Drawing.Color.Navy
-        Me.lblDailyTasks.Location = New System.Drawing.Point(23, 136)
+        Me.lblDailyTasks.Location = New System.Drawing.Point(367, 226)
         Me.lblDailyTasks.Name = "lblDailyTasks"
         Me.lblDailyTasks.Size = New System.Drawing.Size(20, 22)
         Me.lblDailyTasks.TabIndex = 534
@@ -271,7 +267,7 @@ Partial Class frmUser_Dashboard
         Me.lblTotalTasks.AutoSize = True
         Me.lblTotalTasks.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTotalTasks.ForeColor = System.Drawing.Color.Navy
-        Me.lblTotalTasks.Location = New System.Drawing.Point(23, 203)
+        Me.lblTotalTasks.Location = New System.Drawing.Point(615, 226)
         Me.lblTotalTasks.Name = "lblTotalTasks"
         Me.lblTotalTasks.Size = New System.Drawing.Size(20, 22)
         Me.lblTotalTasks.TabIndex = 535
@@ -361,7 +357,10 @@ Partial Class frmUser_Dashboard
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ClientSize = New System.Drawing.Size(1366, 768)
+        Me.Controls.Add(Me.lblUncompletedTasks)
         Me.Controls.Add(Me.picUserProfile)
+        Me.Controls.Add(Me.lblTotalTasks)
+        Me.Controls.Add(Me.lblDailyTasks)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.lblWelcomeUser)
         Me.Controls.Add(Me.lblCancelled)
@@ -384,8 +383,6 @@ Partial Class frmUser_Dashboard
         Me.Panel2.PerformLayout()
         CType(Me.dgvRequests, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picUserProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()

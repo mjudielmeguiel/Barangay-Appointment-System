@@ -2,7 +2,7 @@
 
 Public Class frmcreateadmin
 
-    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) 
         Me.Hide()
         Dim login As New frmlogin
         login.Show()

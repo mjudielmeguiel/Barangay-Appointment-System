@@ -54,4 +54,15 @@
         frmMain.Panel2.Controls.Add(Logs)
         Logs.Show()
     End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        frmMain.Panel2.Controls.Clear()
+        Dim about As New frm_About_us With {
+            .TopLevel = False,
+            .FormBorderStyle = FormBorderStyle.None,
+            .Dock = DockStyle.Fill
+        }
+        frmMain.Panel2.Controls.Add(about)
+        about.Show()
+    End Sub
 End Class
