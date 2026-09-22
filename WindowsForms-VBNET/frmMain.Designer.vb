@@ -234,7 +234,6 @@ Partial Class frmMain
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Menupanel As Panel
     Friend WithEvents Button1 As Button
-    Friend WithEvents Button2 As Button
     Friend WithEvents Panel2 As Panel
     Friend WithEvents lblUserRole As Label
     Friend WithEvents Button5 As Button
@@ -242,4 +241,5 @@ Partial Class frmMain
     Friend WithEvents btnAppointment As Button
     Friend WithEvents Button6 As Button
     Friend WithEvents btnClose As Button
+    Friend WithEvents Button2 As Button
 End Class

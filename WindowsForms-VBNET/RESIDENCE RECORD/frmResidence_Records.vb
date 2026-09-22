@@ -31,13 +31,13 @@ Public Class frmResidence_Records
         Try
             connection()
 
-            sql = "SELECT ResidentCode AS 'Resident Code', FullName AS 'Full Name', Gender, " &
+            sql = "SELECT ResidentID, ResidentCode AS 'Resident Code', FullName AS 'Full Name', Gender, " &
                   "Birthday, MobileNumber AS 'Mobile No.', Email, CivilStatus AS 'Civil Status', " &
                   "Address, AccountStatus AS 'Status', CreatedAt AS 'Date Registered' " &
-                  "FROM residences "
+                  "FROM residences WHERE AccountStatus <> 'Deleted' "
 
             If Not String.IsNullOrEmpty(searchKeyword) AndAlso searchKeyword <> placeholderText Then
-                sql &= "WHERE FullName LIKE @search "
+                sql &= "AND FullName LIKE @search "
             End If
 
             sql &= "ORDER BY ResidentID DESC"
@@ -55,11 +55,31 @@ Public Class frmResidence_Records
             dgvResidences.DataSource = dt
             lblTotalRecords.Text = $"Total Records: {dt.Rows.Count}"
 
+            If dgvResidences.Columns.Contains("ResidentID") Then
+                dgvResidences.Columns("ResidentID").Visible = False
+            End If
+
+            ' Tinanggal na ang pagdaragdag ng Delete button column para sa lahat
+            If dgvResidences.Columns.Contains("btnDelete") Then
+                dgvResidences.Columns.Remove("btnDelete")
+            End If
+
         Catch ex As Exception
             MsgBox("Error loading residence records: " & ex.Message, MsgBoxStyle.Critical, "Database Error")
         Finally
             CloseConnection()
         End Try
+    End Sub
+
+    Private Sub dgvResidences_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvResidences.CellDoubleClick
+        If e.RowIndex >= 0 Then
+            Dim selectedResidentID As Integer = Convert.ToInt32(dgvResidences.Rows(e.RowIndex).Cells("ResidentID").Value)
+
+            Dim editForm As New Barangay_Residences(selectedResidentID)
+            editForm.ShowDialog()
+
+            LoadResidenceRecords()
+        End If
     End Sub
 
     Private Sub SetupSearchPlaceholder()
@@ -137,7 +157,9 @@ Public Class frmResidence_Records
     End Sub
 
     Private Sub btnCreateRequest_Click(sender As Object, e As EventArgs) Handles btnCreateRequest.Click
-        Barangay_Residences.Show()
+        Dim addForm As New Barangay_Residences()
+        addForm.ShowDialog()
+        LoadResidenceRecords()
     End Sub
 
 End Class

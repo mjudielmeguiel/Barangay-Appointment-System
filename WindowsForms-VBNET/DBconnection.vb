@@ -14,7 +14,7 @@ Module DBconnection
                 cn.Close()
             End If
 
-            cn.ConnectionString = "server=192.168.100.16;user=root;password=;database=logindb"
+            cn.ConnectionString = "server=localhost;user=root;password=;database=logindb"
             cn.Open()
         Catch ex As Exception
             MsgBox("Connection Failed: " & ex.Message, MsgBoxStyle.Critical)

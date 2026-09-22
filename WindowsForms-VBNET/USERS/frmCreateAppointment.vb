@@ -1,34 +1,24 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.IO
 Imports System.Drawing.Drawing2D
+Imports System.Runtime.InteropServices
 
 Public Class frmCreateAppointment
-
     Private selectedResidentID As Integer = 0
+    Private selectedResidentAddress As String = ""
     Private authLetterBytes As Byte() = Nothing
     Private repIDBytes As Byte() = Nothing
+    Private _skipClosePrompt As Boolean = False
 
     Public Class ServiceItem
         Public Property ServiceName As String
         Public Property DepartmentName As String
-
         Public Overrides Function ToString() As String
             Return ServiceName
         End Function
     End Class
 
     Private Sub frmCreateAppointment_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Ensure dtpScheduledDate is instantiated if omitted from the designer
-        EnsureDateTimePickerInitialized()
-
-        ' Configure DateTimePicker defaults
-        If dtpScheduledDate IsNot Nothing Then
-            dtpScheduledDate.Format = DateTimePickerFormat.Custom
-            dtpScheduledDate.CustomFormat = "MM/dd/yyyy h:mm tt"
-            dtpScheduledDate.MinDate = DateTime.Today
-            dtpScheduledDate.Value = DateTime.Now
-        End If
-
         cboRequestFor.Items.Clear()
         cboRequestFor.Items.AddRange({
             "Self",
@@ -36,36 +26,37 @@ Public Class frmCreateAppointment
             "Representative / On Behalf"
         })
         cboRequestFor.SelectedIndex = 0
-
         ToggleRepresentativeFields(False)
-
-        LoadDepartments()
         LoadDocumentServices()
-
         lblControlNo.Text = GenerateControlNumber()
         LoadLoggedUserDefault()
+
+        ' ========== PLACEHOLDER SETUP ==========
+        cboRequestType.DropDownStyle = ComboBoxStyle.DropDown
+        CueBanner.SetText(txtName, "Type resident name or click 'Select User'")
+        CueBanner.SetText(txtNameOfRepresentative, "Representative's full name")
+        CueBanner.SetText(txtPurpose, "State the purpose of your appointment")
+        CueBanner.SetText(cboRequestType, "Select Request Type / Document Service")
+        ' ========================================
     End Sub
 
-    Private Sub EnsureDateTimePickerInitialized()
-        If dtpScheduledDate Is Nothing Then
-            dtpScheduledDate = New DateTimePicker With {
-                .Name = "dtpScheduledDate",
-                .Format = DateTimePickerFormat.Custom,
-                .CustomFormat = "MM/dd/yyyy h:mm tt",
-                .MinDate = DateTime.Today,
-                .Value = DateTime.Now,
-                .Size = New Size(220, 25),
-                .Location = New Point(245, 180),
-                .Font = New Font("Segoe UI", 9.0F)
-            }
-            Me.Controls.Add(dtpScheduledDate)
-            dtpScheduledDate.BringToFront()
+    ' === HANDLE FORM CLOSING (X button) ===
+    Private Sub frmCreateAppointment_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If _skipClosePrompt Then Return
+
+        If Not String.IsNullOrWhiteSpace(txtName.Text) Then
+            Dim result As DialogResult = MsgBox($"Are you sure you want to cancel {txtName.Text.Trim()}?",
+                                                 MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel")
+            If result = DialogResult.Yes Then
+                SaveAppointment("PENDING")
+            Else
+                e.Cancel = True
+            End If
         End If
     End Sub
 
     Private Sub cboRequestFor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRequestFor.SelectedIndexChanged
         Dim selectedOption As String = cboRequestFor.Text.Trim()
-
         If selectedOption = "Family Member / Relative" OrElse selectedOption = "Representative / On Behalf" Then
             ToggleRepresentativeFields(True)
         Else
@@ -79,7 +70,6 @@ Public Class frmCreateAppointment
     End Sub
 
     Private Sub ToggleRepresentativeFields(isVisible As Boolean)
-        If lblRepName IsNot Nothing Then lblRepName.Visible = isVisible
         If txtNameOfRepresentative IsNot Nothing Then txtNameOfRepresentative.Visible = isVisible
         If lblAuthLetter IsNot Nothing Then lblAuthLetter.Visible = isVisible
         If picAuthLetter IsNot Nothing Then picAuthLetter.Visible = isVisible
@@ -91,7 +81,6 @@ Public Class frmCreateAppointment
         Using ofd As New OpenFileDialog()
             ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
             ofd.Title = "Select Authorization Letter Image"
-
             If ofd.ShowDialog() = DialogResult.OK Then
                 authLetterBytes = File.ReadAllBytes(ofd.FileName)
                 picAuthLetter.SizeMode = PictureBoxSizeMode.Zoom
@@ -104,7 +93,6 @@ Public Class frmCreateAppointment
         Using ofd As New OpenFileDialog()
             ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
             ofd.Title = "Select Representative Valid ID Image"
-
             If ofd.ShowDialog() = DialogResult.OK Then
                 repIDBytes = File.ReadAllBytes(ofd.FileName)
                 picRepID.SizeMode = PictureBoxSizeMode.Zoom
@@ -113,49 +101,17 @@ Public Class frmCreateAppointment
         End Using
     End Sub
 
-    Private Sub LoadDepartments()
-        cboDepartment.Items.Clear()
-        Try
-            connection()
-            sql = "SELECT DepartmentName FROM departments WHERE IsActive = 1 ORDER BY DepartmentName ASC"
-            cmd = New MySqlCommand(sql, cn)
-            dr = cmd.ExecuteReader()
-            While dr.Read()
-                If Not IsDBNull(dr("DepartmentName")) Then
-                    cboDepartment.Items.Add(dr("DepartmentName").ToString())
-                End If
-            End While
-            dr.Close()
-        Catch ex As Exception
-            cboDepartment.Items.AddRange({"GENERAL SERVICES", "HEALTH OFFICE", "LUPONG TAGAPAMAYAPA", "SOCIAL SERVICES"})
-        Finally
-            CloseConnection()
-        End Try
-    End Sub
-
-    Private Sub LoadDocumentServices(Optional selectedDept As String = "")
+    Private Sub LoadDocumentServices()
         cboRequestType.Items.Clear()
         Try
             connection()
             sql = "SELECT ds.ServiceName, d.DepartmentName " &
                   "FROM document_services ds " &
                   "LEFT JOIN departments d ON ds.DepartmentID = d.DepartmentID " &
-                  "WHERE (ds.IsActive = 1 OR ds.IsActive IS NULL) "
-
-            If Not String.IsNullOrEmpty(selectedDept) Then
-                sql &= "AND d.DepartmentName = @dept "
-            End If
-
-            sql &= "ORDER BY ds.ServiceName ASC"
-
+                  "WHERE (ds.IsActive = 1 OR ds.IsActive IS NULL) " &
+                  "ORDER BY ds.ServiceName ASC"
             cmd = New MySqlCommand(sql, cn)
-
-            If Not String.IsNullOrEmpty(selectedDept) Then
-                cmd.Parameters.AddWithValue("@dept", selectedDept)
-            End If
-
             dr = cmd.ExecuteReader()
-
             While dr.Read()
                 Dim item As New ServiceItem With {
                     .ServiceName = dr("ServiceName").ToString(),
@@ -170,22 +126,22 @@ Public Class frmCreateAppointment
         End Try
     End Sub
 
-    Private Sub cboDepartment_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboDepartment.SelectedIndexChanged
-        If cboDepartment.SelectedItem IsNot Nothing Then
-            LoadDocumentServices(cboDepartment.SelectedItem.ToString())
-        Else
-            LoadDocumentServices()
-        End If
+    Private Sub cboRequestType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRequestType.SelectedIndexChanged
+        ' Wala nang gagawin dito — department ay automatic na kukunin sa submit
     End Sub
 
-    Private Sub cboRequestType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRequestType.SelectedIndexChanged
+    Private Function GetSelectedDepartment() As String
         If cboRequestType.SelectedItem IsNot Nothing AndAlso TypeOf cboRequestType.SelectedItem Is ServiceItem Then
-            Dim selectedItem As ServiceItem = CType(cboRequestType.SelectedItem, ServiceItem)
-            If Not String.IsNullOrEmpty(selectedItem.DepartmentName) AndAlso (cboDepartment.SelectedItem Is Nothing OrElse cboDepartment.SelectedItem.ToString() <> selectedItem.DepartmentName) Then
-                cboDepartment.SelectedItem = selectedItem.DepartmentName
-            End If
+            Return CType(cboRequestType.SelectedItem, ServiceItem).DepartmentName
         End If
-    End Sub
+        Dim typedText As String = cboRequestType.Text.Trim()
+        For Each itm As Object In cboRequestType.Items
+            If TypeOf itm Is ServiceItem AndAlso CType(itm, ServiceItem).ServiceName.Equals(typedText, StringComparison.OrdinalIgnoreCase) Then
+                Return CType(itm, ServiceItem).DepartmentName
+            End If
+        Next
+        Return ""
+    End Function
 
     Private Function GenerateControlNumber() As String
         Dim newCtrlNo As String = "APP-001"
@@ -194,35 +150,34 @@ Public Class frmCreateAppointment
             sql = "SELECT ControlNo FROM appointments ORDER BY AppointmentID DESC LIMIT 1"
             cmd = New MySqlCommand(sql, cn)
             dr = cmd.ExecuteReader()
-
             If dr.Read() Then
                 Dim lastCtrl As String = dr("ControlNo").ToString()
                 Dim numPart As Integer = Convert.ToInt32(lastCtrl.Replace("APP-", ""))
                 newCtrlNo = $"APP-{(numPart + 1):D3}"
             End If
             dr.Close()
-
         Catch ex As Exception
         Finally
             CloseConnection()
         End Try
-
         Return newCtrlNo
     End Function
 
     Private Sub LoadLoggedUserDefault()
         If String.IsNullOrEmpty(LoggedFullname) Then Return
-
         Try
             connection()
-            sql = "SELECT ResidentID, FullName, Picture FROM residences WHERE FullName=@name OR Username=@name"
+            ' Pinalitan ng Address ang column name mula sa residences table
+            sql = "SELECT ResidentID, FullName, Picture, Address FROM residences WHERE FullName=@name OR Username=@name"
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@name", LoggedFullname)
             dr = cmd.ExecuteReader()
-
             If dr.Read() Then
                 selectedResidentID = If(IsDBNull(dr("ResidentID")), 0, Convert.ToInt32(dr("ResidentID")))
                 txtName.Text = dr("FullName").ToString()
+
+                ' I-save ang "Address" mula sa residences table
+                selectedResidentAddress = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
 
                 If Not IsDBNull(dr("Picture")) Then
                     Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
@@ -234,7 +189,6 @@ Public Class frmCreateAppointment
                 End If
             End If
             dr.Close()
-
         Catch ex As Exception
         Finally
             CloseConnection()
@@ -246,31 +200,37 @@ Public Class frmCreateAppointment
             If frm.ShowDialog() = DialogResult.OK Then
                 selectedResidentID = frm.SelectedResidentID
                 txtName.Text = frm.SelectedFullName
-                LoadSelectedResidentPicture(selectedResidentID)
+                LoadSelectedResidentDetails(selectedResidentID)
             End If
         End Using
     End Sub
 
-    Private Sub LoadSelectedResidentPicture(resID As Integer)
+    Private Sub LoadSelectedResidentDetails(resID As Integer)
         Try
             connection()
-            sql = "SELECT Picture FROM residences WHERE ResidentID = @id"
+            ' Pinalitan ng Address ang column name mula sa residences table
+            sql = "SELECT Picture, Address FROM residences WHERE ResidentID = @id"
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@id", resID)
             dr = cmd.ExecuteReader()
+            If dr.Read() Then
+                ' I-save ang "Address" mula sa residences table
+                selectedResidentAddress = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
 
-            If dr.Read() AndAlso Not IsDBNull(dr("Picture")) Then
-                Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
-                Using ms As New MemoryStream(imgBytes)
-                    Dim rawImg As Image = Image.FromStream(ms)
-                    If picUserProfile.Image IsNot Nothing Then picUserProfile.Image.Dispose()
-                    picUserProfile.Image = MakeCircularImage(rawImg)
-                End Using
+                If Not IsDBNull(dr("Picture")) Then
+                    Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
+                    Using ms As New MemoryStream(imgBytes)
+                        Dim rawImg As Image = Image.FromStream(ms)
+                        If picUserProfile.Image IsNot Nothing Then picUserProfile.Image.Dispose()
+                        picUserProfile.Image = MakeCircularImage(rawImg)
+                    End Using
+                Else
+                    picUserProfile.Image = Nothing
+                End If
             Else
                 picUserProfile.Image = Nothing
             End If
             dr.Close()
-
         Catch ex As Exception
             picUserProfile.Image = Nothing
         Finally
@@ -282,28 +242,66 @@ Public Class frmCreateAppointment
         Dim targetWidth As Integer = If(picUserProfile IsNot Nothing AndAlso picUserProfile.Width > 0, picUserProfile.Width, 100)
         Dim targetHeight As Integer = If(picUserProfile IsNot Nothing AndAlso picUserProfile.Height > 0, picUserProfile.Height, 100)
         Dim circleDiameter As Integer = Math.Min(targetWidth, targetHeight)
-
         Dim bmp As New Bitmap(circleDiameter, circleDiameter)
-
         Using g As Graphics = Graphics.FromImage(bmp)
             g.SmoothingMode = SmoothingMode.AntiAlias
             g.PixelOffsetMode = PixelOffsetMode.HighQuality
             g.CompositingQuality = CompositingQuality.HighQuality
-
             Using path As New GraphicsPath()
                 path.AddEllipse(0, 0, circleDiameter, circleDiameter)
                 g.SetClip(path)
-
                 Dim minSrcDim As Integer = Math.Min(srcImage.Width, srcImage.Height)
                 Dim srcRect As New Rectangle((srcImage.Width - minSrcDim) \ 2, (srcImage.Height - minSrcDim) \ 2, minSrcDim, minSrcDim)
-
                 g.DrawImage(srcImage, New Rectangle(0, 0, circleDiameter, circleDiameter), srcRect, GraphicsUnit.Pixel)
             End Using
         End Using
-
         Return bmp
     End Function
 
+    ' ============================================================
+    ' REUSABLE SAVE — "APPROVED" o "PENDING"
+    ' ============================================================
+    Private Function SaveAppointment(ByVal status As String) As Boolean
+        Try
+            connection()
+            Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse cboRequestFor.Text.Trim() = "Representative / On Behalf")
+            Dim autoDepartment As String = GetSelectedDepartment()
+
+            ' I-iinsert ang kinuhang address sa "FullAddress" column ng appointments table
+            sql = "INSERT INTO appointments (ControlNo, ResidentID, FullName, FullAddress, RequestFor, RepresentativeName, AuthorizationLetter, RepresentativeIDCard, RequestType, Purpose, Department, DateSubmitted, ScheduledDate, Status, CreatedAt) " &
+                  "VALUES (@ctrl, @resID, @name, @address, @reqFor, @repName, @authLetter, @repID, @reqType, @purpose, @dept, NOW(), NOW(), @status, NOW())"
+
+            cmd = New MySqlCommand(sql, cn)
+            cmd.Parameters.AddWithValue("@ctrl", lblControlNo.Text.Trim())
+            cmd.Parameters.AddWithValue("@resID", If(selectedResidentID > 0, selectedResidentID, DBNull.Value))
+            cmd.Parameters.AddWithValue("@name", txtName.Text.Trim())
+
+            ' Ipapasa ang na-save na Address mula sa residences papunta sa FullAddress parameter
+            cmd.Parameters.AddWithValue("@address", If(String.IsNullOrWhiteSpace(selectedResidentAddress), "", selectedResidentAddress))
+
+            cmd.Parameters.AddWithValue("@reqFor", If(String.IsNullOrWhiteSpace(cboRequestFor.Text.Trim()), "", cboRequestFor.Text.Trim()))
+            cmd.Parameters.AddWithValue("@repName", If(isRepresentative AndAlso Not String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text.Trim()), txtNameOfRepresentative.Text.Trim(), ""))
+            cmd.Parameters.AddWithValue("@reqType", If(String.IsNullOrWhiteSpace(cboRequestType.Text.Trim()), "", cboRequestType.Text.Trim()))
+            cmd.Parameters.AddWithValue("@purpose", If(String.IsNullOrWhiteSpace(txtPurpose.Text.Trim()), "", txtPurpose.Text.Trim()))
+            cmd.Parameters.AddWithValue("@dept", If(String.IsNullOrWhiteSpace(autoDepartment), "", autoDepartment))
+
+            cmd.Parameters.AddWithValue("@authLetter", If(isRepresentative AndAlso authLetterBytes IsNot Nothing, authLetterBytes, DBNull.Value))
+            cmd.Parameters.AddWithValue("@repID", If(isRepresentative AndAlso repIDBytes IsNot Nothing, repIDBytes, DBNull.Value))
+
+            cmd.Parameters.AddWithValue("@status", status)
+
+            Return cmd.ExecuteNonQuery() > 0
+        Catch ex As Exception
+            MsgBox("Error saving appointment: " & ex.Message, MsgBoxStyle.Critical, "Database Error")
+            Return False
+        Finally
+            CloseConnection()
+        End Try
+    End Function
+
+    ' ============================================================
+    ' SUBMIT = APPROVED agad
+    ' ============================================================
     Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnSubmit.Click
         If String.IsNullOrWhiteSpace(txtName.Text) Then
             MsgBox("Please select or enter a resident name.", MsgBoxStyle.Exclamation, "Validation Error")
@@ -311,27 +309,17 @@ Public Class frmCreateAppointment
             Return
         End If
 
-        ' Schedule Validation
-        If dtpScheduledDate IsNot Nothing AndAlso dtpScheduledDate.Value.Date < DateTime.Today Then
-            MsgBox("Appointment schedule date cannot be in the past.", MsgBoxStyle.Exclamation, "Validation Error")
-            dtpScheduledDate.Focus()
-            Return
-        End If
-
         Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse cboRequestFor.Text.Trim() = "Representative / On Behalf")
-
         If isRepresentative Then
             If String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text) Then
                 MsgBox("Please enter the Representative's full name.", MsgBoxStyle.Exclamation, "Validation Error")
                 txtNameOfRepresentative.Focus()
                 Return
             End If
-
             If authLetterBytes Is Nothing Then
                 MsgBox("Please double-click the Authorization Letter box to upload the document image.", MsgBoxStyle.Exclamation, "Validation Error")
                 Return
             End If
-
             If repIDBytes Is Nothing Then
                 MsgBox("Please double-click the Representative ID box to upload the ID image.", MsgBoxStyle.Exclamation, "Validation Error")
                 Return
@@ -344,58 +332,69 @@ Public Class frmCreateAppointment
             Return
         End If
 
-        If cboDepartment.SelectedIndex = -1 AndAlso String.IsNullOrWhiteSpace(cboDepartment.Text) Then
-            MsgBox("Please select a Department.", MsgBoxStyle.Exclamation, "Validation Error")
-            cboDepartment.Focus()
-            Return
-        End If
-
         If String.IsNullOrWhiteSpace(txtPurpose.Text) Then
             MsgBox("Please state the purpose of your appointment.", MsgBoxStyle.Exclamation, "Validation Error")
             txtPurpose.Focus()
             Return
         End If
 
-        Try
-            connection()
-
-            Dim scheduledDateTime As DateTime = If(dtpScheduledDate IsNot Nothing, dtpScheduledDate.Value, DateTime.Now)
-
-            sql = "INSERT INTO appointments (ControlNo, ResidentID, FullName, RequestFor, RepresentativeName, AuthorizationLetter, RepresentativeIDCard, RequestType, Purpose, Department, DateSubmitted, ScheduledDate, Status, CreatedAt) " &
-                  "VALUES (@ctrl, @resID, @name, @reqFor, @repName, @authLetter, @repID, @reqType, @purpose, @dept, NOW(), @schedDate, 'PENDING', NOW())"
-
-            cmd = New MySqlCommand(sql, cn)
-            cmd.Parameters.AddWithValue("@ctrl", lblControlNo.Text.Trim())
-            cmd.Parameters.AddWithValue("@resID", If(selectedResidentID > 0, selectedResidentID, DBNull.Value))
-            cmd.Parameters.AddWithValue("@name", txtName.Text.Trim())
-            cmd.Parameters.AddWithValue("@reqFor", cboRequestFor.Text.Trim())
-            cmd.Parameters.AddWithValue("@repName", If(isRepresentative, txtNameOfRepresentative.Text.Trim(), DBNull.Value))
-            cmd.Parameters.AddWithValue("@authLetter", If(isRepresentative AndAlso authLetterBytes IsNot Nothing, authLetterBytes, DBNull.Value))
-            cmd.Parameters.AddWithValue("@repID", If(isRepresentative AndAlso repIDBytes IsNot Nothing, repIDBytes, DBNull.Value))
-            cmd.Parameters.AddWithValue("@reqType", cboRequestType.Text.Trim())
-            cmd.Parameters.AddWithValue("@purpose", txtPurpose.Text.Trim())
-            cmd.Parameters.AddWithValue("@dept", cboDepartment.Text.Trim())
-            cmd.Parameters.AddWithValue("@schedDate", scheduledDateTime.ToString("yyyy-MM-dd HH:mm:ss"))
-
-            Dim rows As Integer = cmd.ExecuteNonQuery()
-            If rows > 0 Then
-                MsgBox($"Pick-up appointment request [{lblControlNo.Text.Trim()}] submitted successfully!", MsgBoxStyle.Information, "Success")
-                Me.DialogResult = DialogResult.OK
-                Me.Close()
-            Else
-                MsgBox("Failed to submit pick-up appointment request.", MsgBoxStyle.Exclamation, "Warning")
-            End If
-
-        Catch ex As Exception
-            MsgBox("Error scheduling pick-up appointment: " & ex.Message, MsgBoxStyle.Critical, "Database Error")
-        Finally
-            CloseConnection()
-        End Try
+        If SaveAppointment("APPROVED") Then
+            _skipClosePrompt = True
+            MsgBox($"Pick-up appointment request {lblControlNo.Text.Trim()} submitted and APPROVED successfully!", MsgBoxStyle.Information, "Success")
+            Me.DialogResult = DialogResult.OK
+            Me.Close()
+        Else
+            MsgBox("Failed to submit pick-up appointment request.", MsgBoxStyle.Exclamation, "Warning")
+        End If
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
-        Me.DialogResult = DialogResult.Cancel
-        Me.Close()
+        If String.IsNullOrWhiteSpace(txtName.Text) Then
+            _skipClosePrompt = True
+            Me.DialogResult = DialogResult.Cancel
+            Me.Close()
+            Return
+        End If
+
+        Dim result As DialogResult = MsgBox($"Are you sure you want to cancel {txtName.Text.Trim()}?",
+                                             MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel")
+        If result = DialogResult.Yes Then
+            If SaveAppointment("PENDING") Then
+                MsgBox($"Appointment {lblControlNo.Text.Trim()} saved as PENDING.", MsgBoxStyle.Information, "Saved")
+            End If
+            _skipClosePrompt = True
+            Me.DialogResult = DialogResult.Cancel
+            Me.Close()
+        End If
+    End Sub
+End Class
+
+Public Class CueBanner
+    Private Const EM_SETCUEBANNER As Integer = &H1501
+
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    Private Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal msg As Integer,
+                                        ByVal wParam As Integer,
+                                        <MarshalAs(UnmanagedType.LPWStr)> ByVal lParam As String) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    Private Shared Function FindWindowEx(ByVal hWndParent As IntPtr, ByVal hWndChildAfter As IntPtr,
+                                         ByVal lpszClass As String, ByVal lpszWindow As String) As IntPtr
+    End Function
+
+    Public Shared Sub SetText(ByVal txt As TextBox, ByVal cueText As String)
+        If txt.IsHandleCreated Then
+            SendMessage(txt.Handle, EM_SETCUEBANNER, 0, cueText)
+        End If
     End Sub
 
+    Public Shared Sub SetText(ByVal cbo As ComboBox, ByVal cueText As String)
+        If cbo.IsHandleCreated Then
+            Dim editHandle As IntPtr = FindWindowEx(cbo.Handle, IntPtr.Zero, "Edit", Nothing)
+            If editHandle <> IntPtr.Zero Then
+                SendMessage(editHandle, EM_SETCUEBANNER, 0, cueText)
+            End If
+        End If
+    End Sub
 End Class

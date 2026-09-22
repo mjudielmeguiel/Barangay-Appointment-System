@@ -5,14 +5,11 @@ Imports System.Net.Sockets
 
 Public Class frmMain
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         If String.IsNullOrWhiteSpace(LoggedFullname) OrElse String.IsNullOrWhiteSpace(LoggedRole) Then
-
             MsgBox("⚠️ SECURITY ALERT" & vbCrLf &
                    "Someone attempted to access this restricted area." & vbCrLf &
                    "Unauthorized attempt has been logged.",
                    MsgBoxStyle.Exclamation, "Security Warning")
-
             Try
                 connection()
                 Dim logSql As String = "INSERT INTO activity_logs (UserID, FullName, UserRole, ActionType, Module, Details, ActionDate) " &
@@ -31,7 +28,6 @@ Public Class frmMain
                 CloseConnection()
             End Try
 
-            ' ✅ BUMALIK SA LOGIN
             Me.Close()
             frmlogin.Show()
             Return
@@ -45,14 +41,36 @@ Public Class frmMain
             lblUserRole.Text = "USER"
         End If
 
+        ' ==========================================
+        ' ROLE-BASED ACCESS CONTROL
+        ' ==========================================
+        Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
+
+        ' ✅ Itago ang Button2 para sa Admin
+        Button2.Visible = Not isAdmin
+        Button5.Visible = True
+
+        ' ✅ IBA-IBANG DASHBOARD AYON SA ROLE
         Panel2.Controls.Clear()
-        Dim Home As New frmUser_Dashboard With {
-            .TopLevel = False,
-            .FormBorderStyle = FormBorderStyle.None,
-            .Dock = DockStyle.Fill
-        }
-        Panel2.Controls.Add(Home)
-        Home.Show()
+        If isAdmin Then
+            ' Admin — Admin Dashboard agad
+            Dim AdminDash As New frmAdmin_Dashboard With {
+                .TopLevel = False,
+                .FormBorderStyle = FormBorderStyle.None,
+                .Dock = DockStyle.Fill
+            }
+            Panel2.Controls.Add(AdminDash)
+            AdminDash.Show()
+        Else
+            ' Regular User — User Dashboard
+            Dim Home As New frmUser_Dashboard With {
+                .TopLevel = False,
+                .FormBorderStyle = FormBorderStyle.None,
+                .Dock = DockStyle.Fill
+            }
+            Panel2.Controls.Add(Home)
+            Home.Show()
+        End If
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
@@ -139,7 +157,6 @@ Public Class frmMain
 
                 cmdLog.ExecuteNonQuery()
             End Using
-
         Catch ex As Exception
             MsgBox("Error during logout process: " & ex.Message, MsgBoxStyle.Critical)
         Finally
@@ -165,12 +182,6 @@ Public Class frmMain
         }
         Panel2.Controls.Add(Home)
         Home.Show()
-    End Sub
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
-        frmcreateuser.Show()
-        frmcreateuser.TopMost = True
-        Me.TopMost = False
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click

@@ -12,19 +12,12 @@ Public Class frmAppointmentDetails
     End Sub
 
     Private Sub frmAppointmentDetails_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        RtbAddress.ReadOnly = True
-        RtbAddress.BackColor = Color.FromArgb(245, 247, 250)
-        RtbAddress.BorderStyle = BorderStyle.None
-
-        cboServiceType.Items.Clear()
-        cboServiceType.Items.AddRange({
-            "Barangay Clearance",
-            "Certificate of Indigency",
-            "Barangay ID",
-            "Business Permit",
-            "First Time Job Seeker Certificate",
-            "Certificate of Residency"
-        })
+        ' Setup para sa Address RichTextBox para magmukhang flat label
+        If RtbAddress IsNot Nothing Then
+            RtbAddress.ReadOnly = True
+            RtbAddress.BackColor = Color.FromArgb(245, 247, 250)
+            RtbAddress.BorderStyle = BorderStyle.None
+        End If
 
         LoadAppointmentDetails()
     End Sub
@@ -38,9 +31,9 @@ Public Class frmAppointmentDetails
         Try
             connection()
 
-            sql = "SELECT ControlNo, ResidentID, FullName, EmailAddress, PhoneNumber, FullAddress, " &
-                  "RequestType, Status, DateSubmitted, RequestFor, RepresentativeName, " &
-                  "AuthorizationLetter, RepresentativeIDCard " &
+            ' Kasama na dito ang FullAddress base sa appointments table mo
+            sql = "SELECT ControlNo, ResidentID, FullName, FullAddress, " &
+                  "RequestType, Status, DateSubmitted, RequestFor " &
                   "FROM appointments WHERE ControlNo = @ctrl"
 
             cmd = New MySqlCommand(sql, cn)
@@ -52,9 +45,11 @@ Public Class frmAppointmentDetails
                 fullName = dr("FullName").ToString()
                 lblName.Text = fullName
                 residentID = If(IsDBNull(dr("ResidentID")), 0, Convert.ToInt32(dr("ResidentID")))
-                lblEmail.Text = If(IsDBNull(dr("EmailAddress")), "-", dr("EmailAddress").ToString())
-                lblPhone.Text = If(IsDBNull(dr("PhoneNumber")), "-", dr("PhoneNumber").ToString())
-                RtbAddress.Text = If(IsDBNull(dr("FullAddress")), "-", dr("FullAddress").ToString())
+
+                ' DITO IDI-DISPLAY ANG ADDRESS NG NAKA-APPOINTMENT:
+                If RtbAddress IsNot Nothing Then
+                    RtbAddress.Text = If(IsDBNull(dr("FullAddress")), "No Address Provided", dr("FullAddress").ToString())
+                End If
 
                 currentStatus = dr("Status").ToString().ToUpper()
                 lblStatus.Text = currentStatus
@@ -65,31 +60,34 @@ Public Class frmAppointmentDetails
                     lblDateSubmitted.Text = "-"
                 End If
 
-                Dim currentService As String = dr("RequestType").ToString()
-                If cboServiceType.Items.Contains(currentService) Then
-                    cboServiceType.SelectedItem = currentService
-                Else
-                    cboServiceType.Text = currentService
-                End If
+                lblServiceType.Text = dr("RequestType").ToString()
 
                 Dim requestFor As String = If(IsDBNull(dr("RequestFor")), "Self", dr("RequestFor").ToString())
-                Dim repName As String = If(IsDBNull(dr("RepresentativeName")), "-", dr("RepresentativeName").ToString())
 
                 If lblRequestFor IsNot Nothing Then lblRequestFor.Text = requestFor
-                If lblRepresentativeName IsNot Nothing Then lblRepresentativeName.Text = repName
 
-                If Not IsDBNull(dr("AuthorizationLetter")) AndAlso picAuthLetter IsNot Nothing Then
-                    DisplayImage(CType(dr("AuthorizationLetter"), Byte()), picAuthLetter)
+                ' Expected Pickup Logic
+                If lblExpectedPickup IsNot Nothing Then
+                    If currentStatus = "APPROVED" Then
+                        lblExpectedPickup.Text = "Expected Pickup: " & DateTime.Now.ToString("MMMM dd, yyyy") & " (Today)"
+                        lblExpectedPickup.Visible = True
+                    Else
+                        lblExpectedPickup.Visible = False
+                    End If
                 End If
 
-                If Not IsDBNull(dr("RepresentativeIDCard")) AndAlso picRepID IsNot Nothing Then
-                    DisplayImage(CType(dr("RepresentativeIDCard"), Byte()), picRepID)
+                ' Button para sa Representative Details Form
+                If btnViewRepDetails IsNot Nothing Then
+                    If requestFor.Equals("Self", StringComparison.OrdinalIgnoreCase) Then
+                        btnViewRepDetails.Visible = False
+                    Else
+                        btnViewRepDetails.Visible = True
+                    End If
                 End If
             End If
             dr.Close()
 
             LoadResidentMedia(residentID, fullName)
-            AdjustActionButtonsByStatus()
 
         Catch ex As Exception
             MsgBox("Error loading appointment details: " & ex.Message, MsgBoxStyle.Critical, "Database Error")
@@ -98,93 +96,20 @@ Public Class frmAppointmentDetails
         End Try
     End Sub
 
-    Private Sub AdjustActionButtonsByStatus()
-        Select Case currentStatus
-            Case "PENDING"
-                btnApprove.Text = "Approve"
-                btnApprove.Visible = True
-
-                btnReject.Text = "Reject"
-                btnReject.Visible = True
-
-            Case "APPROVED"
-                btnApprove.Text = "Complete"
-                btnApprove.Visible = True
-
-                btnReject.Text = "Cancel"
-                btnReject.Visible = True
-
-            Case "REJECTED"
-                btnApprove.Text = "Re-Apply"
-                btnApprove.Visible = True
-                btnReject.Visible = False
-
-            Case Else
-                btnApprove.Visible = False
-                btnReject.Visible = False
-        End Select
+    ' Click event para magbukas ang form ng Representative Details
+    Private Sub btnViewRepDetails_Click(sender As Object, e As EventArgs) Handles btnViewRepDetails.Click
+        Dim repForm As New frmAuthorizationLetter(targetControlNo)
+        repForm.ShowDialog()
     End Sub
 
-    Private Sub btnApprove_Click(sender As Object, e As EventArgs) Handles btnApprove.Click
-        If currentStatus = "PENDING" Then
-            If MsgBox($"Are you sure you want to APPROVE appointment [{targetControlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Approval") = MsgBoxResult.Yes Then
-                UpdateAppointmentStatus("APPROVED")
-            End If
-
-        ElseIf currentStatus = "APPROVED" Then
-            If MsgBox($"Mark appointment [{targetControlNo}] as COMPLETED?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Completion") = MsgBoxResult.Yes Then
-                UpdateAppointmentStatus("COMPLETED")
-            End If
-
-        ElseIf currentStatus = "REJECTED" Then
-            If MsgBox($"Resubmit appointment [{targetControlNo}] to PENDING?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Re-Apply") = MsgBoxResult.Yes Then
-                UpdateAppointmentStatus("PENDING")
-            End If
-        End If
-    End Sub
-
-    Private Sub btnReject_Click(sender As Object, e As EventArgs) Handles btnReject.Click
-        If currentStatus = "PENDING" Then
-            If MsgBox($"Are you sure you want to REJECT appointment [{targetControlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation, "Confirm Rejection") = MsgBoxResult.Yes Then
-                UpdateAppointmentStatus("REJECTED")
-            End If
-
-        ElseIf currentStatus = "APPROVED" Then
-            If MsgBox($"Are you sure you want to CANCEL appointment [{targetControlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation, "Confirm Cancellation") = MsgBoxResult.Yes Then
-                UpdateAppointmentStatus("CANCELLED")
-            End If
-        End If
-    End Sub
-
-    Private Sub UpdateAppointmentStatus(newStatus As String)
-        Try
-            connection()
-
-            sql = "UPDATE appointments SET Status = @status, RequestType = @reqType, UpdatedAt = NOW() WHERE ControlNo = @ctrl"
-            cmd = New MySqlCommand(sql, cn)
-            cmd.Parameters.AddWithValue("@status", newStatus)
-            cmd.Parameters.AddWithValue("@reqType", cboServiceType.Text.Trim())
-            cmd.Parameters.AddWithValue("@ctrl", targetControlNo)
-
-            Dim rows As Integer = cmd.ExecuteNonQuery()
-            If rows > 0 Then
-                MsgBox($"Appointment [{targetControlNo}] successfully updated to {newStatus}!", MsgBoxStyle.Information, "Status Updated")
-                Me.DialogResult = DialogResult.OK
-                Me.Close()
-            Else
-                MsgBox("Failed to update status.", MsgBoxStyle.Exclamation, "Warning")
-            End If
-
-        Catch ex As Exception
-            MsgBox("Error updating status: " & ex.Message, MsgBoxStyle.Critical, "Database Error")
-        Finally
-            CloseConnection()
-        End Try
+    ' Click event para isara ang form
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
     End Sub
 
     Private Sub LoadResidentMedia(resID As Integer, name As String)
         Try
-            sql = "SELECT Picture, IdentificationFront, IdentificationBack FROM residences " &
+            sql = "SELECT Picture FROM residences " &
                   "WHERE ResidentID = @id OR FullName = @name"
 
             cmd = New MySqlCommand(sql, cn)
@@ -195,14 +120,6 @@ Public Class frmAppointmentDetails
             If dr.Read() Then
                 If Not IsDBNull(dr("Picture")) AndAlso picProfile IsNot Nothing Then
                     DisplayImage(CType(dr("Picture"), Byte()), picProfile)
-                End If
-
-                If Not IsDBNull(dr("IdentificationFront")) AndAlso picIDFront IsNot Nothing Then
-                    DisplayImage(CType(dr("IdentificationFront"), Byte()), picIDFront)
-                End If
-
-                If Not IsDBNull(dr("IdentificationBack")) AndAlso picIDBack IsNot Nothing Then
-                    DisplayImage(CType(dr("IdentificationBack"), Byte()), picIDBack)
                 End If
             End If
             dr.Close()
@@ -220,9 +137,4 @@ Public Class frmAppointmentDetails
             End Using
         End If
     End Sub
-
-    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
-    End Sub
-
 End Class
