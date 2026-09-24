@@ -6,9 +6,8 @@ Imports System.Runtime.InteropServices
 Public Class frmCreateAppointment
     Private selectedResidentID As Integer = 0
     Private selectedResidentAddress As String = ""
-    Private authLetterBytes As Byte() = Nothing
-    Private repIDBytes As Byte() = Nothing
     Private _skipClosePrompt As Boolean = False
+    Private selectedRepresentativeID As Integer = 0
 
     Public Class ServiceItem
         Public Property ServiceName As String
@@ -26,24 +25,21 @@ Public Class frmCreateAppointment
             "Representative / On Behalf"
         })
         cboRequestFor.SelectedIndex = 0
-        ToggleRepresentativeFields(False)
         LoadDocumentServices()
         lblControlNo.Text = GenerateControlNumber()
         LoadLoggedUserDefault()
 
-        ' ========== PLACEHOLDER SETUP ==========
         cboRequestType.DropDownStyle = ComboBoxStyle.DropDown
         CueBanner.SetText(txtName, "Type resident name or click 'Select User'")
         CueBanner.SetText(txtNameOfRepresentative, "Representative's full name")
         CueBanner.SetText(txtPurpose, "State the purpose of your appointment")
         CueBanner.SetText(cboRequestType, "Select Request Type / Document Service")
-        ' ========================================
+
+        ToggleRepresentativeFields(False)
     End Sub
 
-    ' === HANDLE FORM CLOSING (X button) ===
     Private Sub frmCreateAppointment_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If _skipClosePrompt Then Return
-
         If Not String.IsNullOrWhiteSpace(txtName.Text) Then
             Dim result As DialogResult = MsgBox($"Are you sure you want to cancel {txtName.Text.Trim()}?",
                                                  MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel")
@@ -62,41 +58,26 @@ Public Class frmCreateAppointment
         Else
             ToggleRepresentativeFields(False)
             txtNameOfRepresentative.Clear()
-            authLetterBytes = Nothing
-            repIDBytes = Nothing
-            If picAuthLetter IsNot Nothing Then picAuthLetter.Image = Nothing
-            If picRepID IsNot Nothing Then picRepID.Image = Nothing
+            selectedRepresentativeID = 0
         End If
     End Sub
 
+    ' === TINANGGAL NA ANG DALAWANG PICTUREBOX DITO ===
     Private Sub ToggleRepresentativeFields(isVisible As Boolean)
-        If txtNameOfRepresentative IsNot Nothing Then txtNameOfRepresentative.Visible = isVisible
-        If lblAuthLetter IsNot Nothing Then lblAuthLetter.Visible = isVisible
-        If picAuthLetter IsNot Nothing Then picAuthLetter.Visible = isVisible
-        If lblRepID IsNot Nothing Then lblRepID.Visible = isVisible
-        If picRepID IsNot Nothing Then picRepID.Visible = isVisible
+        If txtNameOfRepresentative IsNot Nothing Then
+            txtNameOfRepresentative.Visible = isVisible
+        End If
+        If btnSelectRepresentative IsNot Nothing Then
+            btnSelectRepresentative.Visible = isVisible
+        End If
+        ' ✅ TINANGGAL NA: lblAuthLetter, picAuthLetter, lblRepID, picRepID
     End Sub
 
-    Private Sub picAuthLetter_DoubleClick(sender As Object, e As EventArgs) Handles picAuthLetter.DoubleClick
-        Using ofd As New OpenFileDialog()
-            ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
-            ofd.Title = "Select Authorization Letter Image"
-            If ofd.ShowDialog() = DialogResult.OK Then
-                authLetterBytes = File.ReadAllBytes(ofd.FileName)
-                picAuthLetter.SizeMode = PictureBoxSizeMode.Zoom
-                picAuthLetter.Image = Image.FromFile(ofd.FileName)
-            End If
-        End Using
-    End Sub
-
-    Private Sub picRepID_DoubleClick(sender As Object, e As EventArgs) Handles picRepID.DoubleClick
-        Using ofd As New OpenFileDialog()
-            ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
-            ofd.Title = "Select Representative Valid ID Image"
-            If ofd.ShowDialog() = DialogResult.OK Then
-                repIDBytes = File.ReadAllBytes(ofd.FileName)
-                picRepID.SizeMode = PictureBoxSizeMode.Zoom
-                picRepID.Image = Image.FromFile(ofd.FileName)
+    Private Sub btnSelectRepresentative_Click(sender As Object, e As EventArgs) Handles btnSelectRepresentative.Click
+        Using frm As New ResidenceList
+            If frm.ShowDialog() = DialogResult.OK Then
+                txtNameOfRepresentative.Text = frm.SelectedFullName
+                selectedRepresentativeID = frm.SelectedResidentID
             End If
         End Using
     End Sub
@@ -126,17 +107,14 @@ Public Class frmCreateAppointment
         End Try
     End Sub
 
-    Private Sub cboRequestType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRequestType.SelectedIndexChanged
-        ' Wala nang gagawin dito — department ay automatic na kukunin sa submit
-    End Sub
-
     Private Function GetSelectedDepartment() As String
         If cboRequestType.SelectedItem IsNot Nothing AndAlso TypeOf cboRequestType.SelectedItem Is ServiceItem Then
             Return CType(cboRequestType.SelectedItem, ServiceItem).DepartmentName
         End If
         Dim typedText As String = cboRequestType.Text.Trim()
         For Each itm As Object In cboRequestType.Items
-            If TypeOf itm Is ServiceItem AndAlso CType(itm, ServiceItem).ServiceName.Equals(typedText, StringComparison.OrdinalIgnoreCase) Then
+            If TypeOf itm Is ServiceItem AndAlso
+               CType(itm, ServiceItem).ServiceName.Equals(typedText, StringComparison.OrdinalIgnoreCase) Then
                 Return CType(itm, ServiceItem).DepartmentName
             End If
         Next
@@ -167,7 +145,6 @@ Public Class frmCreateAppointment
         If String.IsNullOrEmpty(LoggedFullname) Then Return
         Try
             connection()
-            ' Pinalitan ng Address ang column name mula sa residences table
             sql = "SELECT ResidentID, FullName, Picture, Address FROM residences WHERE FullName=@name OR Username=@name"
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@name", LoggedFullname)
@@ -175,10 +152,7 @@ Public Class frmCreateAppointment
             If dr.Read() Then
                 selectedResidentID = If(IsDBNull(dr("ResidentID")), 0, Convert.ToInt32(dr("ResidentID")))
                 txtName.Text = dr("FullName").ToString()
-
-                ' I-save ang "Address" mula sa residences table
                 selectedResidentAddress = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
-
                 If Not IsDBNull(dr("Picture")) Then
                     Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
                     Using ms As New MemoryStream(imgBytes)
@@ -208,15 +182,12 @@ Public Class frmCreateAppointment
     Private Sub LoadSelectedResidentDetails(resID As Integer)
         Try
             connection()
-            ' Pinalitan ng Address ang column name mula sa residences table
             sql = "SELECT Picture, Address FROM residences WHERE ResidentID = @id"
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@id", resID)
             dr = cmd.ExecuteReader()
             If dr.Read() Then
-                ' I-save ang "Address" mula sa residences table
                 selectedResidentAddress = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
-
                 If Not IsDBNull(dr("Picture")) Then
                     Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
                     Using ms As New MemoryStream(imgBytes)
@@ -258,36 +229,30 @@ Public Class frmCreateAppointment
         Return bmp
     End Function
 
-    ' ============================================================
-    ' REUSABLE SAVE — "APPROVED" o "PENDING"
-    ' ============================================================
     Private Function SaveAppointment(ByVal status As String) As Boolean
         Try
             connection()
-            Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse cboRequestFor.Text.Trim() = "Representative / On Behalf")
+            Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse
+                                               cboRequestFor.Text.Trim() = "Representative / On Behalf")
             Dim autoDepartment As String = GetSelectedDepartment()
 
-            ' I-iinsert ang kinuhang address sa "FullAddress" column ng appointments table
-            sql = "INSERT INTO appointments (ControlNo, ResidentID, FullName, FullAddress, RequestFor, RepresentativeName, AuthorizationLetter, RepresentativeIDCard, RequestType, Purpose, Department, DateSubmitted, ScheduledDate, Status, CreatedAt) " &
-                  "VALUES (@ctrl, @resID, @name, @address, @reqFor, @repName, @authLetter, @repID, @reqType, @purpose, @dept, NOW(), NOW(), @status, NOW())"
+            sql = "INSERT INTO appointments (ControlNo, ResidentID, FullName, FullAddress, RequestFor, " &
+                  "RepresentativeName, RequestType, Purpose, Department, DateSubmitted, " &
+                  "ScheduledDate, Status, CreatedAt) " &
+                  "VALUES (@ctrl, @resID, @name, @address, @reqFor, @repName, " &
+                  "@reqType, @purpose, @dept, NOW(), NOW(), @status, NOW())"
 
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@ctrl", lblControlNo.Text.Trim())
             cmd.Parameters.AddWithValue("@resID", If(selectedResidentID > 0, selectedResidentID, DBNull.Value))
             cmd.Parameters.AddWithValue("@name", txtName.Text.Trim())
-
-            ' Ipapasa ang na-save na Address mula sa residences papunta sa FullAddress parameter
             cmd.Parameters.AddWithValue("@address", If(String.IsNullOrWhiteSpace(selectedResidentAddress), "", selectedResidentAddress))
-
             cmd.Parameters.AddWithValue("@reqFor", If(String.IsNullOrWhiteSpace(cboRequestFor.Text.Trim()), "", cboRequestFor.Text.Trim()))
-            cmd.Parameters.AddWithValue("@repName", If(isRepresentative AndAlso Not String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text.Trim()), txtNameOfRepresentative.Text.Trim(), ""))
+            cmd.Parameters.AddWithValue("@repName", If(isRepresentative AndAlso Not String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text.Trim()),
+                                                        txtNameOfRepresentative.Text.Trim(), ""))
             cmd.Parameters.AddWithValue("@reqType", If(String.IsNullOrWhiteSpace(cboRequestType.Text.Trim()), "", cboRequestType.Text.Trim()))
             cmd.Parameters.AddWithValue("@purpose", If(String.IsNullOrWhiteSpace(txtPurpose.Text.Trim()), "", txtPurpose.Text.Trim()))
             cmd.Parameters.AddWithValue("@dept", If(String.IsNullOrWhiteSpace(autoDepartment), "", autoDepartment))
-
-            cmd.Parameters.AddWithValue("@authLetter", If(isRepresentative AndAlso authLetterBytes IsNot Nothing, authLetterBytes, DBNull.Value))
-            cmd.Parameters.AddWithValue("@repID", If(isRepresentative AndAlso repIDBytes IsNot Nothing, repIDBytes, DBNull.Value))
-
             cmd.Parameters.AddWithValue("@status", status)
 
             Return cmd.ExecuteNonQuery() > 0
@@ -299,9 +264,6 @@ Public Class frmCreateAppointment
         End Try
     End Function
 
-    ' ============================================================
-    ' SUBMIT = APPROVED agad
-    ' ============================================================
     Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnSubmit.Click
         If String.IsNullOrWhiteSpace(txtName.Text) Then
             MsgBox("Please select or enter a resident name.", MsgBoxStyle.Exclamation, "Validation Error")
@@ -309,21 +271,16 @@ Public Class frmCreateAppointment
             Return
         End If
 
-        Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse cboRequestFor.Text.Trim() = "Representative / On Behalf")
+        Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse
+                                            cboRequestFor.Text.Trim() = "Representative / On Behalf")
+
         If isRepresentative Then
             If String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text) Then
                 MsgBox("Please enter the Representative's full name.", MsgBoxStyle.Exclamation, "Validation Error")
                 txtNameOfRepresentative.Focus()
                 Return
             End If
-            If authLetterBytes Is Nothing Then
-                MsgBox("Please double-click the Authorization Letter box to upload the document image.", MsgBoxStyle.Exclamation, "Validation Error")
-                Return
-            End If
-            If repIDBytes Is Nothing Then
-                MsgBox("Please double-click the Representative ID box to upload the ID image.", MsgBoxStyle.Exclamation, "Validation Error")
-                Return
-            End If
+            ' ✅ TINANGGAL NA ANG PAG-CHECK SA UPLOAD — hindi na kailangan dito
         End If
 
         If cboRequestType.SelectedIndex = -1 AndAlso String.IsNullOrWhiteSpace(cboRequestType.Text) Then
@@ -340,7 +297,8 @@ Public Class frmCreateAppointment
 
         If SaveAppointment("APPROVED") Then
             _skipClosePrompt = True
-            MsgBox($"Pick-up appointment request {lblControlNo.Text.Trim()} submitted and APPROVED successfully!", MsgBoxStyle.Information, "Success")
+            MsgBox($"Pick-up appointment request {lblControlNo.Text.Trim()} submitted and APPROVED successfully!",
+                   MsgBoxStyle.Information, "Success")
             Me.DialogResult = DialogResult.OK
             Me.Close()
         Else
@@ -371,7 +329,6 @@ End Class
 
 Public Class CueBanner
     Private Const EM_SETCUEBANNER As Integer = &H1501
-
     <DllImport("user32.dll", CharSet:=CharSet.Auto)>
     Private Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal msg As Integer,
                                         ByVal wParam As Integer,

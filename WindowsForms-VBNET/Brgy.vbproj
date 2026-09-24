@@ -268,12 +268,6 @@
     <Compile Include="RESIDENCE RECORD\ResidenceList.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="USERS\Book Apointment\frmAuthorizationLetter.Designer.vb">
-      <DependentUpon>frmAuthorizationLetter.vb</DependentUpon>
-    </Compile>
-    <Compile Include="USERS\Book Apointment\frmAuthorizationLetter.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="USERS\frmAppointmentDetails.Designer.vb">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </Compile>
@@ -415,9 +409,6 @@
     <EmbeddedResource Include="RESIDENCE RECORD\ResidenceList.resx">
       <DependentUpon>ResidenceList.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="USERS\Book Apointment\frmAuthorizationLetter.resx">
-      <DependentUpon>frmAuthorizationLetter.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="USERS\frmAppointmentDetails.resx">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </EmbeddedResource>
@@ -475,7 +466,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="USERS\Book Apointment\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
       <Visible>False</Visible>

@@ -96,13 +96,6 @@ Public Class frmAppointmentDetails
         End Try
     End Sub
 
-    ' Click event para magbukas ang form ng Representative Details
-    Private Sub btnViewRepDetails_Click(sender As Object, e As EventArgs) Handles btnViewRepDetails.Click
-        Dim repForm As New frmAuthorizationLetter(targetControlNo)
-        repForm.ShowDialog()
-    End Sub
-
-    ' Click event para isara ang form
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub

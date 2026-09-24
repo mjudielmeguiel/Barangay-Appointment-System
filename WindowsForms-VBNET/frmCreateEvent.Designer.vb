@@ -185,7 +185,7 @@ Partial Class frmCreateEvent
         Me.btnCancel.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCancel.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnCancel.Location = New System.Drawing.Point(15, 523)
+        Me.btnCancel.Location = New System.Drawing.Point(12, 523)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(575, 37)
         Me.btnCancel.TabIndex = 597

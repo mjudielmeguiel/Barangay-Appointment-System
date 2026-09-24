@@ -32,19 +32,15 @@ Partial Class frmCreateAppointment
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnSelectUser = New System.Windows.Forms.Button()
         Me.picUserProfile = New System.Windows.Forms.PictureBox()
-        Me.picAuthLetter = New System.Windows.Forms.PictureBox()
-        Me.picRepID = New System.Windows.Forms.PictureBox()
-        Me.lblAuthLetter = New System.Windows.Forms.Label()
-        Me.lblRepID = New System.Windows.Forms.Label()
         Me.txtNameOfRepresentative = New System.Windows.Forms.TextBox()
         Me.btnSubmit = New System.Windows.Forms.Button()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.btnSelectRepresentative = New System.Windows.Forms.Button()
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36 = New System.Windows.Forms.Button()
         CType(Me.picUserProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.picAuthLetter, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.picRepID, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -156,55 +152,15 @@ Partial Class frmCreateAppointment
         Me.picUserProfile.TabIndex = 601
         Me.picUserProfile.TabStop = False
         '
-        'picAuthLetter
-        '
-        Me.picAuthLetter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.picAuthLetter.Location = New System.Drawing.Point(156, 325)
-        Me.picAuthLetter.Name = "picAuthLetter"
-        Me.picAuthLetter.Size = New System.Drawing.Size(138, 174)
-        Me.picAuthLetter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picAuthLetter.TabIndex = 602
-        Me.picAuthLetter.TabStop = False
-        '
-        'picRepID
-        '
-        Me.picRepID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.picRepID.Location = New System.Drawing.Point(300, 325)
-        Me.picRepID.Name = "picRepID"
-        Me.picRepID.Size = New System.Drawing.Size(138, 174)
-        Me.picRepID.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picRepID.TabIndex = 607
-        Me.picRepID.TabStop = False
-        '
-        'lblAuthLetter
-        '
-        Me.lblAuthLetter.AutoSize = True
-        Me.lblAuthLetter.Font = New System.Drawing.Font("Microsoft YaHei UI Light", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAuthLetter.Location = New System.Drawing.Point(152, 303)
-        Me.lblAuthLetter.Name = "lblAuthLetter"
-        Me.lblAuthLetter.Size = New System.Drawing.Size(117, 19)
-        Me.lblAuthLetter.TabIndex = 608
-        Me.lblAuthLetter.Text = "Autorization letter"
-        '
-        'lblRepID
-        '
-        Me.lblRepID.AutoSize = True
-        Me.lblRepID.Font = New System.Drawing.Font("Microsoft YaHei UI Light", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblRepID.Location = New System.Drawing.Point(296, 303)
-        Me.lblRepID.Name = "lblRepID"
-        Me.lblRepID.Size = New System.Drawing.Size(144, 19)
-        Me.lblRepID.TabIndex = 609
-        Me.lblRepID.Text = "Representative Valid ID"
-        '
         'txtNameOfRepresentative
         '
         Me.txtNameOfRepresentative.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.txtNameOfRepresentative.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtNameOfRepresentative.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtNameOfRepresentative.Location = New System.Drawing.Point(444, 325)
+        Me.txtNameOfRepresentative.Location = New System.Drawing.Point(156, 319)
         Me.txtNameOfRepresentative.Name = "txtNameOfRepresentative"
         Me.txtNameOfRepresentative.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtNameOfRepresentative.Size = New System.Drawing.Size(309, 28)
+        Me.txtNameOfRepresentative.Size = New System.Drawing.Size(551, 28)
         Me.txtNameOfRepresentative.TabIndex = 610
         '
         'btnSubmit
@@ -266,18 +222,50 @@ Partial Class frmCreateAppointment
         Me.Label9.TabIndex = 519
         Me.Label9.Text = "Create Request"
         '
+        'btnSelectRepresentative
+        '
+        Me.btnSelectRepresentative.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSelectRepresentative.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnSelectRepresentative.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnSelectRepresentative.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSelectRepresentative.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSelectRepresentative.ForeColor = System.Drawing.Color.DarkBlue
+        Me.btnSelectRepresentative.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnSelectRepresentative.Location = New System.Drawing.Point(713, 319)
+        Me.btnSelectRepresentative.Name = "btnSelectRepresentative"
+        Me.btnSelectRepresentative.Size = New System.Drawing.Size(40, 27)
+        Me.btnSelectRepresentative.TabIndex = 613
+        Me.btnSelectRepresentative.Text = "..."
+        Me.btnSelectRepresentative.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnSelectRepresentative.UseVisualStyleBackColor = False
+        '
+        'object_dcdd2b84_7f89_408d_8299_a12d391d0d36
+        '
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.ForeColor = System.Drawing.Color.DarkBlue
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Location = New System.Drawing.Point(713, 325)
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Name = "object_dcdd2b84_7f89_408d_8299_a12d391d0d36"
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Size = New System.Drawing.Size(40, 27)
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.TabIndex = 613
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Text = "..."
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.UseVisualStyleBackColor = False
+        Me.object_dcdd2b84_7f89_408d_8299_a12d391d0d36.Visible = False
+        '
         'frmCreateAppointment
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(765, 559)
+        Me.Controls.Add(Me.btnSelectRepresentative)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.btnSubmit)
         Me.Controls.Add(Me.txtNameOfRepresentative)
-        Me.Controls.Add(Me.lblRepID)
-        Me.Controls.Add(Me.lblAuthLetter)
-        Me.Controls.Add(Me.picRepID)
-        Me.Controls.Add(Me.picAuthLetter)
         Me.Controls.Add(Me.picUserProfile)
         Me.Controls.Add(Me.btnSelectUser)
         Me.Controls.Add(Me.btnCancel)
@@ -292,8 +280,6 @@ Partial Class frmCreateAppointment
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "frmCreateAppointment"
         CType(Me.picUserProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.picAuthLetter, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.picRepID, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -310,14 +296,12 @@ Partial Class frmCreateAppointment
     Friend WithEvents btnCancel As Button
     Friend WithEvents btnSelectUser As Button
     Friend WithEvents picUserProfile As PictureBox
-    Friend WithEvents picAuthLetter As PictureBox
-    Friend WithEvents picRepID As PictureBox
-    Friend WithEvents lblAuthLetter As Label
-    Friend WithEvents lblRepID As Label
     Friend WithEvents txtNameOfRepresentative As TextBox
     Friend WithEvents btnSubmit As Button
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Label3 As Label
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label9 As Label
+    Friend WithEvents btnSelectRepresentative As Button
+    Friend WithEvents object_dcdd2b84_7f89_408d_8299_a12d391d0d36 As Button
 End Class

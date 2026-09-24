@@ -203,9 +203,9 @@ Partial Class frmlogin
         Me.btnClose.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClose.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClose.Location = New System.Drawing.Point(33, 446)
+        Me.btnClose.Location = New System.Drawing.Point(36, 446)
         Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(338, 37)
+        Me.btnClose.Size = New System.Drawing.Size(335, 37)
         Me.btnClose.TabIndex = 252
         Me.btnClose.Text = "Exit"
         Me.btnClose.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText

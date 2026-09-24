@@ -26,8 +26,6 @@ Partial Class frmActivityLogs
         Me.cboActionType = New System.Windows.Forms.ComboBox()
         Me.dtpFrom = New System.Windows.Forms.DateTimePicker()
         Me.dtpTo = New System.Windows.Forms.DateTimePicker()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -72,26 +70,6 @@ Partial Class frmActivityLogs
         Me.dtpTo.Name = "dtpTo"
         Me.dtpTo.Size = New System.Drawing.Size(292, 28)
         Me.dtpTo.TabIndex = 587
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft YaHei UI Light", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 194)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(41, 19)
-        Me.Label1.TabIndex = 588
-        Me.Label1.Text = "From"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI Light", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(306, 194)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(24, 19)
-        Me.Label2.TabIndex = 589
-        Me.Label2.Text = "To"
         '
         'Panel4
         '
@@ -259,8 +237,6 @@ Partial Class frmActivityLogs
         Me.Controls.Add(Me.Panel7)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "frmActivityLogs"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -279,8 +255,6 @@ Partial Class frmActivityLogs
     Friend WithEvents cboActionType As ComboBox
     Friend WithEvents dtpFrom As DateTimePicker
     Friend WithEvents dtpTo As DateTimePicker
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Label3 As Label
     Friend WithEvents PictureBox2 As PictureBox

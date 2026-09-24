@@ -50,17 +50,17 @@ Partial Class frmcreateadmin
         '
         Me.txtFirstname.BackColor = System.Drawing.SystemColors.Control
         Me.txtFirstname.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtFirstname.Location = New System.Drawing.Point(208, 260)
+        Me.txtFirstname.Location = New System.Drawing.Point(208, 183)
         Me.txtFirstname.Name = "txtFirstname"
         Me.txtFirstname.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtFirstname.Size = New System.Drawing.Size(187, 28)
+        Me.txtFirstname.Size = New System.Drawing.Size(185, 28)
         Me.txtFirstname.TabIndex = 143
         '
         'txtLastname
         '
         Me.txtLastname.BackColor = System.Drawing.SystemColors.Control
         Me.txtLastname.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLastname.Location = New System.Drawing.Point(12, 260)
+        Me.txtLastname.Location = New System.Drawing.Point(12, 183)
         Me.txtLastname.Name = "txtLastname"
         Me.txtLastname.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.txtLastname.Size = New System.Drawing.Size(190, 28)
@@ -70,17 +70,17 @@ Partial Class frmcreateadmin
         '
         Me.txtUsername.BackColor = System.Drawing.SystemColors.Control
         Me.txtUsername.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUsername.Location = New System.Drawing.Point(15, 333)
+        Me.txtUsername.Location = New System.Drawing.Point(15, 256)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtUsername.Size = New System.Drawing.Size(378, 28)
+        Me.txtUsername.Size = New System.Drawing.Size(376, 28)
         Me.txtUsername.TabIndex = 150
         '
         'txtPassword
         '
         Me.txtPassword.BackColor = System.Drawing.SystemColors.Control
         Me.txtPassword.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPassword.Location = New System.Drawing.Point(12, 413)
+        Me.txtPassword.Location = New System.Drawing.Point(12, 336)
         Me.txtPassword.Name = "txtPassword"
         Me.txtPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.txtPassword.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
@@ -91,18 +91,18 @@ Partial Class frmcreateadmin
         '
         Me.txtConfirmPass.BackColor = System.Drawing.SystemColors.Control
         Me.txtConfirmPass.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtConfirmPass.Location = New System.Drawing.Point(208, 413)
+        Me.txtConfirmPass.Location = New System.Drawing.Point(208, 336)
         Me.txtConfirmPass.Name = "txtConfirmPass"
         Me.txtConfirmPass.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.txtConfirmPass.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtConfirmPass.Size = New System.Drawing.Size(187, 28)
+        Me.txtConfirmPass.Size = New System.Drawing.Size(185, 28)
         Me.txtConfirmPass.TabIndex = 154
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(8, 238)
+        Me.Label1.Location = New System.Drawing.Point(8, 161)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(68, 19)
         Me.Label1.TabIndex = 149
@@ -112,7 +112,7 @@ Partial Class frmcreateadmin
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(204, 238)
+        Me.Label2.Location = New System.Drawing.Point(204, 161)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(69, 19)
         Me.Label2.TabIndex = 144
@@ -122,7 +122,7 @@ Partial Class frmcreateadmin
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(11, 311)
+        Me.Label3.Location = New System.Drawing.Point(11, 234)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(71, 19)
         Me.Label3.TabIndex = 151
@@ -132,7 +132,7 @@ Partial Class frmcreateadmin
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(11, 391)
+        Me.Label5.Location = New System.Drawing.Point(11, 314)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(67, 19)
         Me.Label5.TabIndex = 153
@@ -142,7 +142,7 @@ Partial Class frmcreateadmin
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(204, 391)
+        Me.Label6.Location = New System.Drawing.Point(204, 314)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(121, 19)
         Me.Label6.TabIndex = 155
@@ -152,17 +152,17 @@ Partial Class frmcreateadmin
         '
         Me.txtDepartment.BackColor = System.Drawing.SystemColors.Control
         Me.txtDepartment.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDepartment.Location = New System.Drawing.Point(12, 184)
+        Me.txtDepartment.Location = New System.Drawing.Point(12, 107)
         Me.txtDepartment.Name = "txtDepartment"
         Me.txtDepartment.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtDepartment.Size = New System.Drawing.Size(383, 28)
+        Me.txtDepartment.Size = New System.Drawing.Size(381, 28)
         Me.txtDepartment.TabIndex = 158
         '
         'Label7
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(8, 162)
+        Me.Label7.Location = New System.Drawing.Point(8, 85)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(141, 19)
         Me.Label7.TabIndex = 159
@@ -172,7 +172,7 @@ Partial Class frmcreateadmin
         '
         Me.lblPassStatus.AutoSize = True
         Me.lblPassStatus.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPassStatus.Location = New System.Drawing.Point(204, 444)
+        Me.lblPassStatus.Location = New System.Drawing.Point(204, 367)
         Me.lblPassStatus.Name = "lblPassStatus"
         Me.lblPassStatus.Size = New System.Drawing.Size(15, 19)
         Me.lblPassStatus.TabIndex = 160
@@ -186,9 +186,9 @@ Partial Class frmcreateadmin
         Me.btnSave.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSave.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSave.Location = New System.Drawing.Point(15, 466)
+        Me.btnSave.Location = New System.Drawing.Point(12, 410)
         Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(383, 37)
+        Me.btnSave.Size = New System.Drawing.Size(381, 37)
         Me.btnSave.TabIndex = 253
         Me.btnSave.Text = "Save"
         Me.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -245,7 +245,7 @@ Partial Class frmcreateadmin
         Me.btnClose.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClose.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClose.Location = New System.Drawing.Point(12, 509)
+        Me.btnClose.Location = New System.Drawing.Point(12, 453)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(381, 37)
         Me.btnClose.TabIndex = 606
@@ -257,7 +257,7 @@ Partial Class frmcreateadmin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(405, 558)
+        Me.ClientSize = New System.Drawing.Size(405, 502)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.btnSave)
