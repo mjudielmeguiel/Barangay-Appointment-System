@@ -43,7 +43,9 @@ Partial Class frmPayments
         Me.Label8 = New System.Windows.Forms.Label()
         Me.lblError = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.lblAdminFeeNotice = New System.Windows.Forms.Label()
+        Me.lblWalletUsed = New System.Windows.Forms.Label()
+        Me.txtWalletUsed = New System.Windows.Forms.TextBox()
+        Me.chkOnlinePayment = New System.Windows.Forms.CheckBox()
         Me.btnMaya = New System.Windows.Forms.Button()
         Me.lblTransactionNo = New System.Windows.Forms.Label()
         Me.txtTransactionNo = New System.Windows.Forms.TextBox()
@@ -52,10 +54,9 @@ Partial Class frmPayments
         Me.txtSenderName = New System.Windows.Forms.TextBox()
         Me.lblOnlinePayment = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.txtSearch = New System.Windows.Forms.TextBox()
-        Me.btnCancel = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.dgvPayments = New System.Windows.Forms.DataGridView()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel4.SuspendLayout()
@@ -188,7 +189,7 @@ Partial Class frmPayments
         Me.btnGcash.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnGcash.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnGcash.Image = CType(resources.GetObject("btnGcash.Image"), System.Drawing.Image)
-        Me.btnGcash.Location = New System.Drawing.Point(178, 356)
+        Me.btnGcash.Location = New System.Drawing.Point(178, 343)
         Me.btnGcash.Name = "btnGcash"
         Me.btnGcash.Size = New System.Drawing.Size(131, 37)
         Me.btnGcash.TabIndex = 554
@@ -199,7 +200,7 @@ Partial Class frmPayments
         '
         'btnMarkPaid
         '
-        Me.btnMarkPaid.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnMarkPaid.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnMarkPaid.BackColor = System.Drawing.Color.Navy
         Me.btnMarkPaid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnMarkPaid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
@@ -220,7 +221,7 @@ Partial Class frmPayments
         Me.lblAmountPaid.AutoSize = True
         Me.lblAmountPaid.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblAmountPaid.ForeColor = System.Drawing.Color.Navy
-        Me.lblAmountPaid.Location = New System.Drawing.Point(20, 301)
+        Me.lblAmountPaid.Location = New System.Drawing.Point(20, 288)
         Me.lblAmountPaid.Name = "lblAmountPaid"
         Me.lblAmountPaid.Size = New System.Drawing.Size(100, 19)
         Me.lblAmountPaid.TabIndex = 557
@@ -231,7 +232,7 @@ Partial Class frmPayments
         Me.txtAmountPaid.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.txtAmountPaid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtAmountPaid.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAmountPaid.Location = New System.Drawing.Point(178, 297)
+        Me.txtAmountPaid.Location = New System.Drawing.Point(178, 284)
         Me.txtAmountPaid.Name = "txtAmountPaid"
         Me.txtAmountPaid.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.txtAmountPaid.Size = New System.Drawing.Size(268, 28)
@@ -297,8 +298,12 @@ Partial Class frmPayments
         '
         'Panel1
         '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.lblAdminFeeNotice)
+        Me.Panel1.Controls.Add(Me.lblWalletUsed)
+        Me.Panel1.Controls.Add(Me.txtWalletUsed)
+        Me.Panel1.Controls.Add(Me.chkOnlinePayment)
         Me.Panel1.Controls.Add(Me.btnMaya)
         Me.Panel1.Controls.Add(Me.lblTransactionNo)
         Me.Panel1.Controls.Add(Me.txtTransactionNo)
@@ -325,17 +330,38 @@ Partial Class frmPayments
         Me.Panel1.Size = New System.Drawing.Size(464, 646)
         Me.Panel1.TabIndex = 566
         '
-        'lblAdminFeeNotice
+        'lblWalletUsed
         '
-        Me.lblAdminFeeNotice.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblAdminFeeNotice.AutoSize = True
-        Me.lblAdminFeeNotice.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAdminFeeNotice.ForeColor = System.Drawing.Color.Navy
-        Me.lblAdminFeeNotice.Location = New System.Drawing.Point(174, 396)
-        Me.lblAdminFeeNotice.Name = "lblAdminFeeNotice"
-        Me.lblAdminFeeNotice.Size = New System.Drawing.Size(195, 19)
-        Me.lblAdminFeeNotice.TabIndex = 575
-        Me.lblAdminFeeNotice.Text = "ADD 10 Pesos for ADMIN Fee"
+        Me.lblWalletUsed.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblWalletUsed.AutoSize = True
+        Me.lblWalletUsed.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblWalletUsed.ForeColor = System.Drawing.Color.Navy
+        Me.lblWalletUsed.Location = New System.Drawing.Point(22, 390)
+        Me.lblWalletUsed.Name = "lblWalletUsed"
+        Me.lblWalletUsed.Size = New System.Drawing.Size(132, 19)
+        Me.lblWalletUsed.TabIndex = 577
+        Me.lblWalletUsed.Text = "Mode of Payment:"
+        '
+        'txtWalletUsed
+        '
+        Me.txtWalletUsed.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.txtWalletUsed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtWalletUsed.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtWalletUsed.Location = New System.Drawing.Point(178, 386)
+        Me.txtWalletUsed.Name = "txtWalletUsed"
+        Me.txtWalletUsed.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtWalletUsed.Size = New System.Drawing.Size(268, 28)
+        Me.txtWalletUsed.TabIndex = 576
+        '
+        'chkOnlinePayment
+        '
+        Me.chkOnlinePayment.AutoSize = True
+        Me.chkOnlinePayment.Location = New System.Drawing.Point(346, 318)
+        Me.chkOnlinePayment.Name = "chkOnlinePayment"
+        Me.chkOnlinePayment.Size = New System.Drawing.Size(100, 17)
+        Me.chkOnlinePayment.TabIndex = 567
+        Me.chkOnlinePayment.Text = "Online Payment"
+        Me.chkOnlinePayment.UseVisualStyleBackColor = True
         '
         'btnMaya
         '
@@ -346,7 +372,7 @@ Partial Class frmPayments
         Me.btnMaya.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnMaya.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnMaya.Image = CType(resources.GetObject("btnMaya.Image"), System.Drawing.Image)
-        Me.btnMaya.Location = New System.Drawing.Point(315, 356)
+        Me.btnMaya.Location = New System.Drawing.Point(315, 343)
         Me.btnMaya.Name = "btnMaya"
         Me.btnMaya.Size = New System.Drawing.Size(131, 37)
         Me.btnMaya.TabIndex = 574
@@ -361,7 +387,7 @@ Partial Class frmPayments
         Me.lblTransactionNo.AutoSize = True
         Me.lblTransactionNo.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTransactionNo.ForeColor = System.Drawing.Color.Navy
-        Me.lblTransactionNo.Location = New System.Drawing.Point(20, 479)
+        Me.lblTransactionNo.Location = New System.Drawing.Point(20, 470)
         Me.lblTransactionNo.Name = "lblTransactionNo"
         Me.lblTransactionNo.Size = New System.Drawing.Size(149, 19)
         Me.lblTransactionNo.TabIndex = 573
@@ -372,7 +398,7 @@ Partial Class frmPayments
         Me.txtTransactionNo.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.txtTransactionNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtTransactionNo.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTransactionNo.Location = New System.Drawing.Point(178, 475)
+        Me.txtTransactionNo.Location = New System.Drawing.Point(178, 466)
         Me.txtTransactionNo.Name = "txtTransactionNo"
         Me.txtTransactionNo.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.txtTransactionNo.Size = New System.Drawing.Size(268, 28)
@@ -384,7 +410,7 @@ Partial Class frmPayments
         Me.lblSenderName.AutoSize = True
         Me.lblSenderName.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSenderName.ForeColor = System.Drawing.Color.Navy
-        Me.lblSenderName.Location = New System.Drawing.Point(22, 433)
+        Me.lblSenderName.Location = New System.Drawing.Point(22, 424)
         Me.lblSenderName.Name = "lblSenderName"
         Me.lblSenderName.Size = New System.Drawing.Size(101, 19)
         Me.lblSenderName.TabIndex = 571
@@ -392,7 +418,7 @@ Partial Class frmPayments
         '
         'btnClose
         '
-        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnClose.BackColor = System.Drawing.Color.DarkRed
         Me.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
@@ -412,7 +438,7 @@ Partial Class frmPayments
         Me.txtSenderName.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.txtSenderName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtSenderName.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSenderName.Location = New System.Drawing.Point(178, 429)
+        Me.txtSenderName.Location = New System.Drawing.Point(178, 420)
         Me.txtSenderName.Name = "txtSenderName"
         Me.txtSenderName.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.txtSenderName.Size = New System.Drawing.Size(268, 28)
@@ -424,7 +450,7 @@ Partial Class frmPayments
         Me.lblOnlinePayment.AutoSize = True
         Me.lblOnlinePayment.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOnlinePayment.ForeColor = System.Drawing.Color.Navy
-        Me.lblOnlinePayment.Location = New System.Drawing.Point(22, 363)
+        Me.lblOnlinePayment.Location = New System.Drawing.Point(22, 350)
         Me.lblOnlinePayment.Name = "lblOnlinePayment"
         Me.lblOnlinePayment.Size = New System.Drawing.Size(118, 19)
         Me.lblOnlinePayment.TabIndex = 569
@@ -437,20 +463,31 @@ Partial Class frmPayments
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel7.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel7.Controls.Add(Me.Panel3)
-        Me.Panel7.Controls.Add(Me.btnCancel)
         Me.Panel7.Controls.Add(Me.Label11)
+        Me.Panel7.Controls.Add(Me.Panel3)
         Me.Panel7.Controls.Add(Me.dgvPayments)
         Me.Panel7.Location = New System.Drawing.Point(482, 94)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(872, 647)
         Me.Panel7.TabIndex = 560
         '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft YaHei UI", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.MidnightBlue
+        Me.Label11.Location = New System.Drawing.Point(9, 12)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(242, 31)
+        Me.Label11.TabIndex = 188
+        Me.Label11.Text = "Pending Payments"
+        '
         'Panel3
         '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel3.BackColor = System.Drawing.SystemColors.ControlLight
         Me.Panel3.Controls.Add(Me.txtSearch)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel3.Location = New System.Drawing.Point(0, 62)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(870, 38)
@@ -467,46 +504,19 @@ Partial Class frmPayments
         Me.txtSearch.Size = New System.Drawing.Size(254, 28)
         Me.txtSearch.TabIndex = 223
         '
-        'btnCancel
-        '
-        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCancel.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCancel.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCancel.ForeColor = System.Drawing.Color.DarkBlue
-        Me.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnCancel.Location = New System.Drawing.Point(725, 12)
-        Me.btnCancel.Name = "btnCancel"
-        Me.btnCancel.Size = New System.Drawing.Size(131, 37)
-        Me.btnCancel.TabIndex = 552
-        Me.btnCancel.Text = "Close"
-        Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnCancel.UseVisualStyleBackColor = False
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft YaHei UI", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.ForeColor = System.Drawing.Color.MidnightBlue
-        Me.Label11.Location = New System.Drawing.Point(9, 12)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(242, 31)
-        Me.Label11.TabIndex = 188
-        Me.Label11.Text = "Pending Payments"
-        '
         'dgvPayments
         '
         Me.dgvPayments.AllowUserToAddRows = False
         Me.dgvPayments.AllowUserToDeleteRows = False
+        Me.dgvPayments.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvPayments.BackgroundColor = System.Drawing.SystemColors.ButtonFace
         Me.dgvPayments.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvPayments.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvPayments.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.dgvPayments.Location = New System.Drawing.Point(0, 100)
+        Me.dgvPayments.Location = New System.Drawing.Point(-1, 101)
         Me.dgvPayments.Name = "dgvPayments"
         Me.dgvPayments.ReadOnly = True
-        Me.dgvPayments.Size = New System.Drawing.Size(870, 545)
+        Me.dgvPayments.Size = New System.Drawing.Size(872, 545)
         Me.dgvPayments.TabIndex = 508
         '
         'Button2
@@ -577,7 +587,6 @@ Partial Class frmPayments
     Friend WithEvents Panel1 As Panel
     Friend WithEvents btnClose As Button
     Friend WithEvents Panel7 As Panel
-    Friend WithEvents btnCancel As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents Label11 As Label
@@ -588,6 +597,8 @@ Partial Class frmPayments
     Friend WithEvents btnMaya As Button
     Friend WithEvents lblTransactionNo As Label
     Friend WithEvents txtTransactionNo As TextBox
-    Friend WithEvents lblAdminFeeNotice As Label
     Friend WithEvents Button2 As Button
+    Friend WithEvents chkOnlinePayment As CheckBox
+    Friend WithEvents lblWalletUsed As Label
+    Friend WithEvents txtWalletUsed As TextBox
 End Class

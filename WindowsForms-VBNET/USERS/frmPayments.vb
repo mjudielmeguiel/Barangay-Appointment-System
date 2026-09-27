@@ -2,87 +2,182 @@
 Imports System.IO
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Text
+
 Public Class frmPayments
+    Public PreviousForm As Form = Nothing
     Public Property SelectedControlNo As String
     Private docPrice As Decimal = 0D
-    Private adminFee As Decimal = 10D
+    Private ReadOnly adminFee As Decimal = 10D
     Private isWaived As Boolean = False
+    Private currentProcessedByName As String = ""
+    Private currentFullName As String = ""
+    Private currentDocumentType As String = ""
+
+    Private Sub UpdatePayButtonText()
+        If isWaived Then
+            btnMarkPaid.Text = "MARK AS WAIVED"
+            btnMarkPaid.BackColor = Color.FromArgb(40, 167, 69)
+            btnMarkPaid.ForeColor = Color.White
+            Return
+        End If
+
+        Dim totalDue As Decimal = docPrice + adminFee
+        Dim enteredAmount As Decimal = 0D
+        Decimal.TryParse(txtAmountPaid.Text.Trim(), enteredAmount)
+
+        If enteredAmount <= 0 Then
+            btnMarkPaid.Text = $"PAY: {totalDue:N2}"
+            btnMarkPaid.BackColor = Color.FromArgb(10, 25, 100)
+        ElseIf enteredAmount > totalDue Then
+            Dim changeAmt As Decimal = enteredAmount - totalDue
+            btnMarkPaid.Text = $"TOTAL: {totalDue:N2} | CHANGE: {changeAmt:N2}"
+            btnMarkPaid.BackColor = Color.FromArgb(16, 124, 65)
+        ElseIf enteredAmount = totalDue Then
+            btnMarkPaid.Text = $"EXACT AMOUNT: {totalDue:N2}"
+            btnMarkPaid.BackColor = Color.FromArgb(16, 124, 65)
+        Else
+            btnMarkPaid.Text = $"DUE: {totalDue:N2} | SHORTAGE: {(totalDue - enteredAmount):N2}"
+            btnMarkPaid.BackColor = Color.FromArgb(204, 153, 0)
+        End If
+
+        btnMarkPaid.ForeColor = Color.White
+        btnMarkPaid.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
+    End Sub
 
     Private Sub frmPayments_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ClearError()
+        LoadCurrentUserName()
         StyleDataGridView(dgvPayments)
         LoadUnpaidAppointmentsGrid()
         SetPaymentFieldsVisibility(False)
         ClearDetailLabels()
+
+        AddHandler txtAmountPaid.TextChanged, AddressOf txtAmountPaid_TextChanged
+        AddHandler chkOnlinePayment.CheckedChanged, AddressOf chkOnlinePayment_CheckedChanged
+        AddHandler txtSearch.TextChanged, AddressOf txtSearch_TextChanged
+
+        SetOnlinePaymentVisibility(False)
+
+        ' ✅ CANCEL button — para sa pag-cancel ng appointment
+        btnClose.Text = "CANCEL APPOINTMENT"
+        btnClose.BackColor = Color.FromArgb(220, 53, 69)
+        btnClose.ForeColor = Color.White
+        btnClose.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
     End Sub
 
-    ' --- ISANG Button Column lang: CANCEL ---
-    Private Sub AddCancelButtonColumn()
-        If dgvPayments.Columns.Contains("Cancel") Then
-            dgvPayments.Columns.Remove("Cancel")
-        End If
-        Dim cancelCol As New DataGridViewButtonColumn()
-        cancelCol.Name = "Cancel"
-        cancelCol.HeaderText = ""
-        cancelCol.Text = "CANCEL"
-        cancelCol.UseColumnTextForButtonValue = True
-        cancelCol.Width = 110
-        cancelCol.FlatStyle = FlatStyle.Flat
-        dgvPayments.Columns.Add(cancelCol)
+    Private Sub LoadCurrentUserName()
+        Try
+            DBconnection.connection()
+            If String.IsNullOrWhiteSpace(frmlogin.LoggedInUsername) Then
+                currentProcessedByName = "Unknown User"
+                Exit Sub
+            End If
+
+            DBconnection.sql = "SELECT CONCAT(Lastname, ', ', Firstname) AS FullName " &
+                               "FROM users WHERE Username = @Username LIMIT 1"
+            Using cmd As New MySqlCommand(DBconnection.sql, DBconnection.cn)
+                cmd.Parameters.AddWithValue("@Username", frmlogin.LoggedInUsername)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                    currentProcessedByName = result.ToString()
+                Else
+                    DBconnection.sql = "SELECT CONCAT(Lastname, ', ', Firstname) AS FullName " &
+                                       "FROM admin WHERE Username = @Username LIMIT 1"
+                    Using cmdAdmin As New MySqlCommand(DBconnection.sql, DBconnection.cn)
+                        cmdAdmin.Parameters.AddWithValue("@Username", frmlogin.LoggedInUsername)
+                        Dim adminResult = cmdAdmin.ExecuteScalar()
+                        If adminResult IsNot Nothing AndAlso Not IsDBNull(adminResult) Then
+                            currentProcessedByName = adminResult.ToString()
+                        Else
+                            currentProcessedByName = frmlogin.LoggedInFullname
+                        End If
+                    End Using
+                End If
+            End Using
+        Catch ex As Exception
+            currentProcessedByName = frmlogin.LoggedInFullname
+        Finally
+            DBconnection.CloseConnection()
+        End Try
+    End Sub
+
+    Private Sub txtAmountPaid_TextChanged(sender As Object, e As EventArgs)
+        If Not isWaived Then UpdatePayButtonText()
+    End Sub
+
+    Private Sub chkOnlinePayment_CheckedChanged(sender As Object, e As EventArgs)
+        SetOnlinePaymentVisibility(chkOnlinePayment.Checked)
+        ClearOnlinePaymentFields()
+        UpdatePayButtonText()
+    End Sub
+
+    Private Sub SetOnlinePaymentVisibility(show As Boolean)
+        lblOnlinePayment.Visible = show
+        btnGcash.Visible = show
+        btnMaya.Visible = show
+        lblSenderName.Visible = show
+        txtSenderName.Visible = show
+        lblTransactionNo.Visible = show
+        txtTransactionNo.Visible = show
+        lblWalletUsed.Visible = show
+        txtWalletUsed.Visible = show
+    End Sub
+
+    Private Sub ClearOnlinePaymentFields()
+        txtSenderName.Clear()
+        txtTransactionNo.Clear()
+        txtWalletUsed.Clear()
+    End Sub
+
+    Private Sub btnGcash_Click(sender As Object, e As EventArgs) Handles btnGcash.Click
+        txtWalletUsed.Text = "GCASH"
+    End Sub
+
+    Private Sub btnMaya_Click(sender As Object, e As EventArgs) Handles btnMaya.Click
+        txtWalletUsed.Text = "PAYMAYA"
+    End Sub
+
+    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs)
+        LoadUnpaidAppointmentsGrid(txtSearch.Text.Trim())
     End Sub
 
     Private Sub ShowError(msg As String)
-        If lblError IsNot Nothing Then
-            lblError.Text = "⚠ " & msg
-            lblError.ForeColor = Color.Red
-            lblError.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
-            lblError.Visible = True
-        End If
+        lblError.Text = "⚠ " & msg
+        lblError.ForeColor = Color.Red
+        lblError.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
+        lblError.Visible = True
     End Sub
 
     Private Sub ShowSuccess(msg As String)
-        If lblError IsNot Nothing Then
-            lblError.Text = "✔ " & msg
-            lblError.ForeColor = Color.FromArgb(16, 124, 65)
-            lblError.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
-            lblError.Visible = True
-        End If
+        lblError.Text = "✔ " & msg
+        lblError.ForeColor = Color.FromArgb(16, 124, 65)
+        lblError.Visible = True
     End Sub
 
     Private Sub ClearError()
-        If lblError IsNot Nothing Then
-            lblError.Text = ""
-            lblError.Visible = False
-        End If
+        lblError.Text = ""
+        lblError.Visible = False
     End Sub
 
     Private Sub SetPaymentFieldsVisibility(show As Boolean)
-        Dim hasPayment As Boolean = show AndAlso Not isWaived
         lblControlNo.Visible = show
         lblStatus.Visible = show
         lblFullName.Visible = show
         lblDocumentType.Visible = show
-        lblORNumber.Visible = hasPayment
-        txtORNo.Visible = hasPayment
-        lblAmountPaid.Visible = hasPayment
-        txtAmountPaid.Visible = hasPayment
-        lblOnlinePayment.Visible = hasPayment
-        btnGcash.Visible = hasPayment
-        btnMaya.Visible = hasPayment
-        lblAdminFeeNotice.Visible = hasPayment
-        lblSenderName.Visible = hasPayment
-        txtSenderName.Visible = hasPayment
-        lblTransactionNo.Visible = hasPayment
-        txtTransactionNo.Visible = hasPayment
-        btnMarkPaid.Visible = show
-        If isWaived Then
-            btnMarkPaid.Text = "MARK AS WAIVED"
-            btnMarkPaid.BackColor = Color.FromArgb(40, 167, 69)
+        lblORNumber.Visible = show
+        txtORNo.Visible = show
+        lblAmountPaid.Visible = show
+        txtAmountPaid.Visible = show
+        chkOnlinePayment.Visible = show
+
+        If show AndAlso chkOnlinePayment.Checked Then
+            SetOnlinePaymentVisibility(True)
         Else
-            btnMarkPaid.Text = "MARK PAID"
-            btnMarkPaid.BackColor = Color.FromArgb(10, 25, 100)
+            SetOnlinePaymentVisibility(False)
         End If
-        btnMarkPaid.ForeColor = Color.White
+
+        btnMarkPaid.Visible = show
+        UpdatePayButtonText()
     End Sub
 
     Private Sub ClearDetailLabels()
@@ -92,31 +187,42 @@ Public Class frmPayments
         lblDocumentType.Text = "-"
         txtORNo.Clear()
         txtAmountPaid.Clear()
-        txtSenderName.Clear()
-        txtTransactionNo.Clear()
-        docPrice = 0D
+        ClearOnlinePaymentFields()
+        chkOnlinePayment.Checked = False
         isWaived = False
+        docPrice = 0D
+        currentFullName = ""
+        currentDocumentType = ""
     End Sub
 
-    Public Sub LoadUnpaidAppointmentsGrid()
+    Public Sub LoadUnpaidAppointmentsGrid(Optional searchKeyword As String = "")
         Try
             DBconnection.connection()
-            DBconnection.sql = "SELECT a.AppointmentID, a.ControlNo AS `Control No.`, a.RequestType AS `Request Type`, " &
-                               "a.Purpose, a.Department, a.DateSubmitted AS `Date Submitted`, " &
-                               "a.FullName, a.PaymentStatus, a.Status, a.Amount AS DocAmount " &
-                               "FROM appointments a " &
-                               "WHERE a.Status = 'APPROVED' " &
-                               "AND (a.PaymentStatus = 'UNPAID' OR a.PaymentStatus IS NULL OR a.PaymentStatus = '') " &
-                               "ORDER BY a.AppointmentID DESC"
-            DBconnection.cmd = New MySqlCommand(DBconnection.sql, DBconnection.cn)
-            Dim da As New MySqlDataAdapter(DBconnection.cmd)
-            Dim dt As New DataTable()
-            da.Fill(dt)
-            dgvPayments.DataSource = dt
-            AddCancelButtonColumn()
+            Dim baseSQL As String = "SELECT a.AppointmentID, a.ControlNo AS `Control No.`, " &
+                                    "a.RequestType AS `Request Type`, a.Purpose, a.Department, " &
+                                    "a.DateSubmitted AS `Date Submitted`, a.FullName, " &
+                                    "a.PaymentStatus, a.Status, a.Amount AS DocAmount " &
+                                    "FROM appointments a " &
+                                    "WHERE a.Status = 'APPROVED' " &
+                                    "AND (a.PaymentStatus = 'UNPAID' OR a.PaymentStatus IS NULL OR a.PaymentStatus = '') "
+
+            If Not String.IsNullOrWhiteSpace(searchKeyword) Then
+                baseSQL &= " AND (a.ControlNo LIKE @Keyword OR a.FullName LIKE @Keyword) "
+            End If
+            baseSQL &= " ORDER BY a.AppointmentID DESC"
+
+            Using cmd As New MySqlCommand(baseSQL, DBconnection.cn)
+                If Not String.IsNullOrWhiteSpace(searchKeyword) Then
+                    cmd.Parameters.AddWithValue("@Keyword", "%" & searchKeyword & "%")
+                End If
+                Dim da As New MySqlDataAdapter(cmd)
+                Dim dt As New DataTable()
+                da.Fill(dt)
+                dgvPayments.DataSource = dt
+            End Using
+
             If dgvPayments.Columns.Contains("AppointmentID") Then dgvPayments.Columns("AppointmentID").Visible = False
             If dgvPayments.Columns.Contains("DocAmount") Then dgvPayments.Columns("DocAmount").Visible = False
-            ' Highlight ang Control No. column
             If dgvPayments.Columns.Contains("Control No.") Then
                 dgvPayments.Columns("Control No.").DefaultCellStyle.BackColor = Color.FromArgb(230, 235, 255)
             End If
@@ -130,39 +236,44 @@ Public Class frmPayments
     Private Function GetDocumentPrice(serviceName As String) As Decimal
         Try
             DBconnection.connection()
-            DBconnection.sql = "SELECT Amount FROM document_services WHERE ServiceName LIKE @Name LIMIT 1"
-            DBconnection.cmd = New MySqlCommand(DBconnection.sql, DBconnection.cn)
-            DBconnection.cmd.Parameters.AddWithValue("@Name", "%" & serviceName & "%")
-            Dim result = DBconnection.cmd.ExecuteScalar()
-            If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                Return Convert.ToDecimal(result)
-            End If
+            Using cmd As New MySqlCommand("SELECT Amount FROM document_services WHERE ServiceName LIKE @Name LIMIT 1", DBconnection.cn)
+                cmd.Parameters.AddWithValue("@Name", "%" & serviceName & "%")
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                    Return Convert.ToDecimal(result)
+                End If
+            End Using
         Catch ex As Exception
         Finally
             DBconnection.CloseConnection()
         End Try
         Return 0D
-    End Function ' ✅ INAYOS — may tamang End Function na
+    End Function
 
     Private Sub LoadAppointmentDetails(row As DataGridViewRow)
         ClearError()
         ClearDetailLabels()
         SelectedControlNo = row.Cells("Control No.").Value.ToString()
         Dim requestType As String = If(row.Cells("Request Type").Value?.ToString(), "").Trim()
-        Dim fullname As String = If(row.Cells("FullName").Value IsNot Nothing, row.Cells("FullName").Value.ToString(), "-")
+        Dim fullname As String = If(row.Cells("FullName").Value?.ToString(), "-")
         Dim status As String = If(row.Cells("Status").Value?.ToString(), "")
+
         docPrice = GetDocumentPrice(requestType)
         If docPrice = 0D AndAlso Not IsDBNull(row.Cells("DocAmount").Value) Then
             docPrice = Convert.ToDecimal(row.Cells("DocAmount").Value)
         End If
+
         If docPrice <= 0D Then
             isWaived = True
             txtAmountPaid.Clear()
         Else
             isWaived = False
-            Dim totalAmount As Decimal = docPrice + adminFee
-            txtAmountPaid.Text = totalAmount.ToString("N2")
+            txtAmountPaid.Text = (docPrice + adminFee).ToString("N2")
         End If
+
+        currentFullName = fullname
+        currentDocumentType = requestType
+
         lblControlNo.Text = SelectedControlNo
         lblStatus.Text = status
         lblFullName.Text = fullname
@@ -170,160 +281,197 @@ Public Class frmPayments
         SetPaymentFieldsVisibility(True)
     End Sub
 
-    ' --- Cell Click: CANCEL button o pumili ng row ---
     Private Sub dgvPayments_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dgvPayments.CellMouseClick
         If e.RowIndex < 0 Then Return
-        Dim colName As String = dgvPayments.Columns(e.ColumnIndex).Name
-        Dim ctrlNo As String = dgvPayments.Rows(e.RowIndex).Cells("Control No.").Value.ToString()
-        ' ✅ CANCEL button lang
-        If colName = "Cancel" Then
-            Using reasonForm As New frmCancelReason()
-                If reasonForm.ShowDialog() = DialogResult.OK Then
-                    ExecuteCancellation(ctrlNo, reasonForm.ReasonText)
-                End If
-            End Using
-            Return
-        End If
-        ' Kung ibang cell — i-load ang detalye para mag-pay
         LoadAppointmentDetails(dgvPayments.Rows(e.RowIndex))
     End Sub
-
-    ' --- CELL PAINTING: Rounded PILL CANCEL button ---
-    Private Sub dgvPayments_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvPayments.CellPainting
-        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
-        If dgvPayments.Columns(e.ColumnIndex).Name = "Cancel" Then
-            e.PaintBackground(e.CellBounds, True)
-            Dim btnRect As New Rectangle(e.CellBounds.X + 6, e.CellBounds.Y + 6,
-                                         e.CellBounds.Width - 12, e.CellBounds.Height - 12)
-            Dim radius As Integer = btnRect.Height \ 2 ' Fully rounded pill
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
-            Using path As GraphicsPath = GetRoundedPath(btnRect, radius)
-                Using brush As New SolidBrush(Color.FromArgb(220, 53, 69)) ' Red
-                    e.Graphics.FillPath(brush, path)
-                End Using
-            End Using
-            TextRenderer.DrawText(e.Graphics, "CANCEL",
-                                  New Font("Segoe UI", 8.5F, FontStyle.Bold),
-                                  btnRect, Color.White,
-                                  TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
-            e.Handled = True
-        End If
-    End Sub
-
-    Private Function GetRoundedPath(rect As Rectangle, radius As Integer) As GraphicsPath
-        Dim path As New GraphicsPath()
-        Dim d As Integer = radius * 2
-        If d > rect.Width Then d = rect.Width
-        If d > rect.Height Then d = rect.Height
-        path.AddArc(rect.X, rect.Y, d, d, 180, 90)
-        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90)
-        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90)
-        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90)
-        path.CloseFigure()
-        Return path
-    End Function
 
     Private Sub btnMarkPaid_Click(sender As Object, e As EventArgs) Handles btnMarkPaid.Click
         If String.IsNullOrWhiteSpace(SelectedControlNo) Then
             ShowError("Pumili muna mula sa listahan.")
             Return
         End If
+
         If isWaived Then
-            UpdatePaymentStatus("WAIVED", "", 0D, "", "")
+            Dim waiveMsg As String = $"Are you sure you want to MARK AS WAIVED?{Environment.NewLine}" &
+                                     $"{Environment.NewLine}" &
+                                     $"Name: {currentFullName}{Environment.NewLine}" &
+                                     $"Document: {currentDocumentType}{Environment.NewLine}" &
+                                     $"Control No.: {SelectedControlNo}"
+            If MessageBox.Show(waiveMsg, "Confirm Waive",
+                             MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
+                Return
+            End If
+            UpdatePaymentStatus("WAIVED", "", 0D, "", "", "")
             Return
         End If
-        If String.IsNullOrWhiteSpace(txtORNo.Text) Then
+
+        If String.IsNullOrWhiteSpace(txtORNo.Text.Trim()) Then
             ShowError("Ilagay ang OR Number.")
+            txtORNo.Focus()
             Return
         End If
+
         Dim paidAmount As Decimal
         If Not Decimal.TryParse(txtAmountPaid.Text.Trim(), paidAmount) OrElse paidAmount <= 0 Then
             ShowError("Ilagay ang tamang halaga.")
+            txtAmountPaid.Focus()
             Return
         End If
-        UpdatePaymentStatus("PAID", txtORNo.Text.Trim(), paidAmount,
-                            txtSenderName.Text.Trim(), txtTransactionNo.Text.Trim())
+
+        Dim totalDue As Decimal = docPrice + adminFee
+        Dim paymentMethod As String = If(chkOnlinePayment.Checked, "Online Payment", "Cash Payment")
+        Dim walletInfo As String = If(chkOnlinePayment.Checked, txtWalletUsed.Text.Trim(), "CASH")
+
+        If chkOnlinePayment.Checked Then
+            If String.IsNullOrWhiteSpace(txtSenderName.Text.Trim()) Then
+                ShowError("Ilagay ang Sender Name para sa Online Payment.")
+                txtSenderName.Focus()
+                Return
+            End If
+            If String.IsNullOrWhiteSpace(txtTransactionNo.Text.Trim()) Then
+                ShowError("Ilagay ang Transaction Number.")
+                txtTransactionNo.Focus()
+                Return
+            End If
+            If String.IsNullOrWhiteSpace(txtWalletUsed.Text.Trim()) Then
+                ShowError("Pumili ng wallet (GCASH/PAYMAYA) o ilagay kung saan nagbayad.")
+                txtWalletUsed.Focus()
+                Return
+            End If
+        End If
+
+        Dim confirmMsg As String = $"Are you sure you want to PROCESS PAYMENT?{Environment.NewLine}" &
+                                   $"{Environment.NewLine}" &
+                                   $"Name: {currentFullName}{Environment.NewLine}" &
+                                   $"Document: {currentDocumentType}{Environment.NewLine}" &
+                                   $"Control No.: {SelectedControlNo}{Environment.NewLine}" &
+                                   $"OR Number: {txtORNo.Text.Trim()}{Environment.NewLine}" &
+                                   $"Total Amount: {totalDue:N2}{Environment.NewLine}" &
+                                   $"Amount Paid: {paidAmount:N2}{Environment.NewLine}" &
+                                   $"Payment Method: {paymentMethod} ({walletInfo})"
+
+        If MessageBox.Show(confirmMsg, "Confirm Payment",
+                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
+            Return
+        End If
+
+        Dim senderName As String = If(chkOnlinePayment.Checked, txtSenderName.Text.Trim(), "")
+        Dim transNo As String = If(chkOnlinePayment.Checked, txtTransactionNo.Text.Trim(), "")
+        Dim walletUsedFinal As String = If(chkOnlinePayment.Checked, txtWalletUsed.Text.Trim(), "CASH")
+
+        UpdatePaymentStatus("PAID", txtORNo.Text.Trim(), paidAmount, senderName, transNo, walletUsedFinal)
     End Sub
 
-    Private Sub UpdatePaymentStatus(paymentStatus As String, orNo As String, amount As Decimal, senderName As String, transNo As String)
+    Private Sub UpdatePaymentStatus(paymentStatus As String, orNo As String, amount As Decimal,
+                                    senderName As String, transNo As String, walletUsed As String)
         Try
             DBconnection.connection()
-            DBconnection.sql = "UPDATE appointments " &
+            Dim sql As String = "UPDATE appointments " &
                                "SET PaymentStatus = @PaymentStatus, " &
                                "    OfficialReceiptNo = @ORNo, " &
                                "    Amount = @Amount, " &
                                "    SenderName = @SenderName, " &
                                "    TransactionNumber = @TransNo, " &
+                               "    WalletUsed = @WalletUsed, " &
+                               "    ProcessedBy = @ProcessedBy, " &
                                "    PaymentDate = NOW(), " &
                                "    UpdatedAt = NOW() " &
                                "WHERE ControlNo = @ControlNo"
-            Using cmd As New MySqlCommand(DBconnection.sql, DBconnection.cn)
+
+            Using cmd As New MySqlCommand(sql, DBconnection.cn)
                 cmd.Parameters.AddWithValue("@PaymentStatus", paymentStatus)
                 cmd.Parameters.AddWithValue("@ORNo", orNo)
                 cmd.Parameters.AddWithValue("@Amount", amount)
                 cmd.Parameters.AddWithValue("@SenderName", senderName)
                 cmd.Parameters.AddWithValue("@TransNo", transNo)
+                cmd.Parameters.AddWithValue("@WalletUsed", walletUsed)
+                cmd.Parameters.AddWithValue("@ProcessedBy", currentProcessedByName)
                 cmd.Parameters.AddWithValue("@ControlNo", SelectedControlNo)
                 cmd.ExecuteNonQuery()
             End Using
-            ShowSuccess($"Matagumpay! — {paymentStatus}")
+
+            MessageBox.Show($"Payment Successful!{Environment.NewLine}{Environment.NewLine}" &
+                           $"Status: {paymentStatus}{Environment.NewLine}" &
+                           $"Processed By: {currentProcessedByName}",
+                           "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
             SelectedControlNo = ""
             LoadUnpaidAppointmentsGrid()
             ClearDetailLabels()
             SetPaymentFieldsVisibility(False)
         Catch ex As Exception
-            ShowError("Error: " & ex.Message)
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             DBconnection.CloseConnection()
         End Try
     End Sub
 
+    ' === ✅ CANCEL APPOINTMENT — walang go back, cancel lang ng appointment ===
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        ' Kailangan munang may napiling appointment
+        If String.IsNullOrWhiteSpace(SelectedControlNo) Then
+            ShowError("Pumili muna ng appointment na gustong i-cancel.")
+            Return
+        End If
+
+        ' Confirmation message
+        Dim confirmMsg As String = $"Are you sure you want to CANCEL this appointment?{Environment.NewLine}" &
+                                   $"{Environment.NewLine}" &
+                                   $"Control No.: {SelectedControlNo}{Environment.NewLine}" &
+                                   $"Name: {currentFullName}{Environment.NewLine}" &
+                                   $"Document: {currentDocumentType}"
+
+        If MessageBox.Show(confirmMsg, "Confirm Cancellation",
+                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
+            Return
+        End If
+
+        ' Humingi ng dahilan
+        Using reasonForm As New frmCancelReason()
+            If reasonForm.ShowDialog() = DialogResult.OK Then
+                ExecuteCancellation(SelectedControlNo, reasonForm.ReasonText)
+            End If
+        End Using
+    End Sub
+
+    ' === ✅ CANCEL SA DATABASE — walang go back ===
     Private Sub ExecuteCancellation(ctrlNo As String, reason As String)
         Try
             DBconnection.connection()
-            Dim currentUsername As String = "Administrator"
-            Dim fullName As String = "System Administrator"
-            DBconnection.sql = "SELECT CONCAT(Lastname, ', ', Firstname) AS FullName FROM admin WHERE Username = @Username " &
-                               "UNION " &
-                               "SELECT CONCAT(Lastname, ', ', Firstname) AS FullName FROM users WHERE Username = @Username LIMIT 1"
-            Using nameCmd As New MySqlCommand(DBconnection.sql, DBconnection.cn)
-                nameCmd.Parameters.AddWithValue("@Username", currentUsername)
-                Dim result = nameCmd.ExecuteScalar()
-                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                    fullName = result.ToString()
-                End If
-            End Using
-            DBconnection.sql = "UPDATE appointments " &
+            Dim sql As String = "UPDATE appointments " &
                                "SET Status = 'CANCELLED', " &
                                "    CancellationReason = @Reason, " &
                                "    CancelledBy = @CancelledBy, " &
+                               "    ProcessedBy = @ProcessedBy, " &
                                "    UpdatedAt = NOW() " &
                                "WHERE ControlNo = @ControlNo"
-            Using updateCmd As New MySqlCommand(DBconnection.sql, DBconnection.cn)
-                updateCmd.Parameters.AddWithValue("@Reason", reason)
-                updateCmd.Parameters.AddWithValue("@CancelledBy", fullName)
-                updateCmd.Parameters.AddWithValue("@ControlNo", ctrlNo)
-                updateCmd.ExecuteNonQuery()
+
+            Using cmd As New MySqlCommand(sql, DBconnection.cn)
+                cmd.Parameters.AddWithValue("@Reason", reason)
+                cmd.Parameters.AddWithValue("@CancelledBy", currentProcessedByName)
+                cmd.Parameters.AddWithValue("@ProcessedBy", currentProcessedByName)
+                cmd.Parameters.AddWithValue("@ControlNo", ctrlNo)
+                cmd.ExecuteNonQuery()
             End Using
-            ShowSuccess("Appointment cancelled.")
-            If SelectedControlNo = ctrlNo Then
-                SelectedControlNo = ""
-                ClearDetailLabels()
-                SetPaymentFieldsVisibility(False)
-            End If
+
+            MessageBox.Show($"Appointment Cancelled!{Environment.NewLine}{Environment.NewLine}" &
+                           $"Control No.: {ctrlNo}{Environment.NewLine}" &
+                           $"Processed By: {currentProcessedByName}",
+                           "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            SelectedControlNo = ""
+            ClearDetailLabels()
+            SetPaymentFieldsVisibility(False)
             LoadUnpaidAppointmentsGrid()
+            ' ✅ WALANG go back — mananatili sa frmPayments
         Catch ex As Exception
-            ShowError("Error cancelling: " & ex.Message)
+            MessageBox.Show($"Error cancelling: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             DBconnection.CloseConnection()
         End Try
     End Sub
 
-    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
-    End Sub
-
-    ' --- Clean Grid Style ---
     Private Sub StyleDataGridView(dgv As DataGridView)
         dgv.EnableHeadersVisualStyles = False
         dgv.BorderStyle = BorderStyle.None
@@ -334,16 +482,17 @@ Public Class frmPayments
         dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect
         dgv.MultiSelect = False
         dgv.AllowUserToResizeRows = False
+
         Dim headerStyle As New DataGridViewCellStyle()
         headerStyle.BackColor = Color.FromArgb(248, 249, 252)
         headerStyle.ForeColor = Color.FromArgb(40, 50, 70)
         headerStyle.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
-        headerStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         headerStyle.Padding = New Padding(12, 10, 12, 10)
         dgv.ColumnHeadersDefaultCellStyle = headerStyle
         dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
         dgv.ColumnHeadersHeight = 42
         dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+
         Dim defaultRowStyle As New DataGridViewCellStyle()
         defaultRowStyle.BackColor = Color.White
         defaultRowStyle.ForeColor = Color.FromArgb(50, 50, 60)
@@ -351,12 +500,12 @@ Public Class frmPayments
         defaultRowStyle.SelectionBackColor = Color.FromArgb(235, 237, 255)
         defaultRowStyle.SelectionForeColor = Color.Black
         defaultRowStyle.Padding = New Padding(12, 6, 12, 6)
+
         Dim alternatingRowStyle As New DataGridViewCellStyle(defaultRowStyle)
         alternatingRowStyle.BackColor = Color.FromArgb(245, 247, 255)
         dgv.DefaultCellStyle = defaultRowStyle
         dgv.AlternatingRowsDefaultCellStyle = alternatingRowStyle
         dgv.RowTemplate.Height = 42
         dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-    End Sub ' ✅ INAYOS — may tamang End Sub na
-
+    End Sub
 End Class

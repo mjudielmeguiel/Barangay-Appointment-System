@@ -47,7 +47,7 @@ Partial Class frmcreateuser
         Me.txtEmail = New System.Windows.Forms.TextBox()
         Me.cboRole = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
+        Me.lblRoleError = New System.Windows.Forms.Label()
         Me.cboDepartment = New System.Windows.Forms.ComboBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.lblDepartmentError = New System.Windows.Forms.Label()
@@ -319,15 +319,15 @@ Partial Class frmcreateuser
         Me.Label7.TabIndex = 566
         Me.Label7.Text = "Role"
         '
-        'Label8
+        'lblRoleError
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(351, 317)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(15, 19)
-        Me.Label8.TabIndex = 567
-        Me.Label8.Text = "-"
+        Me.lblRoleError.AutoSize = True
+        Me.lblRoleError.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRoleError.Location = New System.Drawing.Point(351, 317)
+        Me.lblRoleError.Name = "lblRoleError"
+        Me.lblRoleError.Size = New System.Drawing.Size(15, 19)
+        Me.lblRoleError.TabIndex = 567
+        Me.lblRoleError.Text = "-"
         '
         'cboDepartment
         '
@@ -423,7 +423,7 @@ Partial Class frmcreateuser
         Me.Controls.Add(Me.lblDepartmentError)
         Me.Controls.Add(Me.cboRole)
         Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.lblRoleError)
         Me.Controls.Add(Me.picUser)
         Me.Controls.Add(Me.lblStaffCode)
         Me.Controls.Add(Me.Label4)
@@ -482,7 +482,7 @@ Partial Class frmcreateuser
     Friend WithEvents txtEmail As TextBox
     Friend WithEvents cboRole As ComboBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents Label8 As Label
+    Friend WithEvents lblRoleError As Label
     Friend WithEvents cboDepartment As ComboBox
     Friend WithEvents Label9 As Label
     Friend WithEvents lblDepartmentError As Label

@@ -1,7 +1,15 @@
 ﻿Imports MySql.Data.MySqlClient
+
 Public Class frmlogin
     Private lockoutSecondsRemaining As Integer = 60
     Private isLoginSuccess As Boolean = False
+
+    ' === ✅ NAKALOGIN NA IMPORMASYON — GAGAMITIN SA LAHAT NG FORM ===
+    Public Shared Property LoggedInUsername As String = ""
+    Public Shared Property LoggedInFullname As String = ""
+    Public Shared Property LoggedInRole As String = ""
+    Public Shared Property LoggedInUserID As Integer = 0
+
     Private Sub frmlogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForSecurityAttempts()
         txtUsername.Text = "Please Enter your username"
@@ -74,16 +82,15 @@ Public Class frmlogin
             lblError.Text = $"🔒 Locked. Try again in {lockoutSecondsRemaining}s."
             Return
         End If
+
         lblError.Text = ""
         Dim userInput As String = txtUsername.Text.Trim()
         Dim passInput As String = txtPassword.Text.Trim()
 
         If userInput = "" OrElse userInput = "Please Enter your username" OrElse
            passInput = "" OrElse passInput = "Please Enter your Password" Then
-
             RecordActivityLog(0, userInput, "Anonymous", "EMPTY_ATTEMPT", "Authentication",
                              $"Empty attempt — Username: [{userInput}]")
-
             lblError.Text = "⚠️ Enter username and password."
             Return
         End If
@@ -102,9 +109,9 @@ Public Class frmlogin
 
         Try
             connection()
-
             Dim isSuspicious As Boolean = False
             Dim note As String = ""
+
             If userInput.Contains("'") OrElse userInput.Contains(" OR ") OrElse
                userInput.Contains("--") OrElse userInput.Contains(" UNION ") OrElse
                userInput.Contains(" DROP ") OrElse userInput.Contains(" SLEEP(") Then
@@ -112,6 +119,7 @@ Public Class frmlogin
                 note = "⚠️ SUSPICIOUS INPUT — Possible SQL Injection. "
             End If
 
+            ' === HANAPIN SA ADMIN TABLE ===
             Dim adminSql As String = "SELECT AdminID, Firstname, Lastname, Password, LoginAttempts, LockoutExpiry FROM admin WHERE Username=@user"
             Using cmdAdmin As New MySqlCommand(adminSql, cn)
                 cmdAdmin.Parameters.AddWithValue("@user", userInput)
@@ -132,6 +140,7 @@ Public Class frmlogin
                 End Using
             End Using
 
+            ' === HANAPIN SA USERS TABLE ===
             If String.IsNullOrEmpty(foundUserType) Then
                 Dim userSql As String = "SELECT UserID, Firstname, Lastname, Role, Password, LoginAttempts, LockoutExpiry FROM users WHERE Username=@user"
                 Using cmdUser As New MySqlCommand(userSql, cn)
@@ -155,6 +164,7 @@ Public Class frmlogin
                 End Using
             End If
 
+            ' === HANAPIN SA RESIDENCES TABLE ===
             If String.IsNullOrEmpty(foundUserType) Then
                 Dim resSql As String = "SELECT ResidentID, Firstname, Lastname, Password, LoginAttempts, LockoutExpiry FROM residences WHERE Username=@user"
                 Using cmdRes As New MySqlCommand(resSql, cn)
@@ -177,6 +187,7 @@ Public Class frmlogin
                 End Using
             End If
 
+            ' === WALANG NAKITANG USER ===
             If String.IsNullOrEmpty(foundUserType) Then
                 RecordActivityLog(0, userInput, "Unknown", "FAILED_LOGIN", "Authentication",
                                  note & $"Username not found — Input: [{userInput}]")
@@ -184,22 +195,25 @@ Public Class frmlogin
                 Return
             End If
 
+            ' === NAKALOCKOUT PA ===
             If lockoutExpiry > DateTime.Now Then
                 lockoutSecondsRemaining = CInt((lockoutExpiry - DateTime.Now).TotalSeconds)
                 lblError.Text = $"🔒 Locked. Try again in {lockoutSecondsRemaining}s."
                 Timer1.Start()
-
                 RecordActivityLog(recordId, userInput, roleName, "FAILED_LOGIN", "Authentication",
                                  note & $"Attempt during lockout period — Input: [{userInput}]")
                 Return
             End If
 
+            ' === ✅ TAMA ANG PASSWORD — I-SAVE ANG NAKALOGIN NA IMPORMASYON ===
             If dbPass = passInput Then
-                LoggedFullname = If(String.IsNullOrWhiteSpace(fullName), userInput, fullName)
-                LoggedRole = roleName
-                ResetAttempts(foundUserType, userInput)
+                LoggedInUsername = userInput               ' ← Username
+                LoggedInFullname = If(String.IsNullOrWhiteSpace(fullName), userInput, fullName) ' ← Pangalan
+                LoggedInRole = roleName                     ' ← Role
+                LoggedInUserID = recordId                  ' ← User ID
 
-                RecordActivityLog(recordId, LoggedFullname, LoggedRole, "LOGIN", "Authentication",
+                ResetAttempts(foundUserType, userInput)
+                RecordActivityLog(recordId, LoggedInFullname, LoggedInRole, "LOGIN", "Authentication",
                                  $"{roleName} logged in successfully — Username used: [{userInput}]")
 
                 isLoginSuccess = True
@@ -207,10 +221,10 @@ Public Class frmlogin
                 Timer1.Interval = 800
                 Timer1.Start()
             Else
+                ' === MALING PASSWORD ===
                 attempts += 1
                 lblAttempts.Text = attempts.ToString()
                 UpdateAttemptCount(foundUserType, userInput, attempts)
-
                 RecordActivityLog(recordId, userInput, roleName, "FAILED_LOGIN", "Authentication",
                                  note & $"Wrong password — Attempt {attempts} of 3 — Input: [{userInput}]")
 
@@ -265,6 +279,7 @@ Public Class frmlogin
             frmMain.Show()
             Return
         End If
+
         lockoutSecondsRemaining -= 1
         If lockoutSecondsRemaining > 0 Then
             lblError.Text = $"Locked. Try again in {lockoutSecondsRemaining}s."
@@ -278,8 +293,6 @@ Public Class frmlogin
     Private Sub RecordActivityLog(userId As Integer, fullName As String, userRole As String, actionType As String, moduleName As String, details As String)
         Try
             connection()
-
-            ' Kunin ang IP Address
             Dim ipAddress As String = "127.0.0.1"
             Try
                 Dim host As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
@@ -293,10 +306,8 @@ Public Class frmlogin
                 ipAddress = "Unknown"
             End Try
 
-            ' Kunin ang Device Info
             Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
 
-            ' Ipasok sa database — kasama ang IPAddress at DeviceInfo
             Dim logSql As String = "INSERT INTO activity_logs " &
                 "(UserID, FullName, UserRole, ActionType, Module, Details, ActionDate, IPAddress, DeviceInfo) " &
                 "VALUES (@userId, @fullName, @userRole, @actionType, @module, @details, NOW(), @ipAddress, @deviceInfo)"
@@ -310,7 +321,6 @@ Public Class frmlogin
                 cmdLog.Parameters.AddWithValue("@details", details)
                 cmdLog.Parameters.AddWithValue("@ipAddress", ipAddress)
                 cmdLog.Parameters.AddWithValue("@deviceInfo", deviceInfo)
-
                 cmdLog.ExecuteNonQuery()
             End Using
         Catch ex As Exception

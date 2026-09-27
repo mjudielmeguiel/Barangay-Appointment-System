@@ -165,12 +165,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frm About us.Designer.vb">
-      <DependentUpon>frm About us.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frm About us.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmActivityLogs.Designer.vb">
       <DependentUpon>frmActivityLogs.vb</DependentUpon>
     </Compile>
@@ -213,24 +207,13 @@
     <Compile Include="frmReportGeneration.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSettings.Designer.vb">
-      <DependentUpon>frmSettings.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmSettings.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmSpecificAppointments.Designer.vb">
       <DependentUpon>frmSpecificAppointments.vb</DependentUpon>
     </Compile>
     <Compile Include="frmSpecificAppointments.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSystemSettings.Designer.vb">
-      <DependentUpon>frmSystemSettings.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmSystemSettings.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="GlobalVars.vb" />
     <Compile Include="RESIDENCE RECORD\Barangay_Residences.Designer.vb">
       <DependentUpon>Barangay_Residences.vb</DependentUpon>
     </Compile>
@@ -241,12 +224,6 @@
       <DependentUpon>frmAdmin_Dashboard.vb</DependentUpon>
     </Compile>
     <Compile Include="ADMIN\frmAdmin_Dashboard.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ADMIN\User Manager\frmUserInformation.Designer.vb">
-      <DependentUpon>frmUserInformation.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ADMIN\User Manager\frmUserInformation.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DBconnection.vb" />
@@ -304,6 +281,12 @@
     <Compile Include="USERS\frmPayments.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="USERS\frmRoleManagement.Designer.vb">
+      <DependentUpon>frmRoleManagement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\frmRoleManagement.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="USERS\frmUser_Dashboard.Designer.vb">
       <DependentUpon>frmUser_Dashboard.vb</DependentUpon>
     </Compile>
@@ -358,9 +341,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frm About us.resx">
-      <DependentUpon>frm About us.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmActivityLogs.resx">
       <DependentUpon>frmActivityLogs.vb</DependentUpon>
     </EmbeddedResource>
@@ -382,23 +362,14 @@
     <EmbeddedResource Include="frmReportGeneration.resx">
       <DependentUpon>frmReportGeneration.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmSettings.resx">
-      <DependentUpon>frmSettings.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmSpecificAppointments.resx">
       <DependentUpon>frmSpecificAppointments.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmSystemSettings.resx">
-      <DependentUpon>frmSystemSettings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RESIDENCE RECORD\Barangay_Residences.resx">
       <DependentUpon>Barangay_Residences.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ADMIN\frmAdmin_Dashboard.resx">
       <DependentUpon>frmAdmin_Dashboard.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\User Manager\frmUserInformation.resx">
-      <DependentUpon>frmUserInformation.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ADMIN\frmDocumentServices.resx">
       <DependentUpon>frmDocumentServices.vb</DependentUpon>
@@ -426,6 +397,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="USERS\frmPayments.resx">
       <DependentUpon>frmPayments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\frmRoleManagement.resx">
+      <DependentUpon>frmRoleManagement.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="USERS\frmUser_Dashboard.resx">
       <DependentUpon>frmUser_Dashboard.vb</DependentUpon>

@@ -10,21 +10,12 @@ Public Class frmResidence_Records
         Timer1.Start()
 
         SetupSearchPlaceholder()
-        LoadWelcomeUser()
         StyleDataGridView(dgvResidences)
         LoadResidenceRecords()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         lblDateTime.Text = DateTime.Now.ToString("F")
-    End Sub
-
-    Private Sub LoadWelcomeUser()
-        If Not String.IsNullOrEmpty(LoggedFullname) Then
-            lblWelcomeUser.Text = $"{LoggedFullname}!"
-        Else
-            lblWelcomeUser.Text = "User!"
-        End If
     End Sub
 
     Private Sub LoadResidenceRecords(Optional searchKeyword As String = "")
