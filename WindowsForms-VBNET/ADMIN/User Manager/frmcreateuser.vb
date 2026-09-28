@@ -24,7 +24,21 @@ Public Class frmcreateuser
         Me.TopMost = True
         Me.KeyPreview = True
         frmMain.Enabled = False
-        LoadDepartmentsCombo()
+
+        ' ✅ Itago ang Department at Email kung ADMIN ang ine-edit
+        If editingUserID.HasValue AndAlso editingSourceTable = "admin" Then
+            cboDepartment.Visible = False
+            lblDepartmentError.Visible = False
+            txtEmail.Visible = False
+            lblEmailError.Visible = False
+        Else
+            cboDepartment.Visible = True
+            lblDepartmentError.Visible = True
+            txtEmail.Visible = True
+            lblEmailError.Visible = True
+            LoadDepartmentsCombo()
+        End If
+
         LoadRolesFromDatabase()
 
         If editingUserID.HasValue Then
@@ -45,7 +59,7 @@ Public Class frmcreateuser
     Private Sub LoadDepartmentsCombo()
         Try
             connection()
-            sql = "SELECT DepartmentName FROM departments WHERE IsActive = 1 ORDER BY DepartmentName ASC"
+            Dim sql = "SELECT DepartmentName FROM departments WHERE IsActive = 1 ORDER BY DepartmentName ASC"
             Dim dtDept As New DataTable()
             Using localCmd As New MySqlCommand(sql, cn)
                 Using adapter As New MySqlDataAdapter(localCmd)
@@ -70,8 +84,10 @@ Public Class frmcreateuser
         cboRole.Items.Clear()
         Try
             connection()
-            sql = "SELECT RoleName FROM user_roles ORDER BY RoleName ASC"
+            Dim sql = "SELECT RoleName FROM user_roles ORDER BY RoleName ASC"
             Using cmd As New MySqlCommand(sql, cn)
+                If cn.State = ConnectionState.Open Then cn.Close()
+                cn.Open()
                 Using dr As MySqlDataReader = cmd.ExecuteReader()
                     While dr.Read()
                         cboRole.Items.Add(dr("RoleName").ToString().ToUpper())
@@ -89,7 +105,7 @@ Public Class frmcreateuser
         If String.IsNullOrWhiteSpace(roleName) Then Return False
         Try
             connection()
-            sql = "SELECT COUNT(*) FROM user_roles WHERE UPPER(RoleName) = UPPER(@rname)"
+            Dim sql = "SELECT COUNT(*) FROM user_roles WHERE UPPER(RoleName) = UPPER(@rname)"
             Using cmd As New MySqlCommand(sql, cn)
                 cmd.Parameters.AddWithValue("@rname", roleName.Trim())
                 Return Convert.ToInt32(cmd.ExecuteScalar()) > 0
@@ -101,36 +117,56 @@ Public Class frmcreateuser
         End Try
     End Function
 
-    ' ✅ I-load ang datos kapag nag-e-edit
+    ' ✅ I-load ang datos kapag nag-e-edit — WALANG Department sa admin
     Private Sub LoadUserDataForEdit()
         Try
             connection()
             Dim idCol As String = If(editingSourceTable = "admin", "AdminID", "UserID")
-            Dim query As String = If(editingSourceTable = "admin",
-                "SELECT Lastname, Firstname, Department, Role, Username, Password, Email, StaffCode, Picture FROM admin WHERE AdminID = @uid",
-                "SELECT Lastname, Firstname, Department, Role, Username, Password, Email, StaffCode, Picture FROM users WHERE UserID = @uid")
+            Dim query As String
+
+            If editingSourceTable = "admin" Then
+                ' ✅ ADMIN — WALANG Department, walang Email, walang StaffCode
+                query = "SELECT Lastname, Firstname, Role, Username, Password, Picture FROM admin WHERE AdminID = @uid"
+            Else
+                ' ✅ USERS — kumpleto
+                query = "SELECT Lastname, Firstname, Department, Role, Username, Password, Email, StaffCode, Picture FROM users WHERE UserID = @uid"
+            End If
 
             Using cmd As New MySqlCommand(query, cn)
                 cmd.Parameters.AddWithValue("@uid", editingUserID.Value)
+                If cn.State = ConnectionState.Open Then cn.Close()
+                cn.Open()
                 Using dr As MySqlDataReader = cmd.ExecuteReader()
                     If dr.Read() Then
                         txtLastname.Text = If(dr("Lastname") Is DBNull.Value, "", dr("Lastname").ToString())
                         txtFirstname.Text = If(dr("Firstname") Is DBNull.Value, "", dr("Firstname").ToString())
-                        If Not dr("Department") Is DBNull.Value Then
+
+                        ' ✅ Department — USERS lang
+                        If editingSourceTable = "users" AndAlso Not dr("Department") Is DBNull.Value Then
                             cboDepartment.Text = dr("Department").ToString()
                         End If
+
                         If Not dr("Role") Is DBNull.Value Then
                             cboRole.Text = dr("Role").ToString().ToUpper()
                         End If
+
                         txtUsername.Text = If(dr("Username") Is DBNull.Value, "", dr("Username").ToString())
-                        txtUsername.Tag = "ManualEdited" ' Hindi na mag-aauto-generate
+                        txtUsername.Tag = "ManualEdited"
+
                         txtPassword.Text = If(dr("Password") Is DBNull.Value, "", dr("Password").ToString())
                         txtConfirmPass.Text = txtPassword.Text
-                        txtEmail.Text = If(dr("Email") Is DBNull.Value, "", dr("Email").ToString())
-                        If Not dr("StaffCode") Is DBNull.Value Then
+
+                        ' ✅ Email — USERS lang
+                        If editingSourceTable = "users" AndAlso Not dr("Email") Is DBNull.Value Then
+                            txtEmail.Text = dr("Email").ToString()
+                        End If
+
+                        ' ✅ StaffCode — USERS lang
+                        If editingSourceTable = "users" AndAlso Not dr("StaffCode") Is DBNull.Value Then
                             lblStaffCode.Text = dr("StaffCode").ToString()
                         End If
-                        ' I-load ang litrato
+
+                        ' Litrato — pareho
                         If Not dr("Picture") Is DBNull.Value Then
                             profileImageBytes = CType(dr("Picture"), Byte())
                             Using ms As New MemoryStream(profileImageBytes)
@@ -181,12 +217,14 @@ Public Class frmcreateuser
     End Sub
 
     Private Function GetNextStaffCode() As String
-        If editingUserID.HasValue Then Return lblStaffCode.Text ' Huwag magbago kapag nag-e-edit
+        If editingUserID.HasValue Then Return lblStaffCode.Text
         Dim nextCode As String = "STF-001"
         Try
             connection()
-            sql = "SELECT StaffCode FROM users WHERE StaffCode LIKE 'STF-%' ORDER BY UserID DESC LIMIT 1"
+            Dim sql = "SELECT StaffCode FROM users WHERE StaffCode LIKE 'STF-%' ORDER BY UserID DESC LIMIT 1"
             Using cmd As New MySqlCommand(sql, cn)
+                If cn.State = ConnectionState.Open Then cn.Close()
+                cn.Open()
                 Using dr As MySqlDataReader = cmd.ExecuteReader()
                     If dr.Read() Then
                         Dim lastCode As String = dr("StaffCode").ToString()
@@ -218,7 +256,7 @@ Public Class frmcreateuser
     End Sub
 
     Private Sub UpdateUsernameSuggestion() Handles txtFirstname.TextChanged, cboRole.SelectedIndexChanged
-        If editingUserID.HasValue Then Exit Sub ' Huwag baguhin kapag nag-e-edit
+        If editingUserID.HasValue Then Exit Sub
         If txtUsername.Tag Is Nothing OrElse txtUsername.Tag.ToString() <> "AutoGenerated" Then Exit Sub
         If String.IsNullOrWhiteSpace(txtFirstname.Text) OrElse cboRole.SelectedIndex = -1 Then
             txtUsername.Clear()
@@ -235,6 +273,8 @@ Public Class frmcreateuser
             Do
                 Using cmd As New MySqlCommand("SELECT Username FROM users WHERE LOWER(Username)=LOWER(@uname)", cn)
                     cmd.Parameters.AddWithValue("@uname", checkUser)
+                    If cn.State = ConnectionState.Open Then cn.Close()
+                    cn.Open()
                     Using dr = cmd.ExecuteReader()
                         If Not dr.HasRows Then Exit Do
                     End Using
@@ -276,10 +316,15 @@ Public Class frmcreateuser
     End Sub
 
     Private Sub cboDepartment_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboDepartment.SelectedIndexChanged
+        ' ✅ I-skip kung Admin — hindi nakikita naman
+        If editingUserID.HasValue AndAlso editingSourceTable = "admin" Then Exit Sub
         SetFeedbackLabel(lblDepartmentError, If(cboDepartment.SelectedIndex = -1, "Department is required.", "✓ OK"), cboDepartment.SelectedIndex = -1)
     End Sub
 
     Private Sub txtEmail_TextChanged(sender As Object, e As EventArgs) Handles txtEmail.TextChanged
+        ' ✅ I-skip kung Admin
+        If editingUserID.HasValue AndAlso editingSourceTable = "admin" Then Exit Sub
+
         Dim val = txtEmail.Text.Trim().ToLower()
         If String.IsNullOrWhiteSpace(val) Then
             SetFeedbackLabel(lblEmailError, "Email is required.", True)
@@ -293,9 +338,7 @@ Public Class frmcreateuser
             connection()
             Dim checkSql As String
             If editingUserID.HasValue Then
-                checkSql = If(editingSourceTable = "admin",
-                    "SELECT COUNT(*) FROM admin WHERE LOWER(Email)=LOWER(@email) AND AdminID<>@uid",
-                    "SELECT COUNT(*) FROM users WHERE LOWER(Email)=LOWER(@email) AND UserID<>@uid")
+                checkSql = "SELECT COUNT(*) FROM users WHERE LOWER(Email)=LOWER(@email) AND UserID<>@uid"
             Else
                 checkSql = "SELECT COUNT(*) FROM users WHERE LOWER(Email)=LOWER(@email)"
             End If
@@ -379,15 +422,28 @@ Public Class frmcreateuser
             MsgBox("Selected role is invalid!", MsgBoxStyle.Exclamation)
             Return
         End If
-        ' All validation check
-        If lblLastnameError.ForeColor = Color.Red OrElse lblFirstnameError.ForeColor = Color.Red OrElse
-           lblEmailError.ForeColor = Color.Red OrElse lblUsernameError.ForeColor = Color.Red OrElse
-           lblConfirmPassError.ForeColor = Color.Red OrElse lblDepartmentError.ForeColor = Color.Red Then
-            MsgBox("Please resolve all validation errors before submitting!", MsgBoxStyle.Exclamation)
-            Return
+
+        ' ✅ Department validation — USERS lang
+        If editingSourceTable = "users" AndAlso Not editingUserID.HasValue Then
+            If cboDepartment.SelectedIndex = -1 Then
+                MsgBox("Please select a department!", MsgBoxStyle.Exclamation)
+                Return
+            End If
         End If
-        If cboDepartment.SelectedIndex = -1 Then
-            MsgBox("Please select a department!", MsgBoxStyle.Exclamation)
+
+        ' All validation check
+        Dim hasError As Boolean = False
+        If lblLastnameError.ForeColor = Color.Red Then hasError = True
+        If lblFirstnameError.ForeColor = Color.Red Then hasError = True
+        If lblConfirmPassError.ForeColor = Color.Red Then hasError = True
+        If editingSourceTable = "users" Then
+            If lblEmailError.ForeColor = Color.Red Then hasError = True
+            If lblDepartmentError.ForeColor = Color.Red Then hasError = True
+        End If
+        If lblUsernameError.ForeColor = Color.Red Then hasError = True
+
+        If hasError Then
+            MsgBox("Please resolve all validation errors before submitting!", MsgBoxStyle.Exclamation)
             Return
         End If
 
@@ -397,27 +453,42 @@ Public Class frmcreateuser
                 ' ✅ UPDATE MODE
                 If MsgBox("Update this user information?", MsgBoxStyle.YesNo + MsgBoxStyle.Question) = MsgBoxResult.No Then Return
                 Dim idCol = If(editingSourceTable = "admin", "AdminID", "UserID")
-                sql = $"UPDATE {editingSourceTable} SET Lastname=@lname, Firstname=@fname, Department=@dept, Role=@role, Username=@uname, Password=@pass, Email=@email, Picture=@pic WHERE {idCol}=@uid"
+                Dim sql As String
+
+                If editingSourceTable = "admin" Then
+                    ' ✅ ADMIN — walang Department, walang Email
+                    sql = "UPDATE admin SET Lastname=@lname, Firstname=@fname, Role=@role, Username=@uname, Password=@pass, Picture=@pic WHERE " & idCol & "=@uid"
+                Else
+                    ' ✅ USERS — kumpleto
+                    sql = "UPDATE users SET Lastname=@lname, Firstname=@fname, Department=@dept, Role=@role, Username=@uname, Password=@pass, Email=@email, Picture=@pic WHERE " & idCol & "=@uid"
+                End If
+
                 Using cmd As New MySqlCommand(sql, cn)
                     cmd.Parameters.AddWithValue("@lname", txtLastname.Text.Trim().ToUpper())
                     cmd.Parameters.AddWithValue("@fname", txtFirstname.Text.Trim().ToUpper())
-                    cmd.Parameters.AddWithValue("@dept", cboDepartment.Text.Trim())
+                    If editingSourceTable = "users" Then
+                        cmd.Parameters.AddWithValue("@dept", cboDepartment.Text.Trim())
+                        cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim().ToLower())
+                    End If
                     cmd.Parameters.AddWithValue("@role", cboRole.Text.Trim().ToUpper())
                     cmd.Parameters.AddWithValue("@uname", txtUsername.Text.Trim())
                     cmd.Parameters.AddWithValue("@pass", txtPassword.Text)
-                    cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim().ToLower())
                     cmd.Parameters.Add("@pic", MySqlDbType.LongBlob).Value = If(profileImageBytes IsNot Nothing, profileImageBytes, DBNull.Value)
                     cmd.Parameters.AddWithValue("@uid", editingUserID.Value)
+
+                    If cn.State = ConnectionState.Open Then cn.Close()
+                    cn.Open()
                     cmd.ExecuteNonQuery()
                 End Using
+
                 MsgBox("User updated successfully!", MsgBoxStyle.Information)
                 Me.DialogResult = DialogResult.OK
                 Me.Close()
             Else
-                ' ✅ INSERT MODE
+                ' ✅ INSERT MODE — para sa bagong USER
                 Dim freshStaffCode = GetNextStaffCode()
-                sql = "INSERT INTO users (StaffCode, Username, Password, Lastname, Firstname, Department, Role, Email, Picture, AccountStatus, LoginAttempts) " &
-                       "VALUES (@scode, @uname, @pass, @lname, @fname, @dept, @role, @email, @pic, 'Active', 0)"
+                Dim sql = "INSERT INTO users (StaffCode, Username, Password, Lastname, Firstname, Department, Role, Email, Picture, AccountStatus, LoginAttempts) " &
+                           "VALUES (@scode, @uname, @pass, @lname, @fname, @dept, @role, @email, @pic, 'Active', 0)"
                 Using cmd As New MySqlCommand(sql, cn)
                     cmd.Parameters.AddWithValue("@scode", freshStaffCode)
                     cmd.Parameters.AddWithValue("@uname", txtUsername.Text.Trim())
@@ -428,8 +499,12 @@ Public Class frmcreateuser
                     cmd.Parameters.AddWithValue("@role", cboRole.Text.Trim().ToUpper())
                     cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim().ToLower())
                     cmd.Parameters.Add("@pic", MySqlDbType.LongBlob).Value = If(profileImageBytes IsNot Nothing, profileImageBytes, DBNull.Value)
+
+                    If cn.State = ConnectionState.Open Then cn.Close()
+                    cn.Open()
                     cmd.ExecuteNonQuery()
                 End Using
+
                 MsgBox("Successfully Registered New User!", MsgBoxStyle.Information)
                 ClearForm()
                 GenerateStaffCode()
@@ -464,9 +539,7 @@ Public Class frmcreateuser
         Me.Close()
     End Sub
 
-    ' ✅ I-add ito — para ma-enable ang main form kahit paano magsara
     Private Sub frmcreateuser_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        ' Hanapin ang main form at i-enable ito
         Dim mainForm As frmMain = TryCast(Application.OpenForms("frmMain"), frmMain)
         If mainForm IsNot Nothing Then
             mainForm.Enabled = True

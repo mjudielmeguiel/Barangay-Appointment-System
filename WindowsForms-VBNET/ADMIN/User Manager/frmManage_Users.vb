@@ -2,7 +2,6 @@
 Imports MySql.Data.MySqlClient
 
 Public Class frmManage_Users
-
     Private Sub frmManage_Users_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         StyleDataGridView()
         LoadAllUsers()
@@ -21,6 +20,7 @@ Public Class frmManage_Users
         DataGridView1.MultiSelect = False
         DataGridView1.AllowUserToAddRows = False
         DataGridView1.ReadOnly = True
+        DataGridView1.AllowUserToOrderColumns = False ' ✅ I-lock ang pagbabago ng pwesto
 
         Dim headerStyle As New DataGridViewCellStyle With {
             .BackColor = Color.FromArgb(235, 238, 250),
@@ -61,12 +61,11 @@ Public Class frmManage_Users
                     AdminID AS SourceID,
                     '' AS `Staff Code`,
                     CONCAT(Lastname, ', ', Firstname) AS `Full Name`,
-                    Department,
+                    '' AS Department,
                     Role,
                     '' AS Email,
                     IFNULL(AccountStatus, 'New') AS `Status`,
-                    LoginAttempts AS `Failed Attempts`,
-                    Username
+                    LoginAttempts AS `Failed Attempts`
                 FROM admin
                 UNION ALL
                 SELECT 
@@ -78,8 +77,7 @@ Public Class frmManage_Users
                     Role,
                     Email,
                     IFNULL(AccountStatus, 'New') AS `Status`,
-                    LoginAttempts AS `Failed Attempts`,
-                    Username
+                    LoginAttempts AS `Failed Attempts`
                 FROM users
                 ORDER BY `Full Name` ASC"
             Else
@@ -90,12 +88,11 @@ Public Class frmManage_Users
                         AdminID AS SourceID,
                         '' AS `Staff Code`,
                         CONCAT(Lastname, ', ', Firstname) AS `Full Name`,
-                        Department,
+                        '' AS Department,
                         Role,
                         '' AS Email,
                         IFNULL(AccountStatus, 'New') AS `Status`,
-                        LoginAttempts AS `Failed Attempts`,
-                        Username
+                        LoginAttempts AS `Failed Attempts`
                     FROM admin
                     UNION ALL
                     SELECT 
@@ -107,12 +104,11 @@ Public Class frmManage_Users
                         Role,
                         Email,
                         IFNULL(AccountStatus, 'New') AS `Status`,
-                        LoginAttempts AS `Failed Attempts`,
-                        Username
+                        LoginAttempts AS `Failed Attempts`
                     FROM users
                 ) AS combined
                 WHERE 
-                    Username LIKE @search OR `Full Name` LIKE @search OR Department LIKE @search OR 
+                    Username LIKE @search OR `Full Name` LIKE @search OR 
                     Role LIKE @search OR Email LIKE @search OR `Status` LIKE @search OR `Staff Code` LIKE @search
                 ORDER BY `Full Name` ASC"
             End If
@@ -122,23 +118,26 @@ Public Class frmManage_Users
                 If Not String.IsNullOrWhiteSpace(searchQuery) Then
                     cmdUsers.Parameters.AddWithValue("@search", "%" & searchQuery & "%")
                 End If
+                If cn.State = ConnectionState.Open Then cn.Close()
+                cn.Open()
                 Using adapter As New MySqlDataAdapter(cmdUsers)
+                    dtUsers.Clear()
                     adapter.Fill(dtUsers)
                 End Using
             End Using
 
+            DataGridView1.DataSource = Nothing
             DataGridView1.DataSource = dtUsers
-            AddGridActionButtons()
 
+            ' ✅ Itago ang mga hidden columns
             If DataGridView1.Columns.Contains("SourceTable") Then DataGridView1.Columns("SourceTable").Visible = False
             If DataGridView1.Columns.Contains("SourceID") Then DataGridView1.Columns("SourceID").Visible = False
-            If DataGridView1.Columns.Contains("Username") Then DataGridView1.Columns("Username").Visible = False
 
-            If DataGridView1.Columns.Contains("Staff Code") AndAlso
-               Not String.IsNullOrEmpty(DataGridView1.Columns("Staff Code").HeaderText) Then
-                DataGridView1.Columns("Staff Code").DefaultCellStyle.BackColor = Color.FromArgb(220, 225, 248)
-                DataGridView1.Columns("Staff Code").DefaultCellStyle.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
-            End If
+            ' ✅ Ayusin ang pagkakasunod-sunod — ito ang susi!
+            ReorderColumns()
+
+            ' ✅ Idagdag ang Action Buttons sa HULI
+            AddGridActionButtons()
 
             UpdateUserCounts()
         Catch ex As Exception
@@ -148,32 +147,61 @@ Public Class frmManage_Users
         End Try
     End Sub
 
-    Private Sub AddGridActionButtons()
-        If Not DataGridView1.Columns.Contains("colView") Then
-            Dim btnViewCol As New DataGridViewButtonColumn() With {
-                .Name = "colView",
-                .HeaderText = "Action",
-                .FlatStyle = FlatStyle.Flat,
-                .Width = 85
-            }
-            DataGridView1.Columns.Add(btnViewCol)
-        End If
+    ' ✅ Bagong Function — Ayusin ang Column Order
+    Private Sub ReorderColumns()
+        ' Gustong pagkakasunod-sunod:
+        ' Staff Code → Full Name → Department → Role → Email → Status → Failed Attempts → VIEW → DELETE
 
-        If Not DataGridView1.Columns.Contains("colDelete") Then
-            Dim btnDelCol As New DataGridViewButtonColumn() With {
-                .Name = "colDelete",
-                .HeaderText = "",
-                .FlatStyle = FlatStyle.Flat,
-                .Width = 95
-            }
-            DataGridView1.Columns.Add(btnDelCol)
-        End If
+        Dim order As New List(Of String) From {
+            "Staff Code",
+            "Full Name",
+            "Department",
+            "Role",
+            "Email",
+            "Status",
+            "Failed Attempts"
+        }
+
+        Dim displayIndex As Integer = 0
+        For Each colName In order
+            If DataGridView1.Columns.Contains(colName) Then
+                DataGridView1.Columns(colName).DisplayIndex = displayIndex
+                displayIndex += 1
+            End If
+        Next
+    End Sub
+
+    Private Sub AddGridActionButtons()
+        ' ✅ Alisin muna kung nandoon na
+        If DataGridView1.Columns.Contains("colView") Then DataGridView1.Columns.Remove("colView")
+        If DataGridView1.Columns.Contains("colDelete") Then DataGridView1.Columns.Remove("colDelete")
+
+        ' ✅ VIEW — ilalagay sa kasunod na huling data column
+        Dim btnViewCol As New DataGridViewButtonColumn() With {
+            .Name = "colView",
+            .HeaderText = "Action",
+            .Text = "VIEW",
+            .UseColumnTextForButtonValue = True,
+            .FlatStyle = FlatStyle.Flat,
+            .Width = 90
+        }
+        DataGridView1.Columns.Add(btnViewCol)
+
+        ' ✅ DELETE — sa pinakahuli
+        Dim btnDelCol As New DataGridViewButtonColumn() With {
+            .Name = "colDelete",
+            .HeaderText = "",
+            .Text = "DELETE",
+            .UseColumnTextForButtonValue = True,
+            .FlatStyle = FlatStyle.Flat,
+            .Width = 100
+        }
+        DataGridView1.Columns.Add(btnDelCol)
     End Sub
 
     Private Sub DataGridView1_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridView1.CellPainting
         If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
             Dim colName As String = DataGridView1.Columns(e.ColumnIndex).Name
-
             If colName = "colView" Then
                 e.PaintBackground(e.CellBounds, True)
                 Dim btnRect = New Rectangle(e.CellBounds.X + 6, e.CellBounds.Y + 6, e.CellBounds.Width - 12, e.CellBounds.Height - 12)
@@ -185,7 +213,6 @@ Public Class frmManage_Users
                                      btnRect, Color.White,
                                      TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
                 e.Handled = True
-
             ElseIf colName = "colDelete" Then
                 e.PaintBackground(e.CellBounds, True)
                 Dim btnRect = New Rectangle(e.CellBounds.X + 6, e.CellBounds.Y + 6, e.CellBounds.Width - 12, e.CellBounds.Height - 12)
@@ -226,16 +253,16 @@ Public Class frmManage_Users
         If colName = "colView" Then
             Dim frm As New frmcreateuser(sourceID, sourceTable)
             If frm.ShowDialog() = DialogResult.OK Then LoadAllUsers()
-
         ElseIf colName = "colDelete" Then
             If MessageBox.Show($"Are you sure you want to delete:{vbCrLf}{fullName}?",
                       "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.No Then Return
-
             Try
                 connection()
                 Dim idCol = If(sourceTable = "admin", "AdminID", "UserID")
                 Using cmd As New MySqlCommand($"DELETE FROM {sourceTable} WHERE {idCol} = @uid", cn)
                     cmd.Parameters.AddWithValue("@uid", sourceID)
+                    If cn.State = ConnectionState.Open Then cn.Close()
+                    cn.Open()
                     cmd.ExecuteNonQuery()
                 End Using
                 MessageBox.Show("User deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -251,25 +278,35 @@ Public Class frmManage_Users
     Private Sub UpdateUserCounts()
         Try
             connection()
+            If cn.State = ConnectionState.Open Then cn.Close()
+            cn.Open()
+
             Using cmdNew As New MySqlCommand("
-                SELECT (SELECT COUNT(*) FROM admin WHERE AccountStatus IS NULL OR AccountStatus IN ('','New')) +
-                       (SELECT COUNT(*) FROM users WHERE AccountStatus IS NULL OR AccountStatus IN ('','New'))", cn)
+                SELECT 
+                    (SELECT COUNT(*) FROM admin WHERE AccountStatus IS NULL OR AccountStatus IN ('','New')) +
+                    (SELECT COUNT(*) FROM users WHERE AccountStatus IS NULL OR AccountStatus IN ('','New'))", cn)
                 lblNewAccount.Text = Convert.ToInt32(cmdNew.ExecuteScalar()).ToString()
             End Using
+
             Using cmdActive As New MySqlCommand("
-                SELECT (SELECT COUNT(*) FROM admin WHERE AccountStatus='Active') +
-                       (SELECT COUNT(*) FROM users WHERE AccountStatus='Active')", cn)
+                SELECT 
+                    (SELECT COUNT(*) FROM admin WHERE AccountStatus='Active') +
+                    (SELECT COUNT(*) FROM users WHERE AccountStatus='Active')", cn)
                 lblActiveUsers.Text = Convert.ToInt32(cmdActive.ExecuteScalar()).ToString()
             End Using
+
             Using cmdTotal As New MySqlCommand("
                 SELECT (SELECT COUNT(*) FROM admin) + (SELECT COUNT(*) FROM users)", cn)
                 lblTotalUsers.Text = Convert.ToInt32(cmdTotal.ExecuteScalar()).ToString()
             End Using
+
             Using cmdLocked As New MySqlCommand("
-                SELECT (SELECT COUNT(*) FROM admin WHERE AccountStatus='Locked') +
-                       (SELECT COUNT(*) FROM users WHERE AccountStatus='Locked')", cn)
+                SELECT 
+                    (SELECT COUNT(*) FROM admin WHERE AccountStatus='Locked') +
+                    (SELECT COUNT(*) FROM users WHERE AccountStatus='Locked')", cn)
                 lblLockedUsers.Text = Convert.ToInt32(cmdLocked.ExecuteScalar()).ToString()
             End Using
+
         Catch ex As Exception
             MessageBox.Show("Count error: " & ex.Message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Finally
@@ -282,18 +319,15 @@ Public Class frmManage_Users
             Sub(s, e)
                 FilterByStatus("New")
             End Sub
-
         AddHandler lblActiveUsers.Click,
             Sub(s, e)
                 FilterByStatus("Active")
             End Sub
-
         AddHandler lblTotalUsers.Click,
             Sub(s, e)
                 txtSearch.Clear()
                 LoadAllUsers()
             End Sub
-
         AddHandler lblLockedUsers.Click,
             Sub(s, e)
                 FilterByStatus("Locked")
@@ -307,28 +341,37 @@ Public Class frmManage_Users
             Dim filterSql = "
             SELECT * FROM (
                 SELECT 'admin' AS SourceTable, AdminID AS SourceID, '' AS `Staff Code`,
-                       CONCAT(Lastname, ', ', Firstname) AS `Full Name`, Department, Role,
-                       '' AS Email, IFNULL(AccountStatus, 'New') AS `Status`, LoginAttempts AS `Failed Attempts`, Username
+                       CONCAT(Lastname, ', ', Firstname) AS `Full Name`,
+                       '' AS Department,
+                       Role,
+                       '' AS Email, IFNULL(AccountStatus, 'New') AS `Status`, LoginAttempts AS `Failed Attempts`
                 FROM admin
                 UNION ALL
                 SELECT 'users' AS SourceTable, UserID AS SourceID, StaffCode AS `Staff Code`,
-                       CONCAT(Lastname, ', ', Firstname) AS `Full Name`, Department, Role,
-                       Email, IFNULL(AccountStatus, 'New') AS `Status`, LoginAttempts AS `Failed Attempts`, Username
+                       CONCAT(Lastname, ', ', Firstname) AS `Full Name`,
+                       Department,
+                       Role,
+                       Email, IFNULL(AccountStatus, 'New') AS `Status`, LoginAttempts AS `Failed Attempts`
                 FROM users
             ) AS combined WHERE `Status` = @stat ORDER BY `Full Name` ASC"
 
             Dim dt As New DataTable()
+            If cn.State = ConnectionState.Open Then cn.Close()
+            cn.Open()
             Using cmd As New MySqlCommand(filterSql, cn)
                 cmd.Parameters.AddWithValue("@stat", statusValue)
                 Using adapter As New MySqlDataAdapter(cmd)
+                    dt.Clear()
                     adapter.Fill(dt)
                 End Using
             End Using
-
+            DataGridView1.DataSource = Nothing
             DataGridView1.DataSource = dt
+
             If DataGridView1.Columns.Contains("SourceTable") Then DataGridView1.Columns("SourceTable").Visible = False
             If DataGridView1.Columns.Contains("SourceID") Then DataGridView1.Columns("SourceID").Visible = False
-            If DataGridView1.Columns.Contains("Username") Then DataGridView1.Columns("Username").Visible = False
+
+            ReorderColumns()
             AddGridActionButtons()
         Catch ex As Exception
             MessageBox.Show("Filter error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -351,5 +394,4 @@ Public Class frmManage_Users
         frm.ShowDialog()
         LoadAllUsers()
     End Sub
-
 End Class

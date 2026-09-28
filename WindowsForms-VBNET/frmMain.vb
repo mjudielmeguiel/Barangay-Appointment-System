@@ -6,27 +6,30 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 
 Public Class frmMain
-    ' === ✅ PROPERTIES ===
+    ' === PROPERTIES ===
     Private ReadOnly Property LoggedFullname As String
         Get
             Return frmlogin.LoggedInFullname
         End Get
     End Property
+
     Private ReadOnly Property LoggedRole As String
         Get
             Return frmlogin.LoggedInRole
         End Get
     End Property
+
     Private ReadOnly Property LoggedUserID As Integer
         Get
             Return frmlogin.LoggedInUserID
         End Get
     End Property
 
-    ' === SIDEBAR STATE ===
-    Private isSidebarOpen As Boolean = False
+    ' === PANEL DIMENSIONS PARA SA TOGGLE LOGIC LMAANG ===
+    Private Const ICON_RAIL_WIDTH As Integer = 70
+    Private Const MENU_PANEL_WIDTH As Integer = 200
 
-    ' === ✅ FORM LOAD ===
+    ' === FORM LOAD ===
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' --- SECURITY CHECK ---
         If String.IsNullOrWhiteSpace(frmlogin.LoggedInUsername) OrElse
@@ -37,14 +40,10 @@ Public Class frmMain
             Return
         End If
 
-        ' --- ✅ GAWING BILOG ANG PICTURE BOX ---
+        ' --- GAWING BILOG ANG PICTURE BOX ---
         MakeCircularPictureBox(picProfile)
 
-        ' --- SIDEBAR INIT ---
-        sidebarPanel.Visible = False
-        sidebarPanel.Width = 240
-
-        ' --- ✅ LOAD PROFILE INFO ---
+        ' --- LOAD PROFILE INFO ---
         LoadUserProfileInfo()
 
         ' --- ROLE-BASED VISIBILITY ---
@@ -54,22 +53,30 @@ Public Class frmMain
         ' --- LOAD DEFAULT DASHBOARD ---
         Panel2.Controls.Clear()
         Dim defaultForm As Form = If(isAdmin,
-            New frmAdmin_Dashboard With {
-                .TopLevel = False,
-                .FormBorderStyle = FormBorderStyle.None,
-                .Dock = DockStyle.Fill
-            },
-            New frmUser_Dashboard With {
-                .TopLevel = False,
-                .FormBorderStyle = FormBorderStyle.None,
-                .Dock = DockStyle.Fill
-            })
+            New frmAdmin_Dashboard With {.TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill},
+            New frmUser_Dashboard With {.TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill})
         Panel2.Controls.Add(defaultForm)
         defaultForm.Show()
     End Sub
 
-    ' === ✅ BAGONG METHOD: GAWING BILOG ===
+    ' === KAPAG NAG-RESIZE ANG FORM (Panel Layout Handling Only) ---
+    Private Sub frmMain_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        If panelIcons IsNot Nothing Then
+            panelIcons.Height = Me.ClientSize.Height
+        End If
+        If panelMenu IsNot Nothing Then
+            panelMenu.Height = Me.ClientSize.Height
+        End If
+        If Panel2 IsNot Nothing Then
+            Panel2.Location = New Point(panelIcons.Width + If(panelMenu.Visible, panelMenu.Width, 0), Panel2.Top)
+            Panel2.Width = Me.ClientSize.Width - Panel2.Left
+            Panel2.Height = Me.ClientSize.Height - Panel2.Top
+        End If
+    End Sub
+
+    ' === GAWING BILOG ANG PICTUREBOX ===
     Private Sub MakeCircularPictureBox(pb As PictureBox)
+        If pb Is Nothing Then Return
         Dim size As Integer = Math.Min(pb.Width, pb.Height)
         pb.Width = size
         pb.Height = size
@@ -79,139 +86,92 @@ Public Class frmMain
         pb.SizeMode = PictureBoxSizeMode.Zoom
     End Sub
 
-    ' === ✅ FIXED LOAD PROFILE INFO — Supports BOTH admin & users tables ===
+    ' === LOAD PROFILE INFO ===
     Private Sub LoadUserProfileInfo()
         Try
             connection()
             Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
             Dim targetTable As String = If(isAdmin, "admin", "users")
             Dim idColumn As String = If(isAdmin, "AdminID", "UserID")
-            Dim userId As Integer = LoggedUserID
-
-            ' --- ✅ SAFE SELECT — Handles tables properly ---
-            Dim sql As String = $"SELECT Firstname, Lastname, Picture FROM {targetTable} WHERE {idColumn} = @userId"
-
-            ' Add Role to SELECT only if it exists in the table
-            If Not isAdmin Then
-                sql = $"SELECT Firstname, Lastname, Role, Picture FROM {targetTable} WHERE {idColumn} = @userId"
-            Else
-                ' Admin table — Role has default value, safe to include now
-                sql = $"SELECT Firstname, Lastname, Role, Picture FROM {targetTable} WHERE {idColumn} = @userId"
-            End If
+            Dim sql As String = $"SELECT Firstname, Lastname, Role, Picture FROM {targetTable} WHERE {idColumn} = @userId"
 
             Using cmd As New MySqlCommand(sql, cn)
-                cmd.Parameters.AddWithValue("@userId", userId)
+                cmd.Parameters.AddWithValue("@userId", LoggedUserID)
                 Using dr As MySqlDataReader = cmd.ExecuteReader()
                     If dr.Read() Then
-                        ' --- FULL NAME ---
                         Dim fName As String = dr("Firstname").ToString().Trim()
                         Dim lName As String = dr("Lastname").ToString().Trim()
                         Dim displayName As String = $"{fName} {lName}".Trim()
                         lblFullname.Text = If(Not String.IsNullOrWhiteSpace(displayName), displayName, LoggedFullname)
 
-                        ' --- ✅ ROLE — Smart fallback for admin table ---
-                        Dim roleValue As String = ""
-                        If Not isAdmin Then
-                            If Not IsDBNull(dr("Role")) Then
-                                roleValue = dr("Role").ToString().Trim()
-                            End If
-                        Else
-                            ' Admin: use DB value or default
-                            If Not IsDBNull(dr("Role")) Then
-                                roleValue = dr("Role").ToString().Trim()
-                            End If
-                            If String.IsNullOrWhiteSpace(roleValue) Then
-                                roleValue = "Administrator"
-                            End If
-                        End If
+                        Dim roleValue As String = If(Not IsDBNull(dr("Role")), dr("Role").ToString().Trim(), "")
+                        If String.IsNullOrWhiteSpace(roleValue) Then roleValue = If(isAdmin, "Administrator", LoggedRole)
+                        lblUserRole.Text = roleValue.ToUpper()
 
-                        lblUserRole.Text = If(Not String.IsNullOrWhiteSpace(roleValue), roleValue.ToUpper(),
-                            If(Not String.IsNullOrWhiteSpace(LoggedRole), LoggedRole.ToUpper(), "USER"))
-
-                        ' --- PROFILE PICTURE ---
                         If Not IsDBNull(dr("Picture")) Then
-                            Dim picBytes As Byte() = CType(dr("Picture"), Byte())
-                            Using ms As New MemoryStream(picBytes)
+                            Using ms As New MemoryStream(CType(dr("Picture"), Byte()))
                                 picProfile.Image = Image.FromStream(ms)
                             End Using
                         Else
                             picProfile.Image = Nothing
                         End If
                     Else
-                        ' --- Fallback if no record found ---
                         lblFullname.Text = LoggedFullname
-                        lblUserRole.Text = If(isAdmin, "ADMINISTRATOR",
-                            If(Not String.IsNullOrWhiteSpace(LoggedRole), LoggedRole.ToUpper(), "USER"))
+                        lblUserRole.Text = If(isAdmin, "ADMINISTRATOR", LoggedRole.ToUpper())
                         picProfile.Image = Nothing
                     End If
                 End Using
             End Using
         Catch ex As Exception
-            MsgBox("Error loading profile: " & ex.Message, MsgBoxStyle.Information)
-            ' --- Safe fallback on error ---
             lblFullname.Text = LoggedFullname
             lblUserRole.Text = If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
-                "ADMINISTRATOR",
-                If(Not String.IsNullOrWhiteSpace(LoggedRole), LoggedRole.ToUpper(), "USER"))
+                "ADMINISTRATOR", LoggedRole.ToUpper())
             picProfile.Image = Nothing
         Finally
             CloseConnection()
         End Try
     End Sub
 
-    ' === ✅ SIDEBAR TOGGLE ===
+    ' === TOGGLE SIDEBAR (hamburger) — hide/show menu panel ===
     Private Sub btnToggleSidebar_Click(sender As Object, e As EventArgs) Handles btnToggleSidebar.Click
-        isSidebarOpen = Not isSidebarOpen
-        sidebarPanel.Visible = isSidebarOpen
-        sidebarPanel.BringToFront()
+        If panelMenu.Visible Then
+            panelMenu.Visible = False
+            Panel2.Location = New Point(panelIcons.Width, Panel2.Top)
+            Panel2.Width = Me.ClientSize.Width - panelIcons.Width
+        Else
+            panelMenu.Visible = True
+            Panel2.Location = New Point(panelIcons.Width + panelMenu.Width, Panel2.Top)
+            Panel2.Width = Me.ClientSize.Width - (panelIcons.Width + panelMenu.Width)
+        End If
     End Sub
 
-    ' === ✅ MENU NAVIGATION ===
+    ' === MENU NAVIGATION ===
     Private Sub btnHome_Click(sender As Object, e As EventArgs) Handles btnHome.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(frmAdmin_Dashboard), GetType(frmUser_Dashboard)))
-        CloseSidebar()
     End Sub
 
     Private Sub btnResidents_Click(sender As Object, e As EventArgs) Handles btnResidents.Click
         LoadFormIntoPanel(GetType(frmResidence_Records))
-        CloseSidebar()
     End Sub
 
     Private Sub btnUsers_Click(sender As Object, e As EventArgs) Handles btnUsers.Click
         LoadFormIntoPanel(GetType(frmManage_Users))
-        CloseSidebar()
     End Sub
 
     Private Sub btnPayments_Click(sender As Object, e As EventArgs) Handles btnPayments.Click
         Dim Payments As New frmPayments With {
-            .TopLevel = False,
-            .FormBorderStyle = FormBorderStyle.None,
-            .Dock = DockStyle.Fill,
-            .PreviousForm = Me
-        }
+            .TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill, .PreviousForm = Me}
         Panel2.Controls.Clear()
         Panel2.Controls.Add(Payments)
         Payments.Show()
-        CloseSidebar()
     End Sub
 
     Private Sub btnCalendar_Click(sender As Object, e As EventArgs) Handles btnCalendar.Click
         LoadFormIntoPanel(GetType(frmBarangayCalendar))
-        CloseSidebar()
     End Sub
 
-    Private Sub btnHistory_Click(sender As Object, e As EventArgs) Handles btnHistory.Click
-        LoadFormIntoPanel(GetType(frmAppointmentHistory))
-        CloseSidebar()
-    End Sub
-
-    Private Sub btnDocuments_Click(sender As Object, e As EventArgs) Handles btnDocuments.Click
-        frmDocumentServices.Show()
-        CloseSidebar()
-    End Sub
-
-    ' === ✅ HELPER METHODS ===
+    ' === HELPER: LOAD FORM SA PANEL ===
     Private Sub LoadFormIntoPanel(formType As Type)
         Panel2.Controls.Clear()
         Dim frm As Form = CType(Activator.CreateInstance(formType), Form)
@@ -222,57 +182,34 @@ Public Class frmMain
         frm.Show()
     End Sub
 
-    Private Sub CloseSidebar()
-        isSidebarOpen = False
-        sidebarPanel.Visible = False
-    End Sub
-
-    ' === ✅ LOGOUT — Fully supports admin, users, residences tables ===
+    ' === LOGOUT ===
     Private Sub btnClose_Click_1(sender As Object, e As EventArgs) Handles btnClose.Click
         If MsgBox("Are you sure you want to logout?",
-                  MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Logout") = MsgBoxResult.No Then
-            Return
-        End If
+                  MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Logout") = MsgBoxResult.No Then Return
 
         Try
             connection()
             Dim userId As Integer = LoggedUserID
-            Dim targetTable As String = ""
-            Dim idColumnName As String = ""
+            Dim targetTable As String = "users"
+            Dim idColumnName As String = "UserID"
 
             If String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase) Then
-                targetTable = "admin"
-                idColumnName = "AdminID"
+                targetTable = "admin" : idColumnName = "AdminID"
             ElseIf String.Equals(LoggedRole, "Residence", StringComparison.OrdinalIgnoreCase) OrElse
                    String.Equals(LoggedRole, "Resident", StringComparison.OrdinalIgnoreCase) Then
-                targetTable = "residences"
-                idColumnName = "ResidentID"
-            Else
-                targetTable = "users"
-                idColumnName = "UserID"
+                targetTable = "residences" : idColumnName = "ResidentID"
             End If
 
-            If Not String.IsNullOrEmpty(targetTable) AndAlso userId > 0 Then
+            If userId > 0 Then
                 Using cmdUpdate As New MySqlCommand($"UPDATE {targetTable} SET AccountStatus='Offline' WHERE {idColumnName}=@userId", cn)
                     cmdUpdate.Parameters.AddWithValue("@userId", userId)
                     cmdUpdate.ExecuteNonQuery()
                 End Using
             End If
 
-            Dim ipAddress As String = "127.0.0.1"
-            Try
-                Dim host As IPHostEntry = Dns.GetHostEntry(Dns.GetHostName())
-                For Each ip As IPAddress In host.AddressList
-                    If ip.AddressFamily = AddressFamily.InterNetwork Then
-                        ipAddress = ip.ToString()
-                        Exit For
-                    End If
-                Next
-            Catch
-                ipAddress = "Unknown"
-            End Try
-
+            Dim ipAddress As String = GetLocalIPAddress()
             Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
+
             Using cmdLog As New MySqlCommand(
                 "INSERT INTO activity_logs (UserID,FullName,UserRole,ActionType,Module,Details,ActionDate,IPAddress,DeviceInfo) " &
                 "VALUES (@uid,@fn,@role,'LOGOUT','Authentication','User logged out',NOW(),@ip,@dev)", cn)
@@ -296,23 +233,11 @@ Public Class frmMain
         End Try
     End Sub
 
-    ' === ✅ UNAUTHORIZED LOGGING ===
+    ' === UNAUTHORIZED LOGGING ===
     Private Sub LogUnauthorizedAttempt()
         Try
             connection()
-            Dim ipAddress As String = "127.0.0.1"
-            Try
-                Dim host As IPHostEntry = Dns.GetHostEntry(Dns.GetHostName())
-                For Each ip As IPAddress In host.AddressList
-                    If ip.AddressFamily = AddressFamily.InterNetwork Then
-                        ipAddress = ip.ToString()
-                        Exit For
-                    End If
-                Next
-            Catch
-                ipAddress = "Unknown"
-            End Try
-
+            Dim ipAddress As String = GetLocalIPAddress()
             Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
             Using cmdLog As New MySqlCommand(
                 "INSERT INTO activity_logs (UserID,FullName,UserRole,ActionType,Module,Details,ActionDate,IPAddress,DeviceInfo) " &
@@ -327,87 +252,50 @@ Public Class frmMain
         End Try
     End Sub
 
-    ' === ✅ SIDEBAR MENU BUTTONS ===
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        frmChange_Password.Show()
-    End Sub
+    ' === HELPER: GET LOCAL IP ===
+    Private Function GetLocalIPAddress() As String
+        Try
+            Dim host As IPHostEntry = Dns.GetHostEntry(Dns.GetHostName())
+            For Each ip As IPAddress In host.AddressList
+                If ip.AddressFamily = AddressFamily.InterNetwork Then Return ip.ToString()
+            Next
+        Catch
+        End Try
+        Return "127.0.0.1"
+    End Function
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Panel2.Controls.Clear()
-        Dim Logs As New frmActivityLogs With {
-            .TopLevel = False,
-            .FormBorderStyle = FormBorderStyle.None,
-            .Dock = DockStyle.Fill
-        }
-        Panel2.Controls.Add(Logs)
-        Logs.Show()
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Panel2.Controls.Clear()
-        Dim Generate As New frmReportGeneration With {
-            .TopLevel = False,
-            .FormBorderStyle = FormBorderStyle.None,
-            .Dock = DockStyle.Fill
-        }
-        Panel2.Controls.Add(Generate)
-        Generate.Show()
-    End Sub
-
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        Using confirmFrm As New frmConfirmPasswordDelete()
-            If confirmFrm.ShowDialog() = DialogResult.OK Then
-                Application.Restart()
-            End If
-        End Using
-    End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        frmRoleManagement.Show()
-    End Sub
-
-
+    ' === DOUBLE-CLICK PROFILE: PALITAN ANG LITRATO ===
     Private Sub picProfile_DoubleClick(sender As Object, e As EventArgs) Handles picProfile.DoubleClick
         Using ofd As New OpenFileDialog()
-            ofd.Title = "Pumili ng Bagong Profile Picture"
+            ofd.Title = "Select New Profile Picture"
             ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp"
             ofd.RestoreDirectory = True
-
             If ofd.ShowDialog() = DialogResult.OK Then
                 Try
-                    ' --- I-load ang napiling litrato ---
                     Dim newImage As Image = Image.FromFile(ofd.FileName)
                     picProfile.Image = newImage
-
-                    ' --- I-convert sa byte array para sa DB ---
                     Dim picBytes As Byte()
                     Using ms As New MemoryStream()
                         newImage.Save(ms, newImage.RawFormat)
                         picBytes = ms.ToArray()
                     End Using
-
-                    ' --- I-update sa database ---
                     UpdateProfilePicture(picBytes)
-
-                    MsgBox("Profile picture na-update!", MsgBoxStyle.Information)
-
+                    MsgBox("Profile picture updated!", MsgBoxStyle.Information)
                 Catch ex As Exception
-                    MsgBox("Hindi mapalitan ang litrato: " & ex.Message, MsgBoxStyle.Exclamation)
+                    MsgBox("Failed to update picture: " & ex.Message, MsgBoxStyle.Exclamation)
                 End Try
             End If
         End Using
     End Sub
 
-    ' === ✅ I-UPDATE ANG PICTURE SA DATABASE ===
+    ' === UPDATE PROFILE PICTURE SA DB ===
     Private Sub UpdateProfilePicture(picBytes As Byte())
         Try
             connection()
             Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
             Dim targetTable As String = If(isAdmin, "admin", "users")
             Dim idColumn As String = If(isAdmin, "AdminID", "UserID")
-
             Dim sql As String = $"UPDATE {targetTable} SET Picture = @pic WHERE {idColumn} = @userId"
-
             Using cmd As New MySqlCommand(sql, cn)
                 cmd.Parameters.AddWithValue("@pic", picBytes)
                 cmd.Parameters.AddWithValue("@userId", LoggedUserID)
@@ -418,5 +306,35 @@ Public Class frmMain
         Finally
             CloseConnection()
         End Try
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        LoadFormIntoPanel(GetType(frmAppointmentHistory))
+    End Sub
+
+    Private Sub BtnReports_Click(sender As Object, e As EventArgs) Handles BtnReports.Click
+        LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
+            GetType(frmReportGeneration), GetType(frmReportGeneration)))
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        frmcreateuser.Show()
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        frmDocumentServices.Show()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
+    GetType(frmActivityLogs), GetType(frmActivityLogs)))
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        frmChange_Password.Show()
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Barangay_Residences.Show()
     End Sub
 End Class

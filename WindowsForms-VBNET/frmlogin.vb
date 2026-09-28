@@ -1,17 +1,25 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Net
+Imports System.Net.Sockets
 
 Public Class frmlogin
     Private lockoutSecondsRemaining As Integer = 60
     Private isLoginSuccess As Boolean = False
-
-    ' === ✅ NAKALOGIN NA IMPORMASYON — GAGAMITIN SA LAHAT NG FORM ===
+    ' === ✅ NAKALOGIN NA IMPORMASYON — IBABAHAGI SA LAHAT NG FORM ===
     Public Shared Property LoggedInUsername As String = ""
     Public Shared Property LoggedInFullname As String = ""
     Public Shared Property LoggedInRole As String = ""
     Public Shared Property LoggedInUserID As Integer = 0
 
+    ' === ✅ FLAG — MAY ADMIN BA? ===
+    Private hasAdminAccount As Boolean = False
+
     Private Sub frmlogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForSecurityAttempts()
+        ' ✅ TIGNAN KUNG MAY ADMIN — PALITAN ANG BUTTON
+        CheckAdminExists()
+        UpdateCreateButton()
+
         txtUsername.Text = "Please Enter your username"
         txtUsername.ForeColor = Color.DarkGray
         txtPassword.Text = "Please Enter your Password"
@@ -20,6 +28,34 @@ Public Class frmlogin
         lblError.Text = ""
         lblAttempts.Text = "0"
         Timer1.Interval = 1000
+    End Sub
+
+    ' === ✅ TIGNAN KUNG MAY ADMIN SA DATABASE ===
+    Private Sub CheckAdminExists()
+        Try
+            connection()
+            Dim checkSql As String = "SELECT COUNT(*) FROM admin"
+            Using cmd As New MySqlCommand(checkSql, cn)
+                If cn.State = ConnectionState.Open Then cn.Close()
+                cn.Open()
+                Dim adminCount As Integer = CInt(cmd.ExecuteScalar())
+                hasAdminAccount = (adminCount > 0)
+            End Using
+        Catch ex As Exception
+            ' Kung walang admin table pa — ituring na wala pang admin
+            hasAdminAccount = False
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
+    ' === ✅ PALITAN ANG BUTTON TEXT AYON SA SITWASYON ===
+    Private Sub UpdateCreateButton()
+        If hasAdminAccount Then
+            btnCreate.Text = "Forgot Password"
+        Else
+            btnCreate.Text = "Create ADMIN"
+        End If
     End Sub
 
     Private Sub CheckForSecurityAttempts()
@@ -82,11 +118,9 @@ Public Class frmlogin
             lblError.Text = $"🔒 Locked. Try again in {lockoutSecondsRemaining}s."
             Return
         End If
-
         lblError.Text = ""
         Dim userInput As String = txtUsername.Text.Trim()
         Dim passInput As String = txtPassword.Text.Trim()
-
         If userInput = "" OrElse userInput = "Please Enter your username" OrElse
            passInput = "" OrElse passInput = "Please Enter your Password" Then
             RecordActivityLog(0, userInput, "Anonymous", "EMPTY_ATTEMPT", "Authentication",
@@ -94,7 +128,6 @@ Public Class frmlogin
             lblError.Text = "⚠️ Enter username and password."
             Return
         End If
-
         ProcessLogin(userInput, passInput)
     End Sub
 
@@ -106,12 +139,10 @@ Public Class frmlogin
         Dim dbPass As String = ""
         Dim fullName As String = ""
         Dim roleName As String = ""
-
         Try
             connection()
             Dim isSuspicious As Boolean = False
             Dim note As String = ""
-
             If userInput.Contains("'") OrElse userInput.Contains(" OR ") OrElse
                userInput.Contains("--") OrElse userInput.Contains(" UNION ") OrElse
                userInput.Contains(" DROP ") OrElse userInput.Contains(" SLEEP(") Then
@@ -205,17 +236,15 @@ Public Class frmlogin
                 Return
             End If
 
-            ' === ✅ TAMA ANG PASSWORD — I-SAVE ANG NAKALOGIN NA IMPORMASYON ===
+            ' === ✅ TAMA ANG PASSWORD ===
             If dbPass = passInput Then
-                LoggedInUsername = userInput               ' ← Username
-                LoggedInFullname = If(String.IsNullOrWhiteSpace(fullName), userInput, fullName) ' ← Pangalan
-                LoggedInRole = roleName                     ' ← Role
-                LoggedInUserID = recordId                  ' ← User ID
-
+                LoggedInUsername = userInput
+                LoggedInFullname = If(String.IsNullOrWhiteSpace(fullName), userInput, fullName)
+                LoggedInRole = roleName
+                LoggedInUserID = recordId
                 ResetAttempts(foundUserType, userInput)
                 RecordActivityLog(recordId, LoggedInFullname, LoggedInRole, "LOGIN", "Authentication",
                                  $"{roleName} logged in successfully — Username used: [{userInput}]")
-
                 isLoginSuccess = True
                 lblError.Text = "✅ Login Success! Redirecting..."
                 Timer1.Interval = 800
@@ -227,7 +256,6 @@ Public Class frmlogin
                 UpdateAttemptCount(foundUserType, userInput, attempts)
                 RecordActivityLog(recordId, userInput, roleName, "FAILED_LOGIN", "Authentication",
                                  note & $"Wrong password — Attempt {attempts} of 3 — Input: [{userInput}]")
-
                 If attempts >= 3 Then
                     LockoutWithTimer(foundUserType, userInput, 60)
                     lockoutSecondsRemaining = 60
@@ -279,7 +307,6 @@ Public Class frmlogin
             frmMain.Show()
             Return
         End If
-
         lockoutSecondsRemaining -= 1
         If lockoutSecondsRemaining > 0 Then
             lblError.Text = $"Locked. Try again in {lockoutSecondsRemaining}s."
@@ -305,13 +332,10 @@ Public Class frmlogin
             Catch
                 ipAddress = "Unknown"
             End Try
-
             Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
-
             Dim logSql As String = "INSERT INTO activity_logs " &
                 "(UserID, FullName, UserRole, ActionType, Module, Details, ActionDate, IPAddress, DeviceInfo) " &
                 "VALUES (@userId, @fullName, @userRole, @actionType, @module, @details, NOW(), @ipAddress, @deviceInfo)"
-
             Using cmdLog As New MySqlCommand(logSql, cn)
                 cmdLog.Parameters.AddWithValue("@userId", If(userId > 0, userId, 0))
                 cmdLog.Parameters.AddWithValue("@fullName", If(String.IsNullOrEmpty(fullName), "Unknown", fullName))
@@ -334,12 +358,21 @@ Public Class frmlogin
         txtPassword.PasswordChar = If(txtPassword.PasswordChar = "●"c, Char.MinValue, "●"c)
     End Sub
 
-    Private Sub LinkLabel2_LinkClicked(sender As Object, e As EventArgs) Handles LinkLabel2.LinkClicked
-        Me.Hide()
-        frmcreateadmin.Show()
+    ' ❌ TINANGGAL NA ANG LINKLABEL — ISANG BUTTON NA LANG
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Application.Exit()
     End Sub
 
-    Private Sub btnClose_Click_1(sender As Object, e As EventArgs) Handles btnClose.Click
-        Application.Exit()
+    ' === ✅ ANG ISANG BUTTON — DITO NAGPAPALIT NG FUNCTION ===
+    Private Sub btnCreate_Click(sender As Object, e As EventArgs) Handles btnCreate.Click
+        If Not hasAdminAccount Then
+            ' Walang admin → Pumunta sa Create Admin
+            Me.Hide()
+            frmcreateadmin.Show()
+        Else
+            ' May admin na → Pumunta sa Forgot Password
+            Me.Hide()
+            frmforgotpassword.Show()
+        End If
     End Sub
 End Class
