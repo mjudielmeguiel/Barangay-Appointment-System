@@ -1,6 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.IO
-Imports System.Drawing.Drawing2D
 Imports System.Runtime.InteropServices
 
 Public Class frmCreateAppointment
@@ -27,10 +26,11 @@ Public Class frmCreateAppointment
         cboRequestFor.SelectedIndex = 0
         LoadDocumentServices()
         lblControlNo.Text = GenerateControlNumber()
+
+        ' Kung i-l-load pa rin ang logged in user, tatawagin ito
         LoadLoggedUserDefault()
 
         cboRequestType.DropDownStyle = ComboBoxStyle.DropDown
-        CueBanner.SetText(txtName, "Type resident name or click 'Select User'")
         CueBanner.SetText(txtNameOfRepresentative, "Representative's full name")
         CueBanner.SetText(txtPurpose, "State the purpose of your appointment")
         CueBanner.SetText(cboRequestType, "Select Request Type / Document Service")
@@ -40,8 +40,10 @@ Public Class frmCreateAppointment
 
     Private Sub frmCreateAppointment_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If _skipClosePrompt Then Return
-        If Not String.IsNullOrWhiteSpace(txtName.Text) Then
-            Dim result As DialogResult = MsgBox($"Are you sure you want to cancel {txtName.Text.Trim()}?",
+
+        ' Gumamit ako ng txtFirstname at txtLastname base sa bago mong layout
+        If Not String.IsNullOrWhiteSpace(txtFirstname.Text) OrElse Not String.IsNullOrWhiteSpace(txtLastname.Text) Then
+            Dim result As DialogResult = MsgBox($"Are you sure you want to cancel the appointment for {txtFirstname.Text.Trim()}?",
                                                  MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel")
             If result = DialogResult.Yes Then
                 SaveAppointment("PENDING")
@@ -51,7 +53,8 @@ Public Class frmCreateAppointment
         End If
     End Sub
 
-    Private Sub cboRequestFor_SelectedIndexChanged(sender As Object, e As EventArgs)
+    ' === NILAGYAN NG HANDLES PARA GUMANA ANG TOGGLE ===
+    Private Sub cboRequestFor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRequestFor.SelectedIndexChanged
         Dim selectedOption As String = cboRequestFor.Text.Trim()
         If selectedOption = "Family Member / Relative" OrElse selectedOption = "Representative / On Behalf" Then
             ToggleRepresentativeFields(True)
@@ -62,15 +65,15 @@ Public Class frmCreateAppointment
         End If
     End Sub
 
-    ' === TINANGGAL NA ANG DALAWANG PICTUREBOX DITO ===
+    ' === HIDE / SHOW REPRESENTATIVE FIELDS ===
     Private Sub ToggleRepresentativeFields(isVisible As Boolean)
         If txtNameOfRepresentative IsNot Nothing Then
             txtNameOfRepresentative.Visible = isVisible
         End If
-        If btnSelectRepresentative IsNot Nothing Then
-            btnSelectRepresentative.Visible = isVisible
+        ' Siguraduhing may lblRepresentative (o kung ano man ang pangalan ng label mo) sa designer
+        If lblRepresentative IsNot Nothing Then
+            lblRepresentative.Visible = isVisible
         End If
-        ' ✅ TINANGGAL NA: lblAuthLetter, picAuthLetter, lblRepID, picRepID
     End Sub
 
     Private Sub LoadDocumentServices()
@@ -132,90 +135,118 @@ Public Class frmCreateAppointment
         Return newCtrlNo
     End Function
 
+    ' === AUTO-FILL DEFAULT LOGGED IN USER ===
     Private Sub LoadLoggedUserDefault()
         If String.IsNullOrEmpty(LoggedFullname) Then Return
         Try
             connection()
-            sql = "SELECT ResidentID, FullName, Picture, Address FROM residences WHERE FullName=@name OR Username=@name"
+            sql = "SELECT ResidentID FROM residences WHERE FullName=@name OR Username=@name"
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@name", LoggedFullname)
-            dr = cmd.ExecuteReader()
-            If dr.Read() Then
-                selectedResidentID = If(IsDBNull(dr("ResidentID")), 0, Convert.ToInt32(dr("ResidentID")))
-                txtName.Text = dr("FullName").ToString()
-                selectedResidentAddress = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
-                If Not IsDBNull(dr("Picture")) Then
-                    Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
-                    Using ms As New MemoryStream(imgBytes)
-                        Dim rawImg As Image = Image.FromStream(ms)
-                        If picUserProfile.Image IsNot Nothing Then picUserProfile.Image.Dispose()
-                        picUserProfile.Image = MakeCircularImage(rawImg)
-                    End Using
-                End If
+            Dim resIDObj = cmd.ExecuteScalar()
+
+            If resIDObj IsNot Nothing AndAlso Not IsDBNull(resIDObj) Then
+                selectedResidentID = Convert.ToInt32(resIDObj)
+                LoadResidentData(selectedResidentID) ' I-load sa mga bagong textboxes
             End If
-            dr.Close()
         Catch ex As Exception
         Finally
             CloseConnection()
         End Try
     End Sub
 
-    Private Sub LoadSelectedResidentDetails(resID As Integer)
+    ' =================================================================================
+    ' === BUTTON CLICK PARA PUMILI NG RESIDENT ===
+    ' =================================================================================
+    Private Sub btnSelectResident_Click(sender As Object, e As EventArgs) Handles btnSelectResident.Click
+        ' Buksan ang frmResidencelist bilang Dialog
+        Using frmLookup As New frmResidencelist()
+            If frmLookup.ShowDialog() = DialogResult.OK Then
+                ' Makuha ang piniling ID at i-autofill ang textboxes
+                Dim resID As Integer = frmLookup.SelectedResidentID
+                LoadResidentData(resID)
+            End If
+        End Using
+    End Sub
+
+    Private Sub LoadResidentData(resID As Integer)
         Try
             connection()
-            sql = "SELECT Picture, Address FROM residences WHERE ResidentID = @id"
+            sql = "SELECT * FROM residences WHERE ResidentID = @id"
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@id", resID)
             dr = cmd.ExecuteReader()
             If dr.Read() Then
-                selectedResidentAddress = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
-                If Not IsDBNull(dr("Picture")) Then
-                    Dim imgBytes As Byte() = CType(dr("Picture"), Byte())
-                    Using ms As New MemoryStream(imgBytes)
-                        Dim rawImg As Image = Image.FromStream(ms)
-                        If picUserProfile.Image IsNot Nothing Then picUserProfile.Image.Dispose()
-                        picUserProfile.Image = MakeCircularImage(rawImg)
-                    End Using
-                Else
-                    picUserProfile.Image = Nothing
+                selectedResidentID = resID
+
+                ' I-map ang data sa mga textboxes
+                txtLastname.Text = dr("Lastname").ToString()
+                txtFirstname.Text = dr("Firstname").ToString()
+                txtMiddle.Text = If(IsDBNull(dr("Middlename")), "", dr("Middlename").ToString())
+                cboSuffix.Text = If(IsDBNull(dr("Suffix")), "", dr("Suffix").ToString())
+
+                ' Ginamit ang "Birthday" base sa table schema
+                If Not IsDBNull(dr("Birthday")) Then
+                    dtpDateOfBirth.Value = Convert.ToDateTime(dr("Birthday"))
                 End If
-            Else
-                picUserProfile.Image = Nothing
+
+                txtBirthPlace.Text = If(IsDBNull(dr("BirthPlace")), "", dr("BirthPlace").ToString())
+                cboGender.Text = If(IsDBNull(dr("Gender")), "", dr("Gender").ToString())
+                cboCivilStatus.Text = If(IsDBNull(dr("CivilStatus")), "", dr("CivilStatus").ToString())
+
+                ' Ginamit ang "Address" column dahil walang hiwalay na Street, Barangay, City sa table
+                Dim fullAddress As String = If(IsDBNull(dr("Address")), "", dr("Address").ToString())
+                selectedResidentAddress = fullAddress
+
+                ' === SIMULA NG ADDRESS SPLITTING ===
+                ' Hahatiin ang fullAddress base sa comma (,) para ilagay sa hiwa-hiwalay na textboxes
+                Dim addressParts As String() = fullAddress.Split(","c)
+
+                If addressParts.Length >= 3 Then
+                    ' Kung may 3 o higit pang bahagi (Hal: "Street, Barangay, City")
+                    txtStreet.Text = addressParts(0).Trim()
+                    txtBarangay.Text = addressParts(1).Trim()
+                    txtCity.Text = addressParts(2).Trim()
+                ElseIf addressParts.Length = 2 Then
+                    ' Kung 2 bahagi lang (Hal: "Street, Barangay")
+                    txtStreet.Text = addressParts(0).Trim()
+                    txtBarangay.Text = addressParts(1).Trim()
+                    txtCity.Text = ""
+                ElseIf addressParts.Length = 1 Then
+                    ' Kung walang comma, ilalagay lahat sa Street
+                    txtStreet.Text = addressParts(0).Trim()
+                    txtBarangay.Text = ""
+                    txtCity.Text = ""
+                Else
+                    txtStreet.Text = ""
+                    txtBarangay.Text = ""
+                    txtCity.Text = ""
+                End If
+                ' === KATAPUSAN NG ADDRESS SPLITTING ===
+
+                txtFatherName.Text = If(IsDBNull(dr("FatherName")), "", dr("FatherName").ToString())
+                txtMotherName.Text = If(IsDBNull(dr("MotherName")), "", dr("MotherName").ToString())
+                txtMobileNumber.Text = If(IsDBNull(dr("MobileNumber")), "", dr("MobileNumber").ToString())
+                txtEmail.Text = If(IsDBNull(dr("Email")), "", dr("Email").ToString())
             End If
             dr.Close()
         Catch ex As Exception
-            picUserProfile.Image = Nothing
+            MsgBox("Error loading resident data: " & ex.Message, MsgBoxStyle.Exclamation)
         Finally
             CloseConnection()
         End Try
     End Sub
 
-    Private Function MakeCircularImage(srcImage As Image) As Image
-        Dim targetWidth As Integer = If(picUserProfile IsNot Nothing AndAlso picUserProfile.Width > 0, picUserProfile.Width, 100)
-        Dim targetHeight As Integer = If(picUserProfile IsNot Nothing AndAlso picUserProfile.Height > 0, picUserProfile.Height, 100)
-        Dim circleDiameter As Integer = Math.Min(targetWidth, targetHeight)
-        Dim bmp As New Bitmap(circleDiameter, circleDiameter)
-        Using g As Graphics = Graphics.FromImage(bmp)
-            g.SmoothingMode = SmoothingMode.AntiAlias
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality
-            g.CompositingQuality = CompositingQuality.HighQuality
-            Using path As New GraphicsPath()
-                path.AddEllipse(0, 0, circleDiameter, circleDiameter)
-                g.SetClip(path)
-                Dim minSrcDim As Integer = Math.Min(srcImage.Width, srcImage.Height)
-                Dim srcRect As New Rectangle((srcImage.Width - minSrcDim) \ 2, (srcImage.Height - minSrcDim) \ 2, minSrcDim, minSrcDim)
-                g.DrawImage(srcImage, New Rectangle(0, 0, circleDiameter, circleDiameter), srcRect, GraphicsUnit.Pixel)
-            End Using
-        End Using
-        Return bmp
-    End Function
-
+    ' === SAVE LOGIC ===
     Private Function SaveAppointment(ByVal status As String) As Boolean
         Try
             connection()
             Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse
                                                cboRequestFor.Text.Trim() = "Representative / On Behalf")
             Dim autoDepartment As String = GetSelectedDepartment()
+
+            ' Pinagsama ang Firstname at Lastname dahil nakahiwalay na sila sa UI
+            Dim combinedFullName As String = $"{txtFirstname.Text.Trim()} {txtLastname.Text.Trim()}".Trim()
 
             sql = "INSERT INTO appointments (ControlNo, ResidentID, FullName, FullAddress, RequestFor, " &
                   "RepresentativeName, RequestType, Purpose, Department, DateSubmitted, " &
@@ -226,7 +257,7 @@ Public Class frmCreateAppointment
             cmd = New MySqlCommand(sql, cn)
             cmd.Parameters.AddWithValue("@ctrl", lblControlNo.Text.Trim())
             cmd.Parameters.AddWithValue("@resID", If(selectedResidentID > 0, selectedResidentID, DBNull.Value))
-            cmd.Parameters.AddWithValue("@name", txtName.Text.Trim())
+            cmd.Parameters.AddWithValue("@name", combinedFullName)
             cmd.Parameters.AddWithValue("@address", If(String.IsNullOrWhiteSpace(selectedResidentAddress), "", selectedResidentAddress))
             cmd.Parameters.AddWithValue("@reqFor", If(String.IsNullOrWhiteSpace(cboRequestFor.Text.Trim()), "", cboRequestFor.Text.Trim()))
             cmd.Parameters.AddWithValue("@repName", If(isRepresentative AndAlso Not String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text.Trim()),
@@ -245,10 +276,10 @@ Public Class frmCreateAppointment
         End Try
     End Function
 
-    Private Sub btnSubmit_Click(sender As Object, e As EventArgs)
-        If String.IsNullOrWhiteSpace(txtName.Text) Then
+    Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnCreateRequest.Click ' Pinalitan ko na rito kung ang pangalan sa designer ay btnCreateRequest
+        If String.IsNullOrWhiteSpace(txtLastname.Text) OrElse String.IsNullOrWhiteSpace(txtFirstname.Text) Then
             MsgBox("Please select or enter a resident name.", MsgBoxStyle.Exclamation, "Validation Error")
-            txtName.Focus()
+            txtLastname.Focus()
             Return
         End If
 
@@ -261,7 +292,6 @@ Public Class frmCreateAppointment
                 txtNameOfRepresentative.Focus()
                 Return
             End If
-            ' ✅ TINANGGAL NA ANG PAG-CHECK SA UPLOAD — hindi na kailangan dito
         End If
 
         If cboRequestType.SelectedIndex = -1 AndAlso String.IsNullOrWhiteSpace(cboRequestType.Text) Then
@@ -280,31 +310,41 @@ Public Class frmCreateAppointment
             _skipClosePrompt = True
             MsgBox($"Pick-up appointment request {lblControlNo.Text.Trim()} submitted and APPROVED successfully!",
                    MsgBoxStyle.Information, "Success")
-            Me.DialogResult = DialogResult.OK
-            Me.Close()
+
+            ' DITO PAPASOK YUNG COUPON VIEW NA MANGYAYARI KAPAG EMBEDDED ANG FORM SA MAIN DASHBOARD
+            Dim newControlNo As String = GenerateControlNumber() ' O yung ginamit mong GetLatestCreatedControlNo()
+            If Not String.IsNullOrEmpty(newControlNo) Then
+                ' I-show ang coupon view (kung naka-design na itong lumabas bilang dialog form)
+                Using frmCoupon As New frmCouponView(lblControlNo.Text.Trim())
+                    frmCoupon.ShowDialog()
+                End Using
+            End If
+
+            ' Isara o itago ang panel content at bumalik sa dashboard (base sa pinag-usapan natin kanina)
+            Dim dashboard As New frmUser_Dashboard()
+            dashboard.TopLevel = False
+            dashboard.FormBorderStyle = FormBorderStyle.None
+            dashboard.Dock = DockStyle.Fill
+
+            frmMain.Panel2.Controls.Clear()
+            frmMain.Panel2.Controls.Add(dashboard)
+            dashboard.Show()
         Else
             MsgBox("Failed to submit pick-up appointment request.", MsgBoxStyle.Exclamation, "Warning")
         End If
     End Sub
 
-    Private Sub btnCancel_Click(sender As Object, e As EventArgs)
-        If String.IsNullOrWhiteSpace(txtName.Text) Then
-            _skipClosePrompt = True
-            Me.DialogResult = DialogResult.Cancel
-            Me.Close()
-            Return
-        End If
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnClearAll.Click ' Base sa button sa ui na "Clear All" / Cancel
+        _skipClosePrompt = True
 
-        Dim result As DialogResult = MsgBox($"Are you sure you want to cancel {txtName.Text.Trim()}?",
-                                             MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel")
-        If result = DialogResult.Yes Then
-            If SaveAppointment("PENDING") Then
-                MsgBox($"Appointment {lblControlNo.Text.Trim()} saved as PENDING.", MsgBoxStyle.Information, "Saved")
-            End If
-            _skipClosePrompt = True
-            Me.DialogResult = DialogResult.Cancel
-            Me.Close()
-        End If
+        Dim dashboard As New frmUser_Dashboard()
+        dashboard.TopLevel = False
+        dashboard.FormBorderStyle = FormBorderStyle.None
+        dashboard.Dock = DockStyle.Fill
+
+        frmMain.Panel2.Controls.Clear()
+        frmMain.Panel2.Controls.Add(dashboard)
+        dashboard.Show()
     End Sub
 End Class
 

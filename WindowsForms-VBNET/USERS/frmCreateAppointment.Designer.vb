@@ -24,11 +24,16 @@ Partial Class frmCreateAppointment
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCreateAppointment))
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.btnClearAll = New System.Windows.Forms.Button()
+        Me.btnCreateRequest = New System.Windows.Forms.Button()
         Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.picUserProfile = New System.Windows.Forms.PictureBox()
         Me.pnlaccountsystem = New System.Windows.Forms.Panel()
+        Me.btnSelectRepresentative = New System.Windows.Forms.Button()
         Me.txtPurpose = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.lblRepresentative = New System.Windows.Forms.Label()
         Me.lblControlNo = New System.Windows.Forms.Label()
         Me.txtNameOfRepresentative = New System.Windows.Forms.TextBox()
         Me.cboRequestFor = New System.Windows.Forms.ComboBox()
@@ -39,11 +44,8 @@ Partial Class frmCreateAppointment
         Me.Label27 = New System.Windows.Forms.Label()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.lblUsernameError = New System.Windows.Forms.Label()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.btnSelectResident = New System.Windows.Forms.Button()
         Me.lblMiddlenameError = New System.Windows.Forms.Label()
         Me.lblEmailError = New System.Windows.Forms.Label()
         Me.lblMobileError = New System.Windows.Forms.Label()
@@ -56,7 +58,7 @@ Partial Class frmCreateAppointment
         Me.txtFatherName = New System.Windows.Forms.TextBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.Label35 = New System.Windows.Forms.Label()
-        Me.txtStreetAddress = New System.Windows.Forms.TextBox()
+        Me.txtStreet = New System.Windows.Forms.TextBox()
         Me.Label30 = New System.Windows.Forms.Label()
         Me.txtCity = New System.Windows.Forms.TextBox()
         Me.txtBarangay = New System.Windows.Forms.TextBox()
@@ -73,10 +75,10 @@ Partial Class frmCreateAppointment
         Me.lblBirthPlaceError = New System.Windows.Forms.Label()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
-        Me.dtpBirthday = New System.Windows.Forms.DateTimePicker()
+        Me.dtpDateOfBirth = New System.Windows.Forms.DateTimePicker()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.txtMiddlename = New System.Windows.Forms.TextBox()
+        Me.txtMiddle = New System.Windows.Forms.TextBox()
         Me.txtFirstname = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.lblFirstnameError = New System.Windows.Forms.Label()
@@ -84,28 +86,23 @@ Partial Class frmCreateAppointment
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.cboSuffix = New System.Windows.Forms.ComboBox()
-        Me.txtName = New System.Windows.Forms.TextBox()
+        Me.txtLastname = New System.Windows.Forms.TextBox()
         Me.lblLastnameError = New System.Windows.Forms.Label()
-        Me.btnClearAll = New System.Windows.Forms.Button()
-        Me.btnSubmit = New System.Windows.Forms.Button()
-        Me.btnSelectRepresentative = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
-        Me.Panel4.SuspendLayout()
-        CType(Me.picUserProfile, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel5.SuspendLayout()
         Me.pnlaccountsystem.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
         '
         Me.Panel1.AutoScroll = True
+        Me.Panel1.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.Panel1.Controls.Add(Me.Panel5)
         Me.Panel1.Controls.Add(Me.btnClearAll)
-        Me.Panel1.Controls.Add(Me.btnSubmit)
+        Me.Panel1.Controls.Add(Me.btnCreateRequest)
         Me.Panel1.Controls.Add(Me.Panel4)
         Me.Panel1.Controls.Add(Me.pnlaccountsystem)
-        Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Panel3)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
@@ -113,33 +110,88 @@ Partial Class frmCreateAppointment
         Me.Panel1.Size = New System.Drawing.Size(1366, 768)
         Me.Panel1.TabIndex = 0
         '
+        'Panel5
+        '
+        Me.Panel5.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel5.Controls.Add(Me.Label4)
+        Me.Panel5.Controls.Add(Me.Label9)
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel5.Location = New System.Drawing.Point(0, 0)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(1349, 60)
+        Me.Panel5.TabIndex = 715
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label4.Location = New System.Drawing.Point(12, 30)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(164, 19)
+        Me.Label4.TabIndex = 520
+        Me.Label4.Text = "Fill all Document Request"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label9.Location = New System.Drawing.Point(12, 9)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(122, 21)
+        Me.Label9.TabIndex = 519
+        Me.Label9.Text = "Create Request"
+        '
+        'btnClearAll
+        '
+        Me.btnClearAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClearAll.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnClearAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnClearAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnClearAll.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnClearAll.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnClearAll.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnClearAll.Location = New System.Drawing.Point(953, 838)
+        Me.btnClearAll.Name = "btnClearAll"
+        Me.btnClearAll.Size = New System.Drawing.Size(161, 37)
+        Me.btnClearAll.TabIndex = 714
+        Me.btnClearAll.Text = "Clear All"
+        Me.btnClearAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnClearAll.UseVisualStyleBackColor = False
+        '
+        'btnCreateRequest
+        '
+        Me.btnCreateRequest.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCreateRequest.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnCreateRequest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnCreateRequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnCreateRequest.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCreateRequest.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnCreateRequest.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnCreateRequest.Location = New System.Drawing.Point(1120, 838)
+        Me.btnCreateRequest.Name = "btnCreateRequest"
+        Me.btnCreateRequest.Size = New System.Drawing.Size(161, 37)
+        Me.btnCreateRequest.TabIndex = 713
+        Me.btnCreateRequest.Text = "Create Request"
+        Me.btnCreateRequest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnCreateRequest.UseVisualStyleBackColor = False
+        '
         'Panel4
         '
-        Me.Panel4.Controls.Add(Me.picUserProfile)
         Me.Panel4.Location = New System.Drawing.Point(37, 881)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1257, 127)
+        Me.Panel4.Size = New System.Drawing.Size(1278, 127)
         Me.Panel4.TabIndex = 712
-        '
-        'picUserProfile
-        '
-        Me.picUserProfile.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.picUserProfile.Image = CType(resources.GetObject("picUserProfile.Image"), System.Drawing.Image)
-        Me.picUserProfile.Location = New System.Drawing.Point(37, 37)
-        Me.picUserProfile.Name = "picUserProfile"
-        Me.picUserProfile.Size = New System.Drawing.Size(80, 67)
-        Me.picUserProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picUserProfile.TabIndex = 1
-        Me.picUserProfile.TabStop = False
         '
         'pnlaccountsystem
         '
         Me.pnlaccountsystem.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pnlaccountsystem.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.pnlaccountsystem.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.pnlaccountsystem.Controls.Add(Me.btnSelectRepresentative)
         Me.pnlaccountsystem.Controls.Add(Me.txtPurpose)
-        Me.pnlaccountsystem.Controls.Add(Me.Label3)
+        Me.pnlaccountsystem.Controls.Add(Me.lblRepresentative)
         Me.pnlaccountsystem.Controls.Add(Me.lblControlNo)
         Me.pnlaccountsystem.Controls.Add(Me.txtNameOfRepresentative)
         Me.pnlaccountsystem.Controls.Add(Me.cboRequestFor)
@@ -152,8 +204,25 @@ Partial Class frmCreateAppointment
         Me.pnlaccountsystem.Controls.Add(Me.lblUsernameError)
         Me.pnlaccountsystem.Location = New System.Drawing.Point(37, 126)
         Me.pnlaccountsystem.Name = "pnlaccountsystem"
-        Me.pnlaccountsystem.Size = New System.Drawing.Size(1240, 235)
+        Me.pnlaccountsystem.Size = New System.Drawing.Size(1244, 235)
         Me.pnlaccountsystem.TabIndex = 711
+        '
+        'btnSelectRepresentative
+        '
+        Me.btnSelectRepresentative.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSelectRepresentative.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnSelectRepresentative.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnSelectRepresentative.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSelectRepresentative.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSelectRepresentative.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnSelectRepresentative.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnSelectRepresentative.Location = New System.Drawing.Point(648, 165)
+        Me.btnSelectRepresentative.Name = "btnSelectRepresentative"
+        Me.btnSelectRepresentative.Size = New System.Drawing.Size(36, 30)
+        Me.btnSelectRepresentative.TabIndex = 715
+        Me.btnSelectRepresentative.Text = "..."
+        Me.btnSelectRepresentative.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnSelectRepresentative.UseVisualStyleBackColor = False
         '
         'txtPurpose
         '
@@ -165,15 +234,15 @@ Partial Class frmCreateAppointment
         Me.txtPurpose.Size = New System.Drawing.Size(290, 28)
         Me.txtPurpose.TabIndex = 723
         '
-        'Label3
+        'lblRepresentative
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(333, 145)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(94, 17)
-        Me.Label3.TabIndex = 722
-        Me.Label3.Text = "Representative"
+        Me.lblRepresentative.AutoSize = True
+        Me.lblRepresentative.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRepresentative.Location = New System.Drawing.Point(333, 145)
+        Me.lblRepresentative.Name = "lblRepresentative"
+        Me.lblRepresentative.Size = New System.Drawing.Size(94, 17)
+        Me.lblRepresentative.TabIndex = 722
+        Me.lblRepresentative.Text = "Representative"
         '
         'lblControlNo
         '
@@ -277,55 +346,12 @@ Partial Class frmCreateAppointment
         Me.lblUsernameError.TabIndex = 570
         Me.lblUsernameError.Text = "-"
         '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.Panel2.Controls.Add(Me.PictureBox1)
-        Me.Panel2.Controls.Add(Me.Label8)
-        Me.Panel2.Controls.Add(Me.Label1)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1349, 68)
-        Me.Panel2.TabIndex = 709
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(13, 12)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(51, 45)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 657
-        Me.PictureBox1.TabStop = False
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label8.Location = New System.Drawing.Point(70, 38)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(147, 19)
-        Me.Label8.TabIndex = 520
-        Me.Label8.Text = "Fill Document Request"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft YaHei UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(69, 12)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(157, 26)
-        Me.Label1.TabIndex = 519
-        Me.Label1.Text = "Create Request"
-        '
         'Panel3
         '
         Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.Panel3.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel3.Controls.Add(Me.btnSelectResident)
         Me.Panel3.Controls.Add(Me.lblMiddlenameError)
         Me.Panel3.Controls.Add(Me.lblEmailError)
         Me.Panel3.Controls.Add(Me.lblMobileError)
@@ -338,7 +364,7 @@ Partial Class frmCreateAppointment
         Me.Panel3.Controls.Add(Me.txtFatherName)
         Me.Panel3.Controls.Add(Me.Label34)
         Me.Panel3.Controls.Add(Me.Label35)
-        Me.Panel3.Controls.Add(Me.txtStreetAddress)
+        Me.Panel3.Controls.Add(Me.txtStreet)
         Me.Panel3.Controls.Add(Me.Label30)
         Me.Panel3.Controls.Add(Me.txtCity)
         Me.Panel3.Controls.Add(Me.txtBarangay)
@@ -355,10 +381,10 @@ Partial Class frmCreateAppointment
         Me.Panel3.Controls.Add(Me.lblBirthPlaceError)
         Me.Panel3.Controls.Add(Me.Label20)
         Me.Panel3.Controls.Add(Me.Label18)
-        Me.Panel3.Controls.Add(Me.dtpBirthday)
+        Me.Panel3.Controls.Add(Me.dtpDateOfBirth)
         Me.Panel3.Controls.Add(Me.Label2)
         Me.Panel3.Controls.Add(Me.Label6)
-        Me.Panel3.Controls.Add(Me.txtMiddlename)
+        Me.Panel3.Controls.Add(Me.txtMiddle)
         Me.Panel3.Controls.Add(Me.txtFirstname)
         Me.Panel3.Controls.Add(Me.Label5)
         Me.Panel3.Controls.Add(Me.lblFirstnameError)
@@ -366,12 +392,29 @@ Partial Class frmCreateAppointment
         Me.Panel3.Controls.Add(Me.Label12)
         Me.Panel3.Controls.Add(Me.Label13)
         Me.Panel3.Controls.Add(Me.cboSuffix)
-        Me.Panel3.Controls.Add(Me.txtName)
+        Me.Panel3.Controls.Add(Me.txtLastname)
         Me.Panel3.Controls.Add(Me.lblLastnameError)
         Me.Panel3.Location = New System.Drawing.Point(37, 415)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(1240, 401)
+        Me.Panel3.Size = New System.Drawing.Size(1244, 401)
         Me.Panel3.TabIndex = 710
+        '
+        'btnSelectResident
+        '
+        Me.btnSelectResident.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSelectResident.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnSelectResident.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnSelectResident.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSelectResident.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSelectResident.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnSelectResident.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnSelectResident.Location = New System.Drawing.Point(1193, 13)
+        Me.btnSelectResident.Name = "btnSelectResident"
+        Me.btnSelectResident.Size = New System.Drawing.Size(36, 30)
+        Me.btnSelectResident.TabIndex = 724
+        Me.btnSelectResident.Text = "..."
+        Me.btnSelectResident.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnSelectResident.UseVisualStyleBackColor = False
         '
         'lblMiddlenameError
         '
@@ -493,15 +536,15 @@ Partial Class frmCreateAppointment
         Me.Label35.TabIndex = 708
         Me.Label35.Text = "Street"
         '
-        'txtStreetAddress
+        'txtStreet
         '
-        Me.txtStreetAddress.BackColor = System.Drawing.SystemColors.Window
-        Me.txtStreetAddress.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtStreetAddress.Location = New System.Drawing.Point(29, 254)
-        Me.txtStreetAddress.Name = "txtStreetAddress"
-        Me.txtStreetAddress.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtStreetAddress.Size = New System.Drawing.Size(597, 28)
-        Me.txtStreetAddress.TabIndex = 707
+        Me.txtStreet.BackColor = System.Drawing.SystemColors.Window
+        Me.txtStreet.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtStreet.Location = New System.Drawing.Point(29, 254)
+        Me.txtStreet.Name = "txtStreet"
+        Me.txtStreet.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtStreet.Size = New System.Drawing.Size(597, 28)
+        Me.txtStreet.TabIndex = 707
         '
         'Label30
         '
@@ -663,13 +706,13 @@ Partial Class frmCreateAppointment
         Me.Label18.TabIndex = 688
         Me.Label18.Text = "Date of Birth"
         '
-        'dtpBirthday
+        'dtpDateOfBirth
         '
-        Me.dtpBirthday.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dtpBirthday.Location = New System.Drawing.Point(29, 164)
-        Me.dtpBirthday.Name = "dtpBirthday"
-        Me.dtpBirthday.Size = New System.Drawing.Size(290, 28)
-        Me.dtpBirthday.TabIndex = 687
+        Me.dtpDateOfBirth.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dtpDateOfBirth.Location = New System.Drawing.Point(29, 164)
+        Me.dtpDateOfBirth.Name = "dtpDateOfBirth"
+        Me.dtpDateOfBirth.Size = New System.Drawing.Size(290, 28)
+        Me.dtpDateOfBirth.TabIndex = 687
         '
         'Label2
         '
@@ -691,15 +734,15 @@ Partial Class frmCreateAppointment
         Me.Label6.TabIndex = 685
         Me.Label6.Text = "Middle"
         '
-        'txtMiddlename
+        'txtMiddle
         '
-        Me.txtMiddlename.BackColor = System.Drawing.SystemColors.Window
-        Me.txtMiddlename.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtMiddlename.Location = New System.Drawing.Point(644, 79)
-        Me.txtMiddlename.Name = "txtMiddlename"
-        Me.txtMiddlename.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtMiddlename.Size = New System.Drawing.Size(257, 28)
-        Me.txtMiddlename.TabIndex = 684
+        Me.txtMiddle.BackColor = System.Drawing.SystemColors.Window
+        Me.txtMiddle.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMiddle.Location = New System.Drawing.Point(644, 79)
+        Me.txtMiddle.Name = "txtMiddle"
+        Me.txtMiddle.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtMiddle.Size = New System.Drawing.Size(257, 28)
+        Me.txtMiddle.TabIndex = 684
         '
         'txtFirstname
         '
@@ -772,15 +815,15 @@ Partial Class frmCreateAppointment
         Me.cboSuffix.Size = New System.Drawing.Size(257, 28)
         Me.cboSuffix.TabIndex = 458
         '
-        'txtName
+        'txtLastname
         '
-        Me.txtName.BackColor = System.Drawing.SystemColors.Window
-        Me.txtName.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtName.Location = New System.Drawing.Point(29, 79)
-        Me.txtName.Name = "txtName"
-        Me.txtName.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtName.Size = New System.Drawing.Size(290, 28)
-        Me.txtName.TabIndex = 679
+        Me.txtLastname.BackColor = System.Drawing.SystemColors.Window
+        Me.txtLastname.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtLastname.Location = New System.Drawing.Point(29, 79)
+        Me.txtLastname.Name = "txtLastname"
+        Me.txtLastname.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtLastname.Size = New System.Drawing.Size(290, 28)
+        Me.txtLastname.TabIndex = 679
         '
         'lblLastnameError
         '
@@ -791,57 +834,6 @@ Partial Class frmCreateAppointment
         Me.lblLastnameError.Size = New System.Drawing.Size(15, 19)
         Me.lblLastnameError.TabIndex = 681
         Me.lblLastnameError.Text = "-"
-        '
-        'btnClearAll
-        '
-        Me.btnClearAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClearAll.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnClearAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnClearAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnClearAll.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnClearAll.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.btnClearAll.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClearAll.Location = New System.Drawing.Point(949, 838)
-        Me.btnClearAll.Name = "btnClearAll"
-        Me.btnClearAll.Size = New System.Drawing.Size(161, 37)
-        Me.btnClearAll.TabIndex = 714
-        Me.btnClearAll.Text = "Clear All"
-        Me.btnClearAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnClearAll.UseVisualStyleBackColor = False
-        '
-        'btnSubmit
-        '
-        Me.btnSubmit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSubmit.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.btnSubmit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSubmit.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSubmit.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnSubmit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSubmit.Location = New System.Drawing.Point(1116, 838)
-        Me.btnSubmit.Name = "btnSubmit"
-        Me.btnSubmit.Size = New System.Drawing.Size(161, 37)
-        Me.btnSubmit.TabIndex = 713
-        Me.btnSubmit.Text = "Create Request"
-        Me.btnSubmit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnSubmit.UseVisualStyleBackColor = False
-        '
-        'btnSelectRepresentative
-        '
-        Me.btnSelectRepresentative.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSelectRepresentative.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnSelectRepresentative.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnSelectRepresentative.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSelectRepresentative.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSelectRepresentative.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.btnSelectRepresentative.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSelectRepresentative.Location = New System.Drawing.Point(644, 165)
-        Me.btnSelectRepresentative.Name = "btnSelectRepresentative"
-        Me.btnSelectRepresentative.Size = New System.Drawing.Size(36, 30)
-        Me.btnSelectRepresentative.TabIndex = 715
-        Me.btnSelectRepresentative.Text = "..."
-        Me.btnSelectRepresentative.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnSelectRepresentative.UseVisualStyleBackColor = False
         '
         'frmCreateAppointment
         '
@@ -855,13 +847,10 @@ Partial Class frmCreateAppointment
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "frmCreateAppointment"
         Me.Panel1.ResumeLayout(False)
-        Me.Panel4.ResumeLayout(False)
-        CType(Me.picUserProfile, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
         Me.pnlaccountsystem.ResumeLayout(False)
         Me.pnlaccountsystem.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
@@ -876,10 +865,6 @@ Partial Class frmCreateAppointment
     Friend WithEvents Label27 As Label
     Friend WithEvents Label28 As Label
     Friend WithEvents lblUsernameError As Label
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents Label8 As Label
-    Friend WithEvents Label1 As Label
     Friend WithEvents Panel3 As Panel
     Friend WithEvents lblMiddlenameError As Label
     Friend WithEvents lblEmailError As Label
@@ -893,7 +878,7 @@ Partial Class frmCreateAppointment
     Friend WithEvents txtFatherName As TextBox
     Friend WithEvents Label34 As Label
     Friend WithEvents Label35 As Label
-    Friend WithEvents txtStreetAddress As TextBox
+    Friend WithEvents txtStreet As TextBox
     Friend WithEvents Label30 As Label
     Friend WithEvents txtCity As TextBox
     Friend WithEvents txtBarangay As TextBox
@@ -910,10 +895,9 @@ Partial Class frmCreateAppointment
     Friend WithEvents lblBirthPlaceError As Label
     Friend WithEvents Label20 As Label
     Friend WithEvents Label18 As Label
-    Friend WithEvents dtpBirthday As DateTimePicker
     Friend WithEvents Label2 As Label
     Friend WithEvents Label6 As Label
-    Friend WithEvents txtMiddlename As TextBox
+    Friend WithEvents txtMiddle As TextBox
     Friend WithEvents txtFirstname As TextBox
     Friend WithEvents Label5 As Label
     Friend WithEvents lblFirstnameError As Label
@@ -921,17 +905,21 @@ Partial Class frmCreateAppointment
     Friend WithEvents Label12 As Label
     Friend WithEvents Label13 As Label
     Friend WithEvents cboSuffix As ComboBox
-    Friend WithEvents txtName As TextBox
+    Friend WithEvents txtLastname As TextBox
     Friend WithEvents lblLastnameError As Label
     Friend WithEvents cboRequestType As ComboBox
     Friend WithEvents txtNameOfRepresentative As TextBox
     Friend WithEvents cboRequestFor As ComboBox
     Friend WithEvents lblControlNo As Label
-    Friend WithEvents Label3 As Label
+    Friend WithEvents lblRepresentative As Label
     Friend WithEvents txtPurpose As TextBox
     Friend WithEvents Panel4 As Panel
-    Friend WithEvents picUserProfile As PictureBox
     Friend WithEvents btnClearAll As Button
-    Friend WithEvents btnSubmit As Button
+    Friend WithEvents btnCreateRequest As Button
     Friend WithEvents btnSelectRepresentative As Button
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label9 As Label
+    Friend WithEvents btnSelectResident As Button
+    Friend WithEvents dtpDateOfBirth As DateTimePicker
 End Class

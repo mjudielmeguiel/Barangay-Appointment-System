@@ -32,8 +32,14 @@ Partial Class frmAdmin_Dashboard
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblAppointment = New System.Windows.Forms.Label()
         Me.Panel11 = New System.Windows.Forms.Panel()
+        Me.lblLockedAccounts = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.lblActiveUsers = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lblTotalResidents = New System.Windows.Forms.Label()
         Me.Panel10 = New System.Windows.Forms.Panel()
@@ -43,23 +49,16 @@ Partial Class frmAdmin_Dashboard
         Me.Label7 = New System.Windows.Forms.Label()
         Me.lblTotalAppointments = New System.Windows.Forms.Label()
         Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.lblAppointment = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.lblPendingAppointments = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.lblDept = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lblWelcome = New System.Windows.Forms.Label()
         Me.lblDateTime = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.lblLockedAccounts = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.lblActiveUsers = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblTotalUsers = New System.Windows.Forms.Label()
@@ -73,7 +72,6 @@ Partial Class frmAdmin_Dashboard
         Me.Panel9.SuspendLayout()
         Me.Panel6.SuspendLayout()
         Me.Panel5.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -187,6 +185,28 @@ Partial Class frmAdmin_Dashboard
         Me.Panel2.Size = New System.Drawing.Size(180, 113)
         Me.Panel2.TabIndex = 178
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.Navy
+        Me.Label2.Location = New System.Drawing.Point(21, 74)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(127, 22)
+        Me.Label2.TabIndex = 165
+        Me.Label2.Text = "Appointments"
+        '
+        'lblAppointment
+        '
+        Me.lblAppointment.AutoSize = True
+        Me.lblAppointment.Font = New System.Drawing.Font("Microsoft YaHei UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAppointment.ForeColor = System.Drawing.Color.Navy
+        Me.lblAppointment.Location = New System.Drawing.Point(66, 13)
+        Me.lblAppointment.Name = "lblAppointment"
+        Me.lblAppointment.Size = New System.Drawing.Size(45, 50)
+        Me.lblAppointment.TabIndex = 163
+        Me.lblAppointment.Text = "0"
+        '
         'Panel11
         '
         Me.Panel11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -197,6 +217,28 @@ Partial Class frmAdmin_Dashboard
         Me.Panel11.Size = New System.Drawing.Size(180, 113)
         Me.Panel11.TabIndex = 177
         '
+        'lblLockedAccounts
+        '
+        Me.lblLockedAccounts.AutoSize = True
+        Me.lblLockedAccounts.Font = New System.Drawing.Font("Microsoft YaHei UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLockedAccounts.ForeColor = System.Drawing.Color.Navy
+        Me.lblLockedAccounts.Location = New System.Drawing.Point(74, 13)
+        Me.lblLockedAccounts.Name = "lblLockedAccounts"
+        Me.lblLockedAccounts.Size = New System.Drawing.Size(45, 50)
+        Me.lblLockedAccounts.TabIndex = 163
+        Me.lblLockedAccounts.Text = "0"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.ForeColor = System.Drawing.Color.Navy
+        Me.Label6.Location = New System.Drawing.Point(20, 74)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(147, 22)
+        Me.Label6.TabIndex = 164
+        Me.Label6.Text = "Locked Accounts"
+        '
         'Panel8
         '
         Me.Panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -206,6 +248,28 @@ Partial Class frmAdmin_Dashboard
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(180, 113)
         Me.Panel8.TabIndex = 176
+        '
+        'lblActiveUsers
+        '
+        Me.lblActiveUsers.AutoSize = True
+        Me.lblActiveUsers.Font = New System.Drawing.Font("Microsoft YaHei UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblActiveUsers.ForeColor = System.Drawing.Color.Navy
+        Me.lblActiveUsers.Location = New System.Drawing.Point(64, 13)
+        Me.lblActiveUsers.Name = "lblActiveUsers"
+        Me.lblActiveUsers.Size = New System.Drawing.Size(45, 50)
+        Me.lblActiveUsers.TabIndex = 163
+        Me.lblActiveUsers.Text = "0"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.Navy
+        Me.Label3.Location = New System.Drawing.Point(30, 74)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(109, 22)
+        Me.Label3.TabIndex = 164
+        Me.Label3.Text = "Active Users"
         '
         'Label14
         '
@@ -303,28 +367,6 @@ Partial Class frmAdmin_Dashboard
         Me.Panel6.Size = New System.Drawing.Size(181, 113)
         Me.Panel6.TabIndex = 179
         '
-        'lblAppointment
-        '
-        Me.lblAppointment.AutoSize = True
-        Me.lblAppointment.Font = New System.Drawing.Font("Microsoft YaHei UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAppointment.ForeColor = System.Drawing.Color.Navy
-        Me.lblAppointment.Location = New System.Drawing.Point(66, 13)
-        Me.lblAppointment.Name = "lblAppointment"
-        Me.lblAppointment.Size = New System.Drawing.Size(45, 50)
-        Me.lblAppointment.TabIndex = 163
-        Me.lblAppointment.Text = "0"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.Navy
-        Me.Label2.Location = New System.Drawing.Point(21, 74)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(127, 22)
-        Me.Label2.TabIndex = 165
-        Me.Label2.Text = "Appointments"
-        '
         'Label8
         '
         Me.Label8.AutoSize = True
@@ -360,28 +402,20 @@ Partial Class frmAdmin_Dashboard
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(66, 11)
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label9.Location = New System.Drawing.Point(12, 9)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(125, 22)
+        Me.Label9.Size = New System.Drawing.Size(111, 21)
         Me.Label9.TabIndex = 519
         Me.Label9.Text = "Administrator"
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(11, 11)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(50, 41)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 518
-        Me.PictureBox1.TabStop = False
         '
         'Label5
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(67, 33)
+        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label5.Location = New System.Drawing.Point(12, 30)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(236, 19)
         Me.Label5.TabIndex = 520
@@ -389,9 +423,8 @@ Partial Class frmAdmin_Dashboard
         '
         'Panel4
         '
-        Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel4.Controls.Add(Me.Label5)
-        Me.Panel4.Controls.Add(Me.PictureBox1)
         Me.Panel4.Controls.Add(Me.Label9)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel4.Location = New System.Drawing.Point(0, 0)
@@ -438,50 +471,6 @@ Partial Class frmAdmin_Dashboard
         Me.lblDateTime.TabIndex = 179
         Me.lblDateTime.Text = "-"
         '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.Navy
-        Me.Label6.Location = New System.Drawing.Point(20, 74)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(147, 22)
-        Me.Label6.TabIndex = 164
-        Me.Label6.Text = "Locked Accounts"
-        '
-        'lblLockedAccounts
-        '
-        Me.lblLockedAccounts.AutoSize = True
-        Me.lblLockedAccounts.Font = New System.Drawing.Font("Microsoft YaHei UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLockedAccounts.ForeColor = System.Drawing.Color.Navy
-        Me.lblLockedAccounts.Location = New System.Drawing.Point(74, 13)
-        Me.lblLockedAccounts.Name = "lblLockedAccounts"
-        Me.lblLockedAccounts.Size = New System.Drawing.Size(45, 50)
-        Me.lblLockedAccounts.TabIndex = 163
-        Me.lblLockedAccounts.Text = "0"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Navy
-        Me.Label3.Location = New System.Drawing.Point(30, 74)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(109, 22)
-        Me.Label3.TabIndex = 164
-        Me.Label3.Text = "Active Users"
-        '
-        'lblActiveUsers
-        '
-        Me.lblActiveUsers.AutoSize = True
-        Me.lblActiveUsers.Font = New System.Drawing.Font("Microsoft YaHei UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblActiveUsers.ForeColor = System.Drawing.Color.Navy
-        Me.lblActiveUsers.Location = New System.Drawing.Point(64, 13)
-        Me.lblActiveUsers.Name = "lblActiveUsers"
-        Me.lblActiveUsers.Size = New System.Drawing.Size(45, 50)
-        Me.lblActiveUsers.TabIndex = 163
-        Me.lblActiveUsers.Text = "0"
-        '
         'Label1
         '
         Me.Label1.AutoSize = True
@@ -518,6 +507,7 @@ Partial Class frmAdmin_Dashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ClientSize = New System.Drawing.Size(1366, 768)
         Me.Controls.Add(Me.Panel7)
         Me.Controls.Add(Me.Panel2)
@@ -555,7 +545,6 @@ Partial Class frmAdmin_Dashboard
         Me.Panel6.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel5.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -594,7 +583,6 @@ Partial Class frmAdmin_Dashboard
     Friend WithEvents lblPendingAppointments As Label
     Friend WithEvents Panel5 As Panel
     Friend WithEvents Label9 As Label
-    Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents Label5 As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblDept As Label

@@ -269,6 +269,18 @@
     <Compile Include="Satellite Offices\frmSatelliteOfficeList.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="USERS\Book Apointment\frmPayment_Success.Designer.vb">
+      <DependentUpon>frmPayment_Success.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\Book Apointment\frmPayment_Success.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="USERS\Book Apointment\frmResidencelist.Designer.vb">
+      <DependentUpon>frmResidencelist.vb</DependentUpon>
+    </Compile>
+    <Compile Include="USERS\Book Apointment\frmResidencelist.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="USERS\frmAppointmentDetails.Designer.vb">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </Compile>
@@ -410,6 +422,12 @@
     <EmbeddedResource Include="Satellite Offices\frmSatelliteOfficeList.resx">
       <DependentUpon>frmSatelliteOfficeList.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="USERS\Book Apointment\frmPayment_Success.resx">
+      <DependentUpon>frmPayment_Success.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="USERS\Book Apointment\frmResidencelist.resx">
+      <DependentUpon>frmResidencelist.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="USERS\frmAppointmentDetails.resx">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </EmbeddedResource>
@@ -470,9 +488,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="USERS\Book Apointment\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
       <Visible>False</Visible>

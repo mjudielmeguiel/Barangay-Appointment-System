@@ -9,8 +9,146 @@ Public Class frmUser_Dashboard
         StyleDataGridView(dgvRequests)
         ApplyCorporateButtonStyles()
         SetActiveLabel(lblPending)
+
+        ' --- BAGONG ADD PARA SA PROFILE ---
+        MakeCircularPictureBox(picProfile)
+        LoadUserProfileInfo()
+        ' ----------------------------------
+
         RefreshDashboardData()
     End Sub
+
+    ' ==========================================
+    ' === USER PROFILE LOGIC START HERE ========
+    ' ==========================================
+
+    ' === GAWING BILOG ANG PICTUREBOX ===
+    Private Sub MakeCircularPictureBox(pb As PictureBox)
+        If pb Is Nothing Then Return
+        Dim size As Integer = Math.Min(pb.Width, pb.Height)
+        pb.Width = size
+        pb.Height = size
+        Dim gp As New GraphicsPath()
+        gp.AddEllipse(0, 0, pb.Width - 1, pb.Height - 1)
+        pb.Region = New Region(gp)
+        pb.SizeMode = PictureBoxSizeMode.Zoom
+    End Sub
+
+    ' === LOAD USER INFORMATION MULA SA DATABASE ===
+    Private Sub LoadUserProfileInfo()
+        Try
+            If cn.State <> ConnectionState.Open Then connection()
+            ' Kinukuha ang mga columns base sa schema
+            Dim sql As String = "SELECT Firstname, Lastname, Role, AssignedOffice, Department, Email, ContactNumber, AccountStatus, CreatedAt, Picture FROM users WHERE UserID = @userId"
+
+            Using cmd As New MySqlCommand(sql, cn)
+                ' Ipinalagay ko na kinukuha mo ang UserID mula sa frmlogin
+                cmd.Parameters.AddWithValue("@userId", frmlogin.LoggedInUserID)
+
+                Using dr As MySqlDataReader = cmd.ExecuteReader()
+                    If dr.Read() Then
+                        lblFullname.Text = $"{dr("Firstname")} {dr("Lastname")}".Trim()
+                        lblRole.Text = dr("Role").ToString()
+
+                        lblAssignedOffice.Text = If(IsDBNull(dr("AssignedOffice")), "N/A", dr("AssignedOffice").ToString())
+                        lblDepartment.Text = If(IsDBNull(dr("Department")), "N/A", dr("Department").ToString())
+                        lblEmail.Text = If(IsDBNull(dr("Email")), "N/A", dr("Email").ToString())
+
+                        Dim contact As String = If(IsDBNull(dr("ContactNumber")), "", dr("ContactNumber").ToString().Trim())
+                        lblContact.Text = If(String.IsNullOrWhiteSpace(contact), "N/A", contact)
+
+                        ' === FIX PARA SA ACCOUNT STATUS LABEL ===
+                        Dim statusVal As String = If(IsDBNull(dr("AccountStatus")), "", dr("AccountStatus").ToString().Trim())
+
+                        ' Kapag blangko ang nasa database, lagyan natin ng default
+                        If String.IsNullOrWhiteSpace(statusVal) Then
+                            statusVal = "Unknown"
+                        End If
+
+                        lblAccountStatus.Text = $"● {statusVal}"
+
+                        ' Gawing green ang text kapag "Active"
+                        If statusVal.Equals("Active", StringComparison.OrdinalIgnoreCase) Then
+                            lblAccountStatus.ForeColor = Color.Green
+                        Else
+                            lblAccountStatus.ForeColor = Color.Gray
+                        End If
+                        ' =========================================
+
+                        If Not IsDBNull(dr("CreatedAt")) Then
+                            Dim createdDate As DateTime = Convert.ToDateTime(dr("CreatedAt"))
+                            lblDateCreated.Text = "Since " & createdDate.ToString("MMM dd, yyyy")
+                        Else
+                            lblDateCreated.Text = "N/A"
+                        End If
+
+                        ' Load Picture kung meron
+                        If Not IsDBNull(dr("Picture")) Then
+                            Dim picData As Byte() = CType(dr("Picture"), Byte())
+                            Using ms As New MemoryStream(picData)
+                                picProfile.Image = Image.FromStream(ms)
+                            End Using
+                        Else
+                            picProfile.Image = Nothing ' Pwede ka maglagay ng default placeholder resource dito
+                        End If
+                    End If
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox("Error loading profile: " & ex.Message, MsgBoxStyle.Exclamation)
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
+    ' === DOUBLE-CLICK PICTUREBOX PARA MAGPALIT NG PROFILE PIC ===
+    Private Sub picProfile_DoubleClick(sender As Object, e As EventArgs) Handles picProfile.DoubleClick
+        Using ofd As New OpenFileDialog()
+            ofd.Title = "Select New Profile Picture"
+            ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp"
+            If ofd.ShowDialog() = DialogResult.OK Then
+                Try
+                    ' Display the new image
+                    Dim newImage As Image = Image.FromFile(ofd.FileName)
+                    picProfile.Image = newImage
+
+                    ' Convert to Bytes para isave sa DB
+                    Dim picBytes As Byte()
+                    Using ms As New MemoryStream()
+                        newImage.Save(ms, newImage.RawFormat)
+                        picBytes = ms.ToArray()
+                    End Using
+
+                    ' Update to database
+                    UpdateProfilePicture(picBytes)
+                    MsgBox("Profile picture updated successfully!", MsgBoxStyle.Information)
+                Catch ex As Exception
+                    MsgBox("Failed to update picture: " & ex.Message, MsgBoxStyle.Exclamation)
+                End Try
+            End If
+        End Using
+    End Sub
+
+    ' === UPDATE QUERY PARA SA PICTURE (longblob base sa image_cd1dc0.png) ===
+    Private Sub UpdateProfilePicture(picBytes As Byte())
+        Try
+            If cn.State <> ConnectionState.Open Then connection()
+            Dim sql As String = "UPDATE users SET Picture = @pic WHERE UserID = @userId"
+            Using cmd As New MySqlCommand(sql, cn)
+                cmd.Parameters.AddWithValue("@pic", picBytes)
+                cmd.Parameters.AddWithValue("@userId", frmlogin.LoggedInUserID)
+                cmd.ExecuteNonQuery()
+            End Using
+        Catch ex As Exception
+            Throw New Exception("Database error: " & ex.Message)
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
+    ' ==========================================
+    ' === DATING DASHBOARD LOGIC NASA BABA =====
+    ' ==========================================
 
     Private Sub ApplyCorporateButtonStyles()
         Dim CorporateStyle = Sub(btn As Button, backColor As Color, foreColor As Color)
@@ -94,7 +232,6 @@ Public Class frmUser_Dashboard
         End Try
     End Sub
 
-    ' === ✅ ISANG BUTTON NA LANG — CANCEL ===
     Private Sub AddGridActionButtons()
         If Not dgvRequests.Columns.Contains("colCancel") Then
             Dim btnCancelCol As New DataGridViewButtonColumn()
@@ -106,7 +243,6 @@ Public Class frmUser_Dashboard
         End If
     End Sub
 
-    ' === ✅ Itago ang Cancel button kapag hindi APPROVED ===
     Private Sub AdjustGridColumnsByStatus(currentStatus As String)
         If Not dgvRequests.Columns.Contains("colCancel") Then Return
         If currentStatus.ToUpper() = "APPROVED" Then
@@ -117,7 +253,6 @@ Public Class frmUser_Dashboard
         End If
     End Sub
 
-    ' === ✅ CANCEL BUTTON CLICK — cancel lang ang ginagawa ===
     Private Sub dgvRequests_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvRequests.CellContentClick
         If e.RowIndex < 0 Then Return
         Dim controlNo As String = dgvRequests.Rows(e.RowIndex).Cells("Control No.").Value.ToString()
@@ -132,7 +267,6 @@ Public Class frmUser_Dashboard
         End If
     End Sub
 
-    ' === ✅ CELL PAINTING — CANCEL button lang ang iginuguhit ===
     Private Sub dgvRequests_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvRequests.CellPainting
         If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
             Dim colName As String = dgvRequests.Columns(e.ColumnIndex).Name
@@ -292,19 +426,19 @@ Public Class frmUser_Dashboard
         RefreshDashboardData()
     End Sub
 
-    Private Sub btnCreateRequest_Click(sender As Object, e As EventArgs) Handles btnCreateRequest.Click
-        Using frm As New frmCreateAppointment()
-            If frm.ShowDialog() = DialogResult.OK Then
-                Dim newControlNo As String = GetLatestCreatedControlNo()
-                If Not String.IsNullOrEmpty(newControlNo) Then
-                    Using frmCoupon As New frmCouponView(newControlNo)
-                        frmCoupon.ShowDialog()
-                    End Using
-                End If
-                SetActiveLabel(lblPending)
-                RefreshDashboardData()
-            End If
-        End Using
+Private Sub btnCreateRequest_Click(sender As Object, e As EventArgs) Handles btnCreateRequest.Click
+        ' Gumawa ng instance ng form
+        Dim frm As New frmCreateAppointment()
+        
+        ' Set properties para mag-fit at dumikit sa Panel
+        frm.TopLevel = False
+        frm.FormBorderStyle = FormBorderStyle.None
+        frm.Dock = DockStyle.Fill
+        
+        ' Ilagay sa Panel2 ng frmMain
+        frmMain.Panel2.Controls.Clear()
+        frmMain.Panel2.Controls.Add(frm)
+        frm.Show()
     End Sub
 
     Private Function GetLatestCreatedControlNo() As String

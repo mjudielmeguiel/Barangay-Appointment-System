@@ -2,8 +2,7 @@
 Imports System.IO
 Imports System.Net
 Imports System.Net.Sockets
-Imports System.Drawing
-Imports System.Drawing.Drawing2D
+
 Public Class frmMain
     ' === PROPERTIES ===
     Private ReadOnly Property LoggedFullname As String
@@ -11,16 +10,19 @@ Public Class frmMain
             Return frmlogin.LoggedInFullname
         End Get
     End Property
+
     Private ReadOnly Property LoggedRole As String
         Get
             Return frmlogin.LoggedInRole
         End Get
     End Property
+
     Private ReadOnly Property LoggedUserID As Integer
         Get
             Return frmlogin.LoggedInUserID
         End Get
     End Property
+
     ' === PANEL DIMENSIONS PARA SA TOGGLE LOGIC LANG ===
     Private Const ICON_RAIL_WIDTH As Integer = 70
     Private Const MENU_PANEL_WIDTH As Integer = 200
@@ -34,10 +36,7 @@ Public Class frmMain
             frmlogin.Show()
             Return
         End If
-        ' --- GAWING BILOG ANG PICTURE BOX ---
-        MakeCircularPictureBox(picProfile)
-        ' --- LOAD PROFILE INFO ---
-        LoadUserProfileInfo()
+
         ' --- ROLE-BASED VISIBILITY ---
         Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
 
@@ -70,59 +69,7 @@ Public Class frmMain
             Panel2.Height = Me.ClientSize.Height - Panel2.Top
         End If
     End Sub
-    ' === GAWING BILOG ANG PICTUREBOX ===
-    Private Sub MakeCircularPictureBox(pb As PictureBox)
-        If pb Is Nothing Then Return
-        Dim size As Integer = Math.Min(pb.Width, pb.Height)
-        pb.Width = size
-        pb.Height = size
-        Dim gp As New GraphicsPath()
-        gp.AddEllipse(0, 0, pb.Width, pb.Height)
-        pb.Region = New Region(gp)
-        pb.SizeMode = PictureBoxSizeMode.Zoom
-    End Sub
-    ' === LOAD PROFILE INFO ===
-    Private Sub LoadUserProfileInfo()
-        Try
-            connection()
-            Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
-            Dim targetTable As String = If(isAdmin, "admin", "users")
-            Dim idColumn As String = If(isAdmin, "AdminID", "UserID")
-            Dim sql As String = $"SELECT Firstname, Lastname, Role, Picture FROM {targetTable} WHERE {idColumn} = @userId"
-            Using cmd As New MySqlCommand(sql, cn)
-                cmd.Parameters.AddWithValue("@userId", LoggedUserID)
-                Using dr As MySqlDataReader = cmd.ExecuteReader()
-                    If dr.Read() Then
-                        Dim fName As String = dr("Firstname").ToString().Trim()
-                        Dim lName As String = dr("Lastname").ToString().Trim()
-                        Dim displayName As String = $"{fName} {lName}".Trim()
-                        lblFullname.Text = If(Not String.IsNullOrWhiteSpace(displayName), displayName, LoggedFullname)
-                        Dim roleValue As String = If(Not IsDBNull(dr("Role")), dr("Role").ToString().Trim(), "")
-                        If String.IsNullOrWhiteSpace(roleValue) Then roleValue = If(isAdmin, "Administrator", LoggedRole)
-                        lblUserRole.Text = roleValue.ToUpper()
-                        If Not IsDBNull(dr("Picture")) Then
-                            Using ms As New MemoryStream(CType(dr("Picture"), Byte()))
-                                picProfile.Image = Image.FromStream(ms)
-                            End Using
-                        Else
-                            picProfile.Image = Nothing
-                        End If
-                    Else
-                        lblFullname.Text = LoggedFullname
-                        lblUserRole.Text = If(isAdmin, "ADMINISTRATOR", LoggedRole.ToUpper())
-                        picProfile.Image = Nothing
-                    End If
-                End Using
-            End Using
-        Catch ex As Exception
-            lblFullname.Text = LoggedFullname
-            lblUserRole.Text = If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
-                "ADMINISTRATOR", LoggedRole.ToUpper())
-            picProfile.Image = Nothing
-        Finally
-            CloseConnection()
-        End Try
-    End Sub
+
     ' === TOGGLE SIDEBAR ===
 
     ' === MENU NAVIGATION ===
@@ -130,12 +77,15 @@ Public Class frmMain
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(frmAdmin_Dashboard), GetType(frmUser_Dashboard)))
     End Sub
+
     Private Sub btnResidents_Click(sender As Object, e As EventArgs) Handles btnResidents.Click
         LoadFormIntoPanel(GetType(frmResidence_Records))
     End Sub
+
     Private Sub btnUsers_Click(sender As Object, e As EventArgs) Handles btnUsers.Click
         LoadFormIntoPanel(GetType(frmManage_Users))
     End Sub
+
     Private Sub btnPayments_Click(sender As Object, e As EventArgs) Handles btnPayments.Click
         Dim Payments As New frmPayments With {
             .TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill, .PreviousForm = Me}
@@ -143,6 +93,7 @@ Public Class frmMain
         Panel2.Controls.Add(Payments)
         Payments.Show()
     End Sub
+
     Private Sub btnCalendar_Click(sender As Object, e As EventArgs) Handles btnCalendar.Click
         LoadFormIntoPanel(GetType(frmBarangayCalendar))
     End Sub
@@ -156,6 +107,7 @@ Public Class frmMain
         Panel2.Controls.Add(frm)
         frm.Show()
     End Sub
+
     ' === LOGOUT ===
     Private Sub btnClose_Click_1(sender As Object, e As EventArgs) Handles btnClose.Click
         If MsgBox("Are you sure you want to logout?",
@@ -201,6 +153,7 @@ Public Class frmMain
             Application.Restart()
         End Try
     End Sub
+
     ' === UNAUTHORIZED LOGGING ===
     Private Sub LogUnauthorizedAttempt()
         Try
@@ -219,6 +172,7 @@ Public Class frmMain
             CloseConnection()
         End Try
     End Sub
+
     ' === HELPER: GET LOCAL IP ===
     Private Function GetLocalIPAddress() As String
         Try
@@ -230,77 +184,41 @@ Public Class frmMain
         End Try
         Return "127.0.0.1"
     End Function
-    ' === DOUBLE-CLICK PROFILE ===
-    Private Sub picProfile_DoubleClick(sender As Object, e As EventArgs) Handles picProfile.DoubleClick
-        Using ofd As New OpenFileDialog()
-            ofd.Title = "Select New Profile Picture"
-            ofd.Filter = "Image Files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp"
-            ofd.RestoreDirectory = True
-            If ofd.ShowDialog() = DialogResult.OK Then
-                Try
-                    Dim newImage As Image = Image.FromFile(ofd.FileName)
-                    picProfile.Image = newImage
-                    Dim picBytes As Byte()
-                    Using ms As New MemoryStream()
-                        newImage.Save(ms, newImage.RawFormat)
-                        picBytes = ms.ToArray()
-                    End Using
-                    UpdateProfilePicture(picBytes)
-                    MsgBox("Profile picture updated!", MsgBoxStyle.Information)
-                Catch ex As Exception
-                    MsgBox("Failed to update picture: " & ex.Message, MsgBoxStyle.Exclamation)
-                End Try
-            End If
-        End Using
-    End Sub
-    ' === UPDATE PROFILE PICTURE SA DB ===
-    Private Sub UpdateProfilePicture(picBytes As Byte())
-        Try
-            connection()
-            Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
-            Dim targetTable As String = If(isAdmin, "admin", "users")
-            Dim idColumn As String = If(isAdmin, "AdminID", "UserID")
-            Dim sql As String = $"UPDATE {targetTable} SET Picture = @pic WHERE {idColumn} = @userId"
-            Using cmd As New MySqlCommand(sql, cn)
-                cmd.Parameters.AddWithValue("@pic", picBytes)
-                cmd.Parameters.AddWithValue("@userId", LoggedUserID)
-                cmd.ExecuteNonQuery()
-            End Using
-        Catch ex As Exception
-            Throw New Exception("Database error: " & ex.Message)
-        Finally
-            CloseConnection()
-        End Try
-    End Sub
+
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
         LoadFormIntoPanel(GetType(frmAppointmentHistory))
     End Sub
+
     Private Sub BtnReports_Click(sender As Object, e As EventArgs) Handles BtnReports.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(frmReportGeneration), GetType(frmReportGeneration)))
     End Sub
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(frmcreateuser), GetType(frmcreateuser)))
     End Sub
+
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(frmDocumentServices), GetType(frmDocumentServices)))
     End Sub
+
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(frmActivityLogs), GetType(frmActivityLogs)))
     End Sub
+
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         frmChange_Password.Show()
     End Sub
+
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
             GetType(Barangay_Residences), GetType(Barangay_Residences)))
     End Sub
 
     ' === HELPER: LOAD FORM SA PANEL ===
-
     Private Sub btnToggleSidebar_Click(sender As Object, e As EventArgs) Handles btnToggleSidebar.Click
         If panelMenu.Visible Then
             panelMenu.Visible = False
@@ -322,5 +240,9 @@ Public Class frmMain
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
 GetType(frmSatelliteOfficeList), GetType(frmSatelliteOfficeList)))
+    End Sub
+
+    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles Panel2.Paint
+
     End Sub
 End Class
