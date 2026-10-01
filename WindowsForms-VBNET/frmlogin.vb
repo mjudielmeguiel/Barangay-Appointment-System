@@ -124,12 +124,22 @@ Public Class frmlogin
         If userInput = "" OrElse userInput = "Please Enter your username" OrElse
            passInput = "" OrElse passInput = "Please Enter your Password" Then
             RecordActivityLog(0, userInput, "Anonymous", "EMPTY_ATTEMPT", "Authentication",
-                             $"Empty attempt — Username: [{userInput}]")
+                              $"Empty attempt — Username: [{userInput}]")
             lblError.Text = "⚠️ Enter username and password."
             Return
         End If
         ProcessLogin(userInput, passInput)
     End Sub
+
+    ' Ligtas na pang-check kung nag-e-exist ang column
+    Private Function HasColumn(dr As MySqlDataReader, columnName As String) As Boolean
+        For i As Integer = 0 To dr.FieldCount - 1
+            If dr.GetName(i).Equals(columnName, StringComparison.OrdinalIgnoreCase) Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
 
     Private Sub ProcessLogin(userInput As String, passInput As String)
         Dim foundUserType As String = ""
@@ -139,6 +149,8 @@ Public Class frmlogin
         Dim dbPass As String = ""
         Dim fullName As String = ""
         Dim roleName As String = ""
+        Dim accStatus As String = "Active" ' Default status
+
         Try
             connection()
             Dim isSuspicious As Boolean = False
@@ -151,45 +163,60 @@ Public Class frmlogin
             End If
 
             ' === HANAPIN SA ADMIN TABLE ===
-            Dim adminSql As String = "SELECT AdminID, Firstname, Lastname, Password, LoginAttempts, LockoutExpiry FROM admin WHERE Username=@user"
+            Dim adminSql As String = "SELECT * FROM admin WHERE Username=@user"
             Using cmdAdmin As New MySqlCommand(adminSql, cn)
                 cmdAdmin.Parameters.AddWithValue("@user", userInput)
                 Using drAdmin As MySqlDataReader = cmdAdmin.ExecuteReader()
                     If drAdmin.Read() Then
                         foundUserType = "admin"
-                        recordId = If(IsDBNull(drAdmin("AdminID")), 0, Convert.ToInt32(drAdmin("AdminID")))
-                        attempts = If(IsDBNull(drAdmin("LoginAttempts")), 0, Convert.ToInt32(drAdmin("LoginAttempts")))
-                        If Not IsDBNull(drAdmin("LockoutExpiry")) Then
+                        recordId = If(HasColumn(drAdmin, "AdminID") AndAlso Not IsDBNull(drAdmin("AdminID")), Convert.ToInt32(drAdmin("AdminID")), 0)
+                        attempts = If(HasColumn(drAdmin, "LoginAttempts") AndAlso Not IsDBNull(drAdmin("LoginAttempts")), Convert.ToInt32(drAdmin("LoginAttempts")), 0)
+
+                        If HasColumn(drAdmin, "LockoutExpiry") AndAlso Not IsDBNull(drAdmin("LockoutExpiry")) Then
                             lockoutExpiry = Convert.ToDateTime(drAdmin("LockoutExpiry"))
                         End If
-                        dbPass = drAdmin("Password").ToString()
-                        Dim fNameAdmin As String = If(IsDBNull(drAdmin("Firstname")), "", drAdmin("Firstname").ToString().Trim())
-                        Dim lNameAdmin As String = If(IsDBNull(drAdmin("Lastname")), "", drAdmin("Lastname").ToString().Trim())
+
+                        dbPass = If(HasColumn(drAdmin, "Password"), drAdmin("Password").ToString(), "")
+
+                        Dim fNameAdmin As String = If(HasColumn(drAdmin, "Firstname") AndAlso Not IsDBNull(drAdmin("Firstname")), drAdmin("Firstname").ToString().Trim(), "")
+                        Dim lNameAdmin As String = If(HasColumn(drAdmin, "Lastname") AndAlso Not IsDBNull(drAdmin("Lastname")), drAdmin("Lastname").ToString().Trim(), "")
                         fullName = If(String.IsNullOrEmpty(lNameAdmin), fNameAdmin, $"{lNameAdmin}, {fNameAdmin}")
                         roleName = "Administrator"
+
+                        If HasColumn(drAdmin, "AccountStatus") AndAlso Not IsDBNull(drAdmin("AccountStatus")) Then
+                            accStatus = drAdmin("AccountStatus").ToString()
+                        End If
                     End If
                 End Using
             End Using
 
             ' === HANAPIN SA USERS TABLE ===
             If String.IsNullOrEmpty(foundUserType) Then
-                Dim userSql As String = "SELECT UserID, Firstname, Lastname, Role, Password, LoginAttempts, LockoutExpiry FROM users WHERE Username=@user"
+                Dim userSql As String = "SELECT * FROM users WHERE Username=@user"
                 Using cmdUser As New MySqlCommand(userSql, cn)
                     cmdUser.Parameters.AddWithValue("@user", userInput)
                     Using drUser As MySqlDataReader = cmdUser.ExecuteReader()
                         If drUser.Read() Then
                             foundUserType = "users"
-                            recordId = If(IsDBNull(drUser("UserID")), 0, Convert.ToInt32(drUser("UserID")))
-                            attempts = If(IsDBNull(drUser("LoginAttempts")), 0, Convert.ToInt32(drUser("LoginAttempts")))
-                            If Not IsDBNull(drUser("LockoutExpiry")) Then
+                            recordId = If(HasColumn(drUser, "UserID") AndAlso Not IsDBNull(drUser("UserID")), Convert.ToInt32(drUser("UserID")), 0)
+                            attempts = If(HasColumn(drUser, "LoginAttempts") AndAlso Not IsDBNull(drUser("LoginAttempts")), Convert.ToInt32(drUser("LoginAttempts")), 0)
+
+                            If HasColumn(drUser, "LockoutExpiry") AndAlso Not IsDBNull(drUser("LockoutExpiry")) Then
                                 lockoutExpiry = Convert.ToDateTime(drUser("LockoutExpiry"))
                             End If
-                            dbPass = drUser("Password").ToString()
-                            Dim fName As String = If(IsDBNull(drUser("Firstname")), "", drUser("Firstname").ToString().Trim())
-                            Dim lName As String = If(IsDBNull(drUser("Lastname")), "", drUser("Lastname").ToString().Trim())
+
+                            dbPass = If(HasColumn(drUser, "Password"), drUser("Password").ToString(), "")
+
+                            Dim fName As String = If(HasColumn(drUser, "Firstname") AndAlso Not IsDBNull(drUser("Firstname")), drUser("Firstname").ToString().Trim(), "")
+                            Dim lName As String = If(HasColumn(drUser, "Lastname") AndAlso Not IsDBNull(drUser("Lastname")), drUser("Lastname").ToString().Trim(), "")
                             fullName = If(String.IsNullOrEmpty(lName), fName, $"{lName}, {fName}")
-                            Dim uRole As String = drUser("Role").ToString().Trim()
+
+                            Dim uRole As String = If(HasColumn(drUser, "Role") AndAlso Not IsDBNull(drUser("Role")), drUser("Role").ToString().Trim(), "Staff")
                             roleName = If(String.IsNullOrEmpty(uRole), "Staff", uRole)
+
+                            If HasColumn(drUser, "AccountStatus") AndAlso Not IsDBNull(drUser("AccountStatus")) Then
+                                accStatus = drUser("AccountStatus").ToString()
+                            End If
                         End If
                     End Using
                 End Using
@@ -197,22 +224,29 @@ Public Class frmlogin
 
             ' === HANAPIN SA RESIDENCES TABLE ===
             If String.IsNullOrEmpty(foundUserType) Then
-                Dim resSql As String = "SELECT ResidentID, Firstname, Lastname, Password, LoginAttempts, LockoutExpiry FROM residences WHERE Username=@user"
+                Dim resSql As String = "SELECT * FROM residences WHERE Username=@user"
                 Using cmdRes As New MySqlCommand(resSql, cn)
                     cmdRes.Parameters.AddWithValue("@user", userInput)
                     Using drRes As MySqlDataReader = cmdRes.ExecuteReader()
                         If drRes.Read() Then
                             foundUserType = "residences"
-                            recordId = If(IsDBNull(drRes("ResidentID")), 0, Convert.ToInt32(drRes("ResidentID")))
-                            attempts = If(IsDBNull(drRes("LoginAttempts")), 0, Convert.ToInt32(drRes("LoginAttempts")))
-                            If Not IsDBNull(drRes("LockoutExpiry")) Then
+                            recordId = If(HasColumn(drRes, "ResidentID") AndAlso Not IsDBNull(drRes("ResidentID")), Convert.ToInt32(drRes("ResidentID")), 0)
+                            attempts = If(HasColumn(drRes, "LoginAttempts") AndAlso Not IsDBNull(drRes("LoginAttempts")), Convert.ToInt32(drRes("LoginAttempts")), 0)
+
+                            If HasColumn(drRes, "LockoutExpiry") AndAlso Not IsDBNull(drRes("LockoutExpiry")) Then
                                 lockoutExpiry = Convert.ToDateTime(drRes("LockoutExpiry"))
                             End If
-                            dbPass = drRes("Password").ToString()
-                            Dim fName As String = If(IsDBNull(drRes("Firstname")), "", drRes("Firstname").ToString().Trim())
-                            Dim lName As String = If(IsDBNull(drRes("Lastname")), "", drRes("Lastname").ToString().Trim())
+
+                            dbPass = If(HasColumn(drRes, "Password"), drRes("Password").ToString(), "")
+
+                            Dim fName As String = If(HasColumn(drRes, "Firstname") AndAlso Not IsDBNull(drRes("Firstname")), drRes("Firstname").ToString().Trim(), "")
+                            Dim lName As String = If(HasColumn(drRes, "Lastname") AndAlso Not IsDBNull(drRes("Lastname")), drRes("Lastname").ToString().Trim(), "")
                             fullName = If(String.IsNullOrEmpty(lName), fName, $"{lName}, {fName}")
                             roleName = "Residence"
+
+                            If HasColumn(drRes, "AccountStatus") AndAlso Not IsDBNull(drRes("AccountStatus")) Then
+                                accStatus = drRes("AccountStatus").ToString()
+                            End If
                         End If
                     End Using
                 End Using
@@ -234,6 +268,16 @@ Public Class frmlogin
                 RecordActivityLog(recordId, userInput, roleName, "FAILED_LOGIN", "Authentication",
                                  note & $"Attempt during lockout period — Input: [{userInput}]")
                 Return
+            End If
+
+            ' === PENDING ACCOUNT BLOCKER ===
+            ' Nakalagay na ito BAGO i-check ang password. Dahil sa "Return", 
+            ' hindi na ito tutuloy sa pag-check ng password at pagbilang ng "attempts += 1".
+            If accStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase) Then
+                lblError.Text = "⚠️ Please submit ticket to ADMIN before you log in."
+                RecordActivityLog(recordId, userInput, roleName, "LOGIN_DENIED", "Authentication",
+                                  note & $"Pending account attempted to login — Input: [{userInput}]")
+                Return ' <-- Ito ang pumipigil para walang mabibilang na attempts.
             End If
 
             ' === ✅ TAMA ANG PASSWORD ===
@@ -348,7 +392,7 @@ Public Class frmlogin
                 cmdLog.ExecuteNonQuery()
             End Using
         Catch ex As Exception
-            MsgBox("Log Save Error: " & ex.Message, MsgBoxStyle.Exclamation)
+            ' Silent fail on logs to avoid interrupting user experience
         Finally
             CloseConnection()
         End Try
@@ -358,19 +402,15 @@ Public Class frmlogin
         txtPassword.PasswordChar = If(txtPassword.PasswordChar = "●"c, Char.MinValue, "●"c)
     End Sub
 
-    ' ❌ TINANGGAL NA ANG LINKLABEL — ISANG BUTTON NA LANG
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Application.Exit()
     End Sub
 
-    ' === ✅ ANG ISANG BUTTON — DITO NAGPAPALIT NG FUNCTION ===
     Private Sub btnCreate_Click(sender As Object, e As EventArgs) Handles btnCreate.Click
         If Not hasAdminAccount Then
-            ' Walang admin → Pumunta sa Create Admin
             Me.Hide()
             frmcreateadmin.Show()
         Else
-            ' May admin na → Pumunta sa Forgot Password
             Me.Hide()
             frmforgotpassword.Show()
         End If

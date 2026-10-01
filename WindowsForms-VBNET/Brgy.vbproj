@@ -78,6 +78,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>PUTATAN.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>packages\BouncyCastle.Cryptography.2.6.2\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
@@ -254,10 +257,16 @@
     <Compile Include="RESIDENCE RECORD\frmResidence_Records.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RESIDENCE RECORD\ResidenceList.Designer.vb">
-      <DependentUpon>ResidenceList.vb</DependentUpon>
+    <Compile Include="Satellite Offices\frmCreateNewSateliteOffice.Designer.vb">
+      <DependentUpon>frmCreateNewSateliteOffice.vb</DependentUpon>
     </Compile>
-    <Compile Include="RESIDENCE RECORD\ResidenceList.vb">
+    <Compile Include="Satellite Offices\frmCreateNewSateliteOffice.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Satellite Offices\frmSatelliteOfficeList.Designer.vb">
+      <DependentUpon>frmSatelliteOfficeList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Satellite Offices\frmSatelliteOfficeList.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="USERS\frmAppointmentDetails.Designer.vb">
@@ -308,10 +317,10 @@
     <Compile Include="USERS\frmUser_Dashboard.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\User Manager\frmManage_Users.Designer.vb">
+    <Compile Include="ADMIN\User staff\frmManage_Users.Designer.vb">
       <DependentUpon>frmManage_Users.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\User Manager\frmManage_Users.vb">
+    <Compile Include="ADMIN\User staff\frmManage_Users.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmcreateadmin.Designer.vb">
@@ -320,10 +329,10 @@
     <Compile Include="frmcreateadmin.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\User Manager\frmcreateuser.Designer.vb">
+    <Compile Include="ADMIN\User staff\frmcreateuser.Designer.vb">
       <DependentUpon>frmcreateuser.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\User Manager\frmcreateuser.vb">
+    <Compile Include="ADMIN\User staff\frmcreateuser.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmlogin.Designer.vb">
@@ -395,8 +404,11 @@
     <EmbeddedResource Include="RESIDENCE RECORD\frmResidence_Records.resx">
       <DependentUpon>frmResidence_Records.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RESIDENCE RECORD\ResidenceList.resx">
-      <DependentUpon>ResidenceList.vb</DependentUpon>
+    <EmbeddedResource Include="Satellite Offices\frmCreateNewSateliteOffice.resx">
+      <DependentUpon>frmCreateNewSateliteOffice.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Satellite Offices\frmSatelliteOfficeList.resx">
+      <DependentUpon>frmSatelliteOfficeList.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="USERS\frmAppointmentDetails.resx">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
@@ -422,13 +434,13 @@
     <EmbeddedResource Include="USERS\frmUser_Dashboard.resx">
       <DependentUpon>frmUser_Dashboard.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\User Manager\frmManage_Users.resx">
+    <EmbeddedResource Include="ADMIN\User staff\frmManage_Users.resx">
       <DependentUpon>frmManage_Users.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmcreateadmin.resx">
       <DependentUpon>frmcreateadmin.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\User Manager\frmcreateuser.resx">
+    <EmbeddedResource Include="ADMIN\User staff\frmcreateuser.resx">
       <DependentUpon>frmcreateuser.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmlogin.resx">
@@ -472,6 +484,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PUTATAN.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="packages\Tesseract.5.2.0\build\Tesseract.targets" Condition="Exists('packages\Tesseract.5.2.0\build\Tesseract.targets')" />

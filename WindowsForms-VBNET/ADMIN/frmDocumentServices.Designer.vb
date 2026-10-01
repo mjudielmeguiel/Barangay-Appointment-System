@@ -28,20 +28,25 @@ Partial Class frmDocumentServices
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtAmount = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.btnClose = New System.Windows.Forms.Button()
-        Me.btnSave = New System.Windows.Forms.Button()
         Me.btnClear = New System.Windows.Forms.Button()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.lblTotalDocuments = New System.Windows.Forms.Label()
         Me.lblDepartmentError = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.cboDepartment = New System.Windows.Forms.ComboBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.btnDelete = New System.Windows.Forms.Button()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.dgvServices = New System.Windows.Forms.DataGridView()
-        Me.Panel4.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.btnSave = New System.Windows.Forms.Button()
+        Me.lblTotalDocuments = New System.Windows.Forms.Label()
+        Me.Panel1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel7.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         CType(Me.dgvServices, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -95,107 +100,22 @@ Partial Class frmDocumentServices
         Me.Label3.TabIndex = 249
         Me.Label3.Text = "Amount"
         '
-        'btnClose
-        '
-        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClose.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnClose.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnClose.ForeColor = System.Drawing.Color.DarkBlue
-        Me.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClose.Location = New System.Drawing.Point(767, 602)
-        Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(134, 37)
-        Me.btnClose.TabIndex = 251
-        Me.btnClose.Text = "Close"
-        Me.btnClose.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnClose.UseVisualStyleBackColor = False
-        '
-        'btnSave
-        '
-        Me.btnSave.BackColor = System.Drawing.Color.DarkBlue
-        Me.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSave.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSave.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSave.Location = New System.Drawing.Point(627, 602)
-        Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(134, 37)
-        Me.btnSave.TabIndex = 250
-        Me.btnSave.Text = "Save"
-        Me.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnSave.UseVisualStyleBackColor = False
-        '
         'btnClear
         '
-        Me.btnClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnClear.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnClear.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnClear.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClear.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClear.Location = New System.Drawing.Point(625, 137)
+        Me.btnClear.Location = New System.Drawing.Point(275, 5)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(53, 28)
         Me.btnClear.TabIndex = 255
         Me.btnClear.Text = "Clear"
         Me.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnClear.UseVisualStyleBackColor = False
-        '
-        'Panel4
-        '
-        Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel4.Controls.Add(Me.Label2)
-        Me.Panel4.Controls.Add(Me.PictureBox2)
-        Me.Panel4.Controls.Add(Me.Label9)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel4.Location = New System.Drawing.Point(0, 0)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(913, 60)
-        Me.Panel4.TabIndex = 520
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(67, 33)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(125, 19)
-        Me.Label2.TabIndex = 520
-        Me.Label2.Text = "City of Muntinlupa"
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(11, 11)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(50, 41)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox2.TabIndex = 518
-        Me.PictureBox2.TabStop = False
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(66, 11)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(164, 22)
-        Me.Label9.TabIndex = 519
-        Me.Label9.Text = "Document Services"
-        '
-        'lblTotalDocuments
-        '
-        Me.lblTotalDocuments.AutoSize = True
-        Me.lblTotalDocuments.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalDocuments.Location = New System.Drawing.Point(8, 602)
-        Me.lblTotalDocuments.Name = "lblTotalDocuments"
-        Me.lblTotalDocuments.Size = New System.Drawing.Size(80, 19)
-        Me.lblTotalDocuments.TabIndex = 522
-        Me.lblTotalDocuments.Text = "Documents"
         '
         'lblDepartmentError
         '
@@ -227,44 +147,176 @@ Partial Class frmDocumentServices
         Me.cboDepartment.Size = New System.Drawing.Size(496, 25)
         Me.cboDepartment.TabIndex = 524
         '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.Panel1.Controls.Add(Me.PictureBox1)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.Label5)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1366, 68)
+        Me.Panel1.TabIndex = 675
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(13, 12)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(51, 45)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 657
+        Me.PictureBox1.TabStop = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label8.Location = New System.Drawing.Point(70, 38)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(209, 19)
+        Me.Label8.TabIndex = 520
+        Me.Label8.Text = "add and edit Document Services"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft YaHei UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label5.Location = New System.Drawing.Point(69, 12)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(290, 26)
+        Me.Label5.TabIndex = 519
+        Me.Label5.Text = "Barangay Document Services"
+        '
+        'Panel7
+        '
+        Me.Panel7.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel7.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.Panel7.Controls.Add(Me.btnDelete)
+        Me.Panel7.Controls.Add(Me.Panel2)
+        Me.Panel7.Controls.Add(Me.dgvServices)
+        Me.Panel7.Controls.Add(Me.btnSave)
+        Me.Panel7.Location = New System.Drawing.Point(12, 266)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(1342, 471)
+        Me.Panel7.TabIndex = 676
+        '
+        'btnDelete
+        '
+        Me.btnDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnDelete.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnDelete.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnDelete.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnDelete.Location = New System.Drawing.Point(1197, 12)
+        Me.btnDelete.Name = "btnDelete"
+        Me.btnDelete.Size = New System.Drawing.Size(131, 37)
+        Me.btnDelete.TabIndex = 552
+        Me.btnDelete.Text = "Delete"
+        Me.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnDelete.UseVisualStyleBackColor = False
+        '
+        'Panel2
+        '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.Panel2.Controls.Add(Me.txtSearch)
+        Me.Panel2.Controls.Add(Me.btnClear)
+        Me.Panel2.Location = New System.Drawing.Point(0, 61)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(1342, 38)
+        Me.Panel2.TabIndex = 509
+        '
+        'txtSearch
+        '
+        Me.txtSearch.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtSearch.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSearch.Location = New System.Drawing.Point(15, 5)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtSearch.Size = New System.Drawing.Size(254, 28)
+        Me.txtSearch.TabIndex = 223
+        '
         'dgvServices
         '
         Me.dgvServices.AllowUserToAddRows = False
         Me.dgvServices.AllowUserToDeleteRows = False
+        Me.dgvServices.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvServices.BackgroundColor = System.Drawing.SystemColors.ButtonFace
+        Me.dgvServices.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvServices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvServices.Location = New System.Drawing.Point(12, 262)
+        Me.dgvServices.Location = New System.Drawing.Point(0, 100)
         Me.dgvServices.Name = "dgvServices"
         Me.dgvServices.ReadOnly = True
-        Me.dgvServices.Size = New System.Drawing.Size(889, 334)
-        Me.dgvServices.TabIndex = 521
+        Me.dgvServices.Size = New System.Drawing.Size(1342, 371)
+        Me.dgvServices.TabIndex = 508
+        '
+        'btnSave
+        '
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSave.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSave.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSave.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnSave.Location = New System.Drawing.Point(1060, 12)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(131, 37)
+        Me.btnSave.TabIndex = 506
+        Me.btnSave.Text = "Create"
+        Me.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnSave.UseVisualStyleBackColor = False
+        '
+        'lblTotalDocuments
+        '
+        Me.lblTotalDocuments.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblTotalDocuments.AutoSize = True
+        Me.lblTotalDocuments.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalDocuments.Location = New System.Drawing.Point(12, 740)
+        Me.lblTotalDocuments.Name = "lblTotalDocuments"
+        Me.lblTotalDocuments.Size = New System.Drawing.Size(80, 19)
+        Me.lblTotalDocuments.TabIndex = 522
+        Me.lblTotalDocuments.Text = "Documents"
         '
         'frmDocumentServices
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(913, 651)
+        Me.ClientSize = New System.Drawing.Size(1366, 768)
+        Me.Controls.Add(Me.Panel7)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.lblDepartmentError)
         Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.cboDepartment)
         Me.Controls.Add(Me.lblTotalDocuments)
-        Me.Controls.Add(Me.dgvServices)
-        Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.btnClear)
-        Me.Controls.Add(Me.btnClose)
-        Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.txtAmount)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.txtServiceName)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.lblServiceCode)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmDocumentServices"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "frmDocumentServices"
-        Me.Panel4.ResumeLayout(False)
-        Me.Panel4.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         CType(Me.dgvServices, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -275,16 +327,19 @@ Partial Class frmDocumentServices
     Friend WithEvents Label1 As Label
     Friend WithEvents txtAmount As TextBox
     Friend WithEvents Label3 As Label
-    Friend WithEvents btnClose As Button
-    Friend WithEvents btnSave As Button
     Friend WithEvents btnClear As Button
-    Friend WithEvents Panel4 As Panel
-    Friend WithEvents Label2 As Label
-    Friend WithEvents PictureBox2 As PictureBox
-    Friend WithEvents Label9 As Label
-    Friend WithEvents lblTotalDocuments As Label
     Friend WithEvents lblDepartmentError As Label
     Friend WithEvents Label12 As Label
     Friend WithEvents cboDepartment As ComboBox
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents Panel7 As Panel
+    Friend WithEvents btnDelete As Button
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents txtSearch As TextBox
     Friend WithEvents dgvServices As DataGridView
+    Friend WithEvents btnSave As Button
+    Friend WithEvents lblTotalDocuments As Label
 End Class

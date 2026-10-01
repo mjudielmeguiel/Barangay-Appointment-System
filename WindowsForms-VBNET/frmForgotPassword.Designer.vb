@@ -32,21 +32,20 @@ Partial Class frmforgotpassword
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.picUser = New System.Windows.Forms.PictureBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.btnClose = New System.Windows.Forms.Button()
         Me.btnSingle = New System.Windows.Forms.Button()
         Me.lblErrorConfirmPass = New System.Windows.Forms.Label()
         Me.txtConfirmPass = New System.Windows.Forms.TextBox()
         Me.txtNewPassword = New System.Windows.Forms.TextBox()
         Me.lblEmail = New System.Windows.Forms.Label()
-        Me.lblRole = New System.Windows.Forms.Label()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.lblInfoStatus = New System.Windows.Forms.Label()
         Me.lblTicketNumber = New System.Windows.Forms.Label()
         Me.txtUserInput = New System.Windows.Forms.TextBox()
         Me.lblVerifyStatus = New System.Windows.Forms.Label()
         Me.Panel4.SuspendLayout()
-        CType(Me.picUser, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button1
@@ -79,7 +78,7 @@ Partial Class frmforgotpassword
         '
         Me.lblName.AutoSize = True
         Me.lblName.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblName.Location = New System.Drawing.Point(446, 171)
+        Me.lblName.Location = New System.Drawing.Point(571, 28)
         Me.lblName.Name = "lblName"
         Me.lblName.Size = New System.Drawing.Size(68, 19)
         Me.lblName.TabIndex = 626
@@ -89,7 +88,7 @@ Partial Class frmforgotpassword
         '
         Me.lblUsername.AutoSize = True
         Me.lblUsername.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUsername.Location = New System.Drawing.Point(645, 171)
+        Me.lblUsername.Location = New System.Drawing.Point(571, 90)
         Me.lblUsername.Name = "lblUsername"
         Me.lblUsername.Size = New System.Drawing.Size(71, 19)
         Me.lblUsername.TabIndex = 625
@@ -99,7 +98,7 @@ Partial Class frmforgotpassword
         '
         Me.lblDepartment.AutoSize = True
         Me.lblDepartment.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDepartment.Location = New System.Drawing.Point(446, 243)
+        Me.lblDepartment.Location = New System.Drawing.Point(571, 59)
         Me.lblDepartment.Name = "lblDepartment"
         Me.lblDepartment.Size = New System.Drawing.Size(83, 19)
         Me.lblDepartment.TabIndex = 624
@@ -152,17 +151,17 @@ Partial Class frmforgotpassword
         Me.Label11.TabIndex = 519
         Me.Label11.Text = "Forgot Password"
         '
-        'picUser
+        'PictureBox1
         '
-        Me.picUser.BackColor = System.Drawing.Color.Transparent
-        Me.picUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.picUser.Image = CType(resources.GetObject("picUser.Image"), System.Drawing.Image)
-        Me.picUser.Location = New System.Drawing.Point(545, 53)
-        Me.picUser.Name = "picUser"
-        Me.picUser.Size = New System.Drawing.Size(115, 104)
-        Me.picUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picUser.TabIndex = 623
-        Me.picUser.TabStop = False
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(450, 28)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(115, 104)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 623
+        Me.PictureBox1.TabStop = False
         '
         'btnClose
         '
@@ -239,16 +238,6 @@ Partial Class frmforgotpassword
         Me.lblEmail.TabIndex = 629
         Me.lblEmail.Text = "Email"
         '
-        'lblRole
-        '
-        Me.lblRole.AutoSize = True
-        Me.lblRole.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblRole.Location = New System.Drawing.Point(645, 207)
-        Me.lblRole.Name = "lblRole"
-        Me.lblRole.Size = New System.Drawing.Size(35, 19)
-        Me.lblRole.TabIndex = 630
-        Me.lblRole.Text = "Role"
-        '
         'lblStatus
         '
         Me.lblStatus.AutoSize = True
@@ -273,7 +262,7 @@ Partial Class frmforgotpassword
         '
         Me.lblTicketNumber.AutoSize = True
         Me.lblTicketNumber.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTicketNumber.Location = New System.Drawing.Point(691, 65)
+        Me.lblTicketNumber.Location = New System.Drawing.Point(645, 171)
         Me.lblTicketNumber.Name = "lblTicketNumber"
         Me.lblTicketNumber.Size = New System.Drawing.Size(100, 19)
         Me.lblTicketNumber.TabIndex = 633
@@ -285,7 +274,6 @@ Partial Class frmforgotpassword
         Me.txtUserInput.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtUserInput.Location = New System.Drawing.Point(450, 306)
         Me.txtUserInput.Name = "txtUserInput"
-        Me.txtUserInput.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.txtUserInput.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.txtUserInput.Size = New System.Drawing.Size(308, 28)
         Me.txtUserInput.TabIndex = 634
@@ -294,7 +282,7 @@ Partial Class frmforgotpassword
         '
         Me.lblVerifyStatus.AutoSize = True
         Me.lblVerifyStatus.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblVerifyStatus.Location = New System.Drawing.Point(691, 94)
+        Me.lblVerifyStatus.Location = New System.Drawing.Point(534, 189)
         Me.lblVerifyStatus.Name = "lblVerifyStatus"
         Me.lblVerifyStatus.Size = New System.Drawing.Size(48, 19)
         Me.lblVerifyStatus.TabIndex = 635
@@ -310,7 +298,6 @@ Partial Class frmforgotpassword
         Me.Controls.Add(Me.lblTicketNumber)
         Me.Controls.Add(Me.lblInfoStatus)
         Me.Controls.Add(Me.lblStatus)
-        Me.Controls.Add(Me.lblRole)
         Me.Controls.Add(Me.lblEmail)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.lblPassStatus)
@@ -318,7 +305,7 @@ Partial Class frmforgotpassword
         Me.Controls.Add(Me.lblUsername)
         Me.Controls.Add(Me.lblDepartment)
         Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.picUser)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnSingle)
         Me.Controls.Add(Me.lblErrorConfirmPass)
@@ -330,7 +317,7 @@ Partial Class frmforgotpassword
         Me.Text = "frmForgotPassword"
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
-        CType(Me.picUser, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -345,17 +332,16 @@ Partial Class frmforgotpassword
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Label10 As Label
     Friend WithEvents Label11 As Label
-    Friend WithEvents picUser As PictureBox
     Friend WithEvents btnClose As Button
     Friend WithEvents btnSingle As Button
     Friend WithEvents lblErrorConfirmPass As Label
     Friend WithEvents txtConfirmPass As TextBox
     Friend WithEvents txtNewPassword As TextBox
     Friend WithEvents lblEmail As Label
-    Friend WithEvents lblRole As Label
     Friend WithEvents lblStatus As Label
     Friend WithEvents lblInfoStatus As Label
     Friend WithEvents lblTicketNumber As Label
-    Friend WithEvents txtUserInput As TextBox
     Friend WithEvents lblVerifyStatus As Label
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents txtUserInput As TextBox
 End Class

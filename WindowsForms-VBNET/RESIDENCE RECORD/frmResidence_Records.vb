@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Net
+Imports MySql.Data.MySqlClient
 
 Public Class frmResidence_Records
 
@@ -67,9 +68,14 @@ Public Class frmResidence_Records
             Dim selectedResidentID As Integer = Convert.ToInt32(dgvResidences.Rows(e.RowIndex).Cells("ResidentID").Value)
 
             Dim editForm As New Barangay_Residences(selectedResidentID)
-            editForm.ShowDialog()
 
-            LoadResidenceRecords()
+            frmMain.Panel2.Controls.Clear()
+            Dim frm As New Barangay_Residences()
+            frm.TopLevel = False
+            frm.FormBorderStyle = FormBorderStyle.None
+            frm.Dock = DockStyle.Fill
+            frmMain.Panel2.Controls.Add(frm)
+            frm.Show()
         End If
     End Sub
 

@@ -51,7 +51,7 @@ Public Class frmCreateAppointment
         End If
     End Sub
 
-    Private Sub cboRequestFor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRequestFor.SelectedIndexChanged
+    Private Sub cboRequestFor_SelectedIndexChanged(sender As Object, e As EventArgs)
         Dim selectedOption As String = cboRequestFor.Text.Trim()
         If selectedOption = "Family Member / Relative" OrElse selectedOption = "Representative / On Behalf" Then
             ToggleRepresentativeFields(True)
@@ -71,15 +71,6 @@ Public Class frmCreateAppointment
             btnSelectRepresentative.Visible = isVisible
         End If
         ' ✅ TINANGGAL NA: lblAuthLetter, picAuthLetter, lblRepID, picRepID
-    End Sub
-
-    Private Sub btnSelectRepresentative_Click(sender As Object, e As EventArgs) Handles btnSelectRepresentative.Click
-        Using frm As New ResidenceList
-            If frm.ShowDialog() = DialogResult.OK Then
-                txtNameOfRepresentative.Text = frm.SelectedFullName
-                selectedRepresentativeID = frm.SelectedResidentID
-            End If
-        End Using
     End Sub
 
     Private Sub LoadDocumentServices()
@@ -169,16 +160,6 @@ Public Class frmCreateAppointment
         End Try
     End Sub
 
-    Private Sub btnSelectUser_Click(sender As Object, e As EventArgs) Handles btnSelectUser.Click
-        Using frm As New ResidenceList
-            If frm.ShowDialog() = DialogResult.OK Then
-                selectedResidentID = frm.SelectedResidentID
-                txtName.Text = frm.SelectedFullName
-                LoadSelectedResidentDetails(selectedResidentID)
-            End If
-        End Using
-    End Sub
-
     Private Sub LoadSelectedResidentDetails(resID As Integer)
         Try
             connection()
@@ -264,7 +245,7 @@ Public Class frmCreateAppointment
         End Try
     End Function
 
-    Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnSubmit.Click
+    Private Sub btnSubmit_Click(sender As Object, e As EventArgs)
         If String.IsNullOrWhiteSpace(txtName.Text) Then
             MsgBox("Please select or enter a resident name.", MsgBoxStyle.Exclamation, "Validation Error")
             txtName.Focus()
@@ -306,7 +287,7 @@ Public Class frmCreateAppointment
         End If
     End Sub
 
-    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs)
         If String.IsNullOrWhiteSpace(txtName.Text) Then
             _skipClosePrompt = True
             Me.DialogResult = DialogResult.Cancel
