@@ -1,0 +1,89 @@
+﻿@model Barangay_Service_Appointment_System.Models.AppointmentModel
+
+@{
+    ViewData["Title"] = "Create Appointment Request";
+}
+
+<div class="container mt-4 mb-5" style="max-width: 800px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0 fs-5"><i class="fa-solid fa-calendar-plus me-2"></i>Create Appointment Request</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="CreateAppointment" method="post">
+
+                <input type="hidden" asp-for="ResidentID" />
+
+                <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Personal Information (Auto-filled)</h6>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Full Name</label>
+                        <input asp-for="FullName" class="form-control bg-light" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        <input asp-for="EmailAddress" class="form-control bg-light" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Phone Number</label>
+                        <input asp-for="PhoneNumber" class="form-control bg-light" readonly />
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Full Address</label>
+                        <textarea asp-for="FullAddress" class="form-control bg-light" rows="2" readonly></textarea>
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+
+                <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Appointment Details</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Request Type</label>
+                        <select asp-for="RequestType" class="form-select" required>
+                            <option value="">-- Select Request Type --</option>
+                            <option value="Barangay Clearance">Barangay Clearance</option>
+                            <option value="Certificate of Indigency">Certificate of Indigency</option>
+                            <option value="Certificate of Residency">Certificate of Residency</option>
+                            <option value="Business Permit">Business Permit</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Department</label>
+                        <select asp-for="Department" class="form-select" required>
+                            <option value="">-- Select Department --</option>
+                            <option value="Lupon Tagapamayapa">Lupon Tagapamayapa</option>
+                            <option value="Social Services">Social Services</option>
+                            <option value="Clearance & Certification">Clearance & Certification</option>
+                            <option value="Treasurer Office">Treasurer Office</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Appointment Date</label>
+                        <input asp-for="AppointmentDate" type="date" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Appointment Type</label>
+                        <select asp-for="AppointmentType" class="form-select" required>
+                            <option value="Walk-in">Walk-in</option>
+                            <option value="Online">Online</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Purpose</label>
+                        <textarea asp-for="Purpose" class="form-control" rows="3" placeholder="Ilagay ang layunin ng iyong appointment..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@ Public Class frmDocumentServices
     Public Property SelectedNames As String = ""
     Public Property TotalAmount As Decimal = 0.00D
     Private originalCode As String = ""
+    Private selectedServiceID As Integer = 0
 
     Private Sub frmDocumentServices_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         StyleDataGridView()
@@ -29,7 +30,6 @@ Public Class frmDocumentServices
         dgvServices.ReadOnly = True
         dgvServices.EditMode = DataGridViewEditMode.EditProgrammatically
 
-        ' ===== HEADER — Dark Blue Background, White Text =====
         Dim headerStyle As New DataGridViewCellStyle With {
             .BackColor = Color.FromArgb(15, 35, 90),
             .ForeColor = Color.White,
@@ -42,7 +42,6 @@ Public Class frmDocumentServices
         dgvServices.ColumnHeadersHeight = 45
         dgvServices.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
 
-        ' ===== ROWS — Alternating Light Blue / White =====
         Dim defaultRowStyle As New DataGridViewCellStyle With {
             .BackColor = Color.FromArgb(230, 235, 245),
             .ForeColor = Color.FromArgb(25, 35, 60),
@@ -81,19 +80,15 @@ Public Class frmDocumentServices
         End Try
     End Sub
 
-    ' ==================================================
-    '  MAY SEARCH PARAMETER NA
-    ' ==================================================
     Private Sub LoadServicesToGrid(Optional searchKeyword As String = "")
         Try
             DBconnection.connection()
-            Dim query As String = "SELECT d.ServiceCode AS 'Code', d.ServiceName AS 'Document / Service', " &
-                                 "d.Amount, IFNULL(dept.DepartmentName, 'N/A') AS 'Department', d.DepartmentID " &
-                                 "FROM document_services d " &
-                                 "LEFT JOIN departments dept ON d.DepartmentID = dept.DepartmentID " &
-                                 "WHERE d.IsActive = 1 "
+            Dim query As String = "SELECT d.ID AS 'ServiceInternalID', d.ServiceCode AS 'Code', d.ServiceName AS 'Document / Service', " &
+                                   "d.Amount, IFNULL(dept.DepartmentName, 'N/A') AS 'Department', d.DepartmentID " &
+                                   "FROM document_services d " &
+                                   "LEFT JOIN departments dept ON d.DepartmentID = dept.DepartmentID " &
+                                   "WHERE d.IsActive = 1 "
 
-            ' ✅ Magdadagdag ng filter kung may hinahanap
             If Not String.IsNullOrWhiteSpace(searchKeyword) Then
                 query &= " AND (d.ServiceCode LIKE @kw OR " &
                          "d.ServiceName LIKE @kw OR " &
@@ -114,25 +109,19 @@ Public Class frmDocumentServices
                 End Using
             End Using
 
-            ' Highlight Code Column
+            If dgvServices.Columns.Contains("ServiceInternalID") Then dgvServices.Columns("ServiceInternalID").Visible = False
             If dgvServices.Columns.Contains("Code") Then
-                dgvServices.Columns("Code").Width = 100
+                dgvServices.Columns("Code").Width = 90
                 dgvServices.Columns("Code").DefaultCellStyle.BackColor = Color.FromArgb(200, 215, 240)
                 dgvServices.Columns("Code").DefaultCellStyle.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
             End If
-            If dgvServices.Columns.Contains("Document / Service") Then
-                dgvServices.Columns("Document / Service").Width = 250
-            End If
+            If dgvServices.Columns.Contains("Document / Service") Then dgvServices.Columns("Document / Service").Width = 250
             If dgvServices.Columns.Contains("Amount") Then
-                dgvServices.Columns("Amount").Width = 120
+                dgvServices.Columns("Amount").Width = 100
                 dgvServices.Columns("Amount").DefaultCellStyle.Format = "₱ #,##0.00"
             End If
-            If dgvServices.Columns.Contains("Department") Then
-                dgvServices.Columns("Department").Width = 180
-            End If
-            If dgvServices.Columns.Contains("DepartmentID") Then
-                dgvServices.Columns("DepartmentID").Visible = False
-            End If
+            If dgvServices.Columns.Contains("Department") Then dgvServices.Columns("Department").Width = 180
+            If dgvServices.Columns.Contains("DepartmentID") Then dgvServices.Columns("DepartmentID").Visible = False
 
             UpdateTotalDocumentsCount()
         Catch ex As Exception
@@ -149,20 +138,17 @@ Public Class frmDocumentServices
         End If
     End Sub
 
-    ' ==================================================
-    '  ✅ SEARCH — Habang nagta-type, nagfi-filter
-    ' ==================================================
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         LoadServicesToGrid(txtSearch.Text)
     End Sub
 
-    ' ==================================================
-    '  DOUBLE-CLICK — I-load sa form para i-edit
-    ' ==================================================
-    Private Sub dgvServices_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvServices.CellDoubleClick
+    Private Sub dgvServices_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvServices.CellClick
         If e.RowIndex < 0 Then Return
 
         Dim selectedRow As DataGridViewRow = dgvServices.Rows(e.RowIndex)
+        Dim idValue As String = selectedRow.Cells("ServiceInternalID").Value.ToString()
+
+        selectedServiceID = Convert.ToInt32(idValue)
         originalCode = selectedRow.Cells("Code").Value.ToString()
         lblServiceCode.Text = "Service Code — " & originalCode
         txtServiceName.Text = selectedRow.Cells("Document / Service").Value.ToString()
@@ -177,9 +163,26 @@ Public Class frmDocumentServices
         btnSave.Text = "Update Service"
     End Sub
 
-    ' ==================================================
-    '  SAVE ACTIVITY LOG
-    ' ==================================================
+    Private Sub dgvServices_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvServices.CellDoubleClick
+        If e.RowIndex < 0 Then Return
+
+        Dim selectedRow As DataGridViewRow = dgvServices.Rows(e.RowIndex)
+        Dim idValue As String = selectedRow.Cells("ServiceInternalID").Value.ToString()
+        selectedServiceID = Convert.ToInt32(idValue)
+        Dim currentServiceName As String = selectedRow.Cells("Document / Service").Value.ToString()
+
+        Dim mainForm As frmMain = TryCast(Application.OpenForms("frmMain"), frmMain)
+        If mainForm IsNot Nothing Then
+            mainForm.Panel2.Controls.Clear()
+            Dim frm As New frmManagePurpose(selectedServiceID, currentServiceName)
+            frm.TopLevel = False
+            frm.FormBorderStyle = FormBorderStyle.None
+            frm.Dock = DockStyle.Fill
+            mainForm.Panel2.Controls.Add(frm)
+            frm.Show()
+        End If
+    End Sub
+
     Private Sub SaveActivityLog(ByVal actionType As String, ByVal details As String)
         Try
             DBconnection.connection()
@@ -256,16 +259,14 @@ Public Class frmDocumentServices
         cboDepartment.SelectedIndex = -1
         lblServiceCode.Text = "Service Code — (AUTO)"
         originalCode = ""
+        selectedServiceID = 0
         btnSave.Text = "Save Service"
         txtServiceName.Focus()
     End Sub
 
-    ' ==================================================
-    '  SAVE / UPDATE
-    ' ==================================================
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If String.IsNullOrWhiteSpace(txtServiceName.Text) OrElse String.IsNullOrWhiteSpace(txtAmount.Text) Then
-            MessageBox.Show("ILAGAY ANG PANGALAN AT HALAGA.", "PAALALA", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Please enter the service name and amount.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
@@ -278,7 +279,6 @@ Public Class frmDocumentServices
             DBconnection.connection()
 
             If String.IsNullOrWhiteSpace(originalCode) Then
-                ' ===== ADD NEW =====
                 Dim newCode As String = GenerateCodeFromName(txtServiceName.Text.Trim())
                 Dim finalCode As String = newCode
                 Dim counter As Integer = 1
@@ -302,11 +302,10 @@ Public Class frmDocumentServices
                     cmd.ExecuteNonQuery()
                 End Using
 
-                SaveActivityLog("CREATE", "Added Document Service: " & finalCode & " - " & txtServiceName.Text.Trim())
-                MessageBox.Show("NADAGDAG! CODE: " & finalCode, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                SaveActivityLog("CREATE", "Added Document Service: " & finalCode)
+                MessageBox.Show("Service added successfully! CODE: " & finalCode, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             Else
-                ' ===== UPDATE =====
                 Using cmd As New MySqlCommand("UPDATE document_services SET ServiceName = @Name, Amount = @Amount, DepartmentID = @DeptID WHERE ServiceCode = @Code", DBconnection.cn)
                     cmd.Parameters.AddWithValue("@Name", txtServiceName.Text.Trim())
                     cmd.Parameters.AddWithValue("@Amount", Decimal.Parse(txtAmount.Text.Trim()))
@@ -315,52 +314,54 @@ Public Class frmDocumentServices
                     cmd.ExecuteNonQuery()
                 End Using
 
-                SaveActivityLog("UPDATE", "Updated Document Service: " & originalCode & " - " & txtServiceName.Text.Trim())
-                MessageBox.Show("NAI-UPDATE NA! CODE: " & originalCode, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                SaveActivityLog("UPDATE", "Updated Document Service: " & originalCode)
+                MessageBox.Show("Service updated successfully! CODE: " & originalCode, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
 
-            LoadServicesToGrid(txtSearch.Text) ' ✅ Panatilihin ang search filter pagkatapos mag-save
+            LoadServicesToGrid(txtSearch.Text)
             btnClear_Click(sender, e)
 
         Catch ex As Exception
-            MessageBox.Show("ERROR: " & ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("ERROR: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             DBconnection.CloseConnection()
         End Try
     End Sub
 
-    ' ==================================================
-    '  DELETE
-    ' ==================================================
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         If String.IsNullOrWhiteSpace(originalCode) Then
-            MessageBox.Show("Pumili muna ng service gamit ang DOUBLE-CLICK sa listahan.", "PAALALA", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Please select a service from the list first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Return
         End If
 
-        Dim serviceName As String = txtServiceName.Text.Trim()
-        If MessageBox.Show($"Are you sure you want to DELETE this Document Service?" & vbCrLf & $"{serviceName} (CODE: {originalCode})",
-                          "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+        Dim serviceNameText As String = txtServiceName.Text.Trim()
+        If MessageBox.Show($"Are you sure you want to delete this Document Service and all its related details?" & vbCrLf & $"{serviceNameText} (CODE: {originalCode})",
+                            "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
 
             Try
                 DBconnection.connection()
+
                 Using cmd As New MySqlCommand("UPDATE document_services SET IsActive = 0 WHERE ServiceCode = @Code", DBconnection.cn)
                     cmd.Parameters.AddWithValue("@Code", originalCode)
                     cmd.ExecuteNonQuery()
                 End Using
 
-                SaveActivityLog("DELETE", "Deleted Document Service: " & originalCode & " - " & serviceName)
-                MessageBox.Show("DELETED SUCCESSFULLY! CODE: " & originalCode, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Using cmdDetails As New MySqlCommand("DELETE FROM service_details WHERE Service_ID = @Service_ID", DBconnection.cn)
+                    cmdDetails.Parameters.AddWithValue("@Service_ID", selectedServiceID)
+                    cmdDetails.ExecuteNonQuery()
+                End Using
 
-                LoadServicesToGrid(txtSearch.Text) ' ✅ Panatilihin ang search filter pagkatapos mag-delete
+                SaveActivityLog("DELETE", "Deleted Document Service and Details: " & originalCode & " - " & serviceNameText)
+                MessageBox.Show("Service deleted successfully along with its details!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                LoadServicesToGrid(txtSearch.Text)
                 btnClear_Click(sender, e)
 
             Catch ex As Exception
-                MessageBox.Show("Error deleting: " & ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Error deleting service: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Finally
                 DBconnection.CloseConnection()
             End Try
         End If
     End Sub
-
 End Class

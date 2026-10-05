@@ -1,0 +1,230 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\views\\home\\createappointment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:views\\home\\createappointment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\models\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:models\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\models\\residences.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:models\\residences.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|c:\\users\\mjudi\\desktop\\barangay appointment system\\aspnet-webversion\\barangay service appointment system\\barangay service appointment system.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7A30712F-40E2-BBB5-4410-EAE7721C1AE4}|Barangay Service Appointment System.csproj|solutionrelative:barangay service appointment system.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 12,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateAppointment.cshtml",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Views\\Home\\CreateAppointment.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\CreateAppointment.cshtml",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Views\\Home\\CreateAppointment.cshtml",
+              "RelativeToolTip": "Views\\Home\\CreateAppointment.cshtml",
+              "ViewState": "AgIAACIAAAAAAAAAAAAiwFgAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-05T09:04:21.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Appointment.cs",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Models\\Appointment.cs",
+              "RelativeDocumentMoniker": "Models\\Appointment.cs",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Models\\Appointment.cs",
+              "RelativeToolTip": "Models\\Appointment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T09:03:19.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAABwBAAAAAAAAAADwvyUBAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-05T08:38:46.805Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAUwFIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T08:21:08.391Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T08:19:37.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAiwGYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T08:19:29.952Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T08:36:00.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Residences.cs",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Models\\Residences.cs",
+              "RelativeDocumentMoniker": "Models\\Residences.cs",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Models\\Residences.cs",
+              "RelativeToolTip": "Models\\Residences.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T08:19:34.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-05T08:21:21.733Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Barangay Service Appointment System.csproj",
+              "DocumentMoniker": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Barangay Service Appointment System.csproj",
+              "RelativeDocumentMoniker": "Barangay Service Appointment System.csproj",
+              "ToolTip": "C:\\Users\\mjudi\\Desktop\\Barangay Appointment System\\ASPNET-WebVersion\\Barangay Service Appointment System\\Barangay Service Appointment System.csproj",
+              "RelativeToolTip": "Barangay Service Appointment System.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-05T08:15:06.838Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

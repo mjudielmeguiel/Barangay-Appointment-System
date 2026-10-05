@@ -1,0 +1,78 @@
+﻿@model AppointmentSystem.Models.UserLoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in - Barangay Service Management System</title>
+    <link rel="icon" type="image/x-icon" href="~/images/PUTATAN.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+            body { background-color: #192a56; display: flex; height: 100vh; align-items: center; justify-content: center; }
+            .login-container { display: flex; width: 900px; height: 580px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; position: relative; }
+            .login-left { background-color: #192a56; color: #fff; flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: space-between; }
+            .login-left h1 { font-size: 28px; font-weight: 600; margin-bottom: 20px; }
+            .login-left p { font-size: 20px; line-height: 1.5; color: #dcdde1; }
+            .login-left footer { font-size: 12px; color: #b2bec3; }
+            .login-right { flex: 1; padding: 50px; background: #f5f6fa; display: flex; flex-direction: column; justify-content: center; position: relative; }
+            .close-btn { position: absolute; top: 20px; right: 20px; font-size: 18px; color: #192a56; text-decoration: none; font-weight: bold; }
+            .login-right h2 { font-size: 26px; color: #2f3640; margin-bottom: 30px; font-weight: 600; }
+            .form-group { margin-bottom: 20px; position: relative; }
+            .form-control { width: 100%; padding: 14px; background: #ecf0f1; border: 1px solid #dcdde1; border-radius: 4px; font-size: 14px; color: #2f3640; outline: none; }
+            .form-control:focus { border-color: #192a56; background: #fff; }
+            .btn-submit { width: 100%; padding: 14px; background-color: #192a56; border: none; color: white; font-size: 16px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
+            .btn-submit:hover { background-color: #273c75; }
+            .btn-secondary-action { width: 100%; padding: 14px; background-color: #fff; border: 1px solid #192a56; color: #192a56; font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 10px; text-align: center; text-decoration: none; display: block; }
+            .btn-secondary-action:hover { background-color: #f1f2f6; }
+            .register-link { text-align: center; margin-top: 25px; font-size: 13px; color: #718093; }
+            .register-link a { color: #192a56; font-weight: 600; text-decoration: none; }
+            .register-link a:hover { text-decoration: underline; }
+            .text-danger { color: #e74c3c; font-size: 12px; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Left Banner Panel -->
+        <div class="login-left">
+            <div>
+                <h1>Welcome!</h1>
+                <p>Barangay Service Management System<br>A Web-Based Platform for<br>Document Request and Processing</p>
+            </div>
+            <footer>&copy; 2026 BSMS All rights reserved.</footer>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="login-right">
+            <a href="#" class="close-btn">X</a>
+            <h2>Sign in</h2>
+
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <input asp-for="Username" class="form-control" placeholder="Username" autocomplete="off" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input asp-for="Password" class="form-control" placeholder="Please Enter your Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn-submit">Sign in</button>
+                <button type="button" class="btn-secondary-action">Forgot Password</button>
+
+                <div class="register-link">
+                    No Account? <a href="#">Click here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

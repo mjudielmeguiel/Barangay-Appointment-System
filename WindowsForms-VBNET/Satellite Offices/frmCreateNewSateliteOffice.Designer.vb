@@ -55,14 +55,12 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblFacilityNameError = New System.Windows.Forms.Label()
         Me.txtLocationDetails = New System.Windows.Forms.TextBox()
         Me.lblLocationDetailsError = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel6.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel6
@@ -431,49 +429,38 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblLocationDetailsError.TabIndex = 522
         Me.lblLocationDetailsError.Text = "-"
         '
-        'Panel1
+        'Panel4
         '
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
-        Me.Panel1.Controls.Add(Me.PictureBox1)
-        Me.Panel1.Controls.Add(Me.Label8)
-        Me.Panel1.Controls.Add(Me.Label5)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1366, 68)
-        Me.Panel1.TabIndex = 674
+        Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel4.Controls.Add(Me.Label2)
+        Me.Panel4.Controls.Add(Me.Label1)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel4.Location = New System.Drawing.Point(0, 0)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(1366, 60)
+        Me.Panel4.TabIndex = 679
         '
-        'PictureBox1
+        'Label2
         '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(13, 12)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(51, 45)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 657
-        Me.PictureBox1.TabStop = False
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label2.Location = New System.Drawing.Point(12, 30)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(254, 19)
+        Me.Label2.TabIndex = 520
+        Me.Label2.Text = "Fill in Saltellite Office Information Below"
         '
-        'Label8
+        'Label1
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label8.Location = New System.Drawing.Point(70, 38)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(247, 19)
-        Me.Label8.TabIndex = 520
-        Me.Label8.Text = "Fill in Satelite Office information below"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft YaHei UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label5.Location = New System.Drawing.Point(69, 12)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(266, 26)
-        Me.Label5.TabIndex = 519
-        Me.Label5.Text = "Create New Satelite Office"
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(12, 9)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(118, 21)
+        Me.Label1.TabIndex = 519
+        Me.Label1.Text = "Satellite Office"
         '
         'frmCreateNewSateliteOffice
         '
@@ -481,11 +468,11 @@ Partial Class frmCreateNewSateliteOffice
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1366, 768)
+        Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel6)
         Me.Controls.Add(Me.btnSubmit)
         Me.Controls.Add(Me.btnClearAll)
         Me.Controls.Add(Me.Panel2)
-        Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmCreateNewSateliteOffice"
@@ -495,9 +482,8 @@ Partial Class frmCreateNewSateliteOffice
         Me.Panel6.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -534,8 +520,7 @@ Partial Class frmCreateNewSateliteOffice
     Friend WithEvents lblFacilityNameError As Label
     Friend WithEvents txtLocationDetails As TextBox
     Friend WithEvents lblLocationDetailsError As Label
-    Friend WithEvents Panel1 As Panel
-    Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents Label8 As Label
-    Friend WithEvents Label5 As Label
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
 End Class

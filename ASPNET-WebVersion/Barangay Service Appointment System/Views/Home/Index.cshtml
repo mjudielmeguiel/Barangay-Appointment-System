@@ -1,0 +1,561 @@
+﻿@model Barangay_Service_Appointment_System.Models.Residence
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Putatan Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+            :root {
+                --nav-bg: #131e3d;
+                --sidebar-bg: #f8f9fa;
+                --main-bg: #f5f6f8;
+                --text-dark: #333333;
+                --text-muted: #777777;
+                --border-color: #e3e6f0;
+                --primary-blue: #1a2b56;
+                --sidebar-width: 260px;
+                --sidebar-collapsed-width: 75px;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--main-bg);
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+            }
+
+            /* Top Navbar */
+            .top-navbar {
+                background-color: var(--nav-bg);
+                color: white;
+                padding: 0 15px;
+                display: flex;
+                align-items: center;
+                height: 60px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1050;
+            }
+
+            .navbar-brand-wrapper {
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+
+            .navbar-logo {
+                height: 38px;
+                width: 38px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #f8c146;
+                background-color: white;
+                margin-right: 10px;
+                margin-left: 5px;
+                flex-shrink: 0;
+            }
+
+            .navbar-title {
+                font-size: 0.95rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin: 0;
+            }
+
+            .sidebar-toggle-btn {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 1.25rem;
+                cursor: pointer;
+                padding: 5px 8px;
+                border-radius: 4px;
+                transition: background 0.2s;
+                flex-shrink: 0;
+            }
+
+                .sidebar-toggle-btn:hover {
+                    background: rgba(255,255,255,0.1);
+                }
+
+            /* Sidebar */
+            .sidebar {
+                width: var(--sidebar-width);
+                background-color: var(--sidebar-bg);
+                position: fixed;
+                top: 60px;
+                left: 0;
+                bottom: 0;
+                border-right: 1px solid var(--border-color);
+                display: flex;
+                flex-direction: column;
+                transition: all 0.3s ease;
+                z-index: 1040;
+                overflow-x: hidden;
+            }
+
+            body.sidebar-collapsed .sidebar {
+                width: var(--sidebar-collapsed-width);
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 10px 12px;
+                margin: 0;
+                flex-grow: 1;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                padding: 12px 14px;
+                color: var(--primary-blue);
+                text-decoration: none;
+                border-radius: 25px;
+                transition: background-color 0.2s;
+                margin-bottom: 5px;
+                white-space: nowrap;
+            }
+
+                .sidebar-link:hover {
+                    background-color: #e2e6ea;
+                }
+
+                .sidebar-link i {
+                    font-size: 1.2rem;
+                    min-width: 30px;
+                    text-align: center;
+                }
+
+                .sidebar-link span {
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                    margin-left: 10px;
+                    transition: opacity 0.3s ease, visibility 0.3s ease;
+                }
+
+            body.sidebar-collapsed .sidebar-link span {
+                opacity: 0;
+                visibility: hidden;
+                width: 0;
+                display: none;
+            }
+
+            .sidebar-footer {
+                padding: 15px 12px;
+                border-top: 1px solid var(--border-color);
+            }
+
+            /* Main Content */
+            .main-content {
+                margin-left: var(--sidebar-width);
+                margin-top: 60px;
+                min-height: calc(100vh - 60px);
+                background-color: var(--main-bg);
+                transition: margin-left 0.3s ease;
+                padding: 25px 0;
+            }
+
+            body.sidebar-collapsed .main-content {
+                margin-left: var(--sidebar-collapsed-width);
+            }
+
+            .content-wrapper {
+                max-width: 1200px;
+                margin: 0 auto;
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            .profile-card {
+                background: white;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 25px 15px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .profile-img {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 3px solid #f8f9fa;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                margin-bottom: 12px;
+            }
+
+            .profile-name {
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: var(--primary-blue);
+                margin-bottom: 2px;
+            }
+
+            .profile-role {
+                font-size: 0.7rem;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 12px;
+            }
+
+            .info-list {
+                list-style: none;
+                padding: 0;
+                margin: 15px 0 0 0;
+                text-align: left;
+            }
+
+            .info-item {
+                display: flex;
+                align-items: center;
+                padding: 8px 0;
+            }
+
+            .info-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 10px;
+                font-size: 0.85rem;
+                flex-shrink: 0;
+            }
+
+            .info-text p {
+                margin: 0;
+                line-height: 1.2;
+            }
+
+            .info-label {
+                font-size: 0.65rem;
+                color: #888;
+            }
+
+            .info-value {
+                font-size: 0.8rem;
+                color: #333;
+                font-weight: 500;
+            }
+
+            .table-card {
+                background: white;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 20px;
+            }
+
+            .table-header-title {
+                color: var(--primary-blue);
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .btn-custom-dark {
+                background-color: var(--primary-blue);
+                color: white;
+                font-size: 0.8rem;
+                font-weight: 500;
+                border-radius: 4px;
+            }
+
+            .btn-custom-light {
+                background-color: #f8f9fa;
+                border: 1px solid #ddd;
+                color: #333;
+                font-size: 0.8rem;
+                border-radius: 4px;
+            }
+
+            .custom-table {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+                .custom-table th {
+                    font-size: 0.75rem;
+                    color: var(--text-dark);
+                    font-weight: 700;
+                    padding: 12px 8px;
+                    border-top: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--border-color);
+                    background-color: #f8f9fc;
+                    white-space: nowrap;
+                }
+
+                .custom-table td {
+                    font-size: 0.8rem;
+                    padding: 10px 8px;
+                    color: #555;
+                    border-bottom: 1px solid #f0f0f0;
+                }
+
+            .empty-table {
+                text-align: center;
+                padding: 30px 0;
+                color: #999;
+                font-size: 0.85rem;
+            }
+
+            /* Mobile Responsive Adjustments */
+            @@media (max-width: 991.98px) {
+                .sidebar {
+                    transform: translateX(-100%);
+                    width: var(--sidebar-width) !important;
+                }
+
+                body.mobile-sidebar-open .sidebar {
+                    transform: translateX(0);
+                }
+
+                .main-content {
+                    margin-left: 0 !important;
+                }
+
+                .content-wrapper {
+                    padding: 0 15px;
+                }
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="navbar-brand-wrapper">
+            <button class="sidebar-toggle-btn me-2" id="sidebarToggle" title="Toggle Sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <img src="~/images/PUTATAN.ico" alt="Barangay Logo" class="navbar-logo">
+            <h5 class="navbar-title fw-medium">Barangay Putatan, City of Muntinlupa</h5>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+        <ul class="sidebar-menu">
+            <li><a href="#" class="sidebar-link" title="Home"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+            <li><a href="#" class="sidebar-link" title="Residents"><i class="fa-solid fa-users"></i><span>Residents</span></a></li>
+            <li><a href="#" class="sidebar-link" title="Payments"><i class="fa-solid fa-hand-holding-dollar"></i><span>Payments</span></a></li>
+            <li><a href="#" class="sidebar-link" title="Calendar"><i class="fa-solid fa-calendar-days"></i><span>Calendar</span></a></li>
+            <li><a href="#" class="sidebar-link" title="Offices"><i class="fa-solid fa-building"></i><span>Offices</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-link" title="Settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <div class="row g-4">
+                <!-- Left Column: Profile Card -->
+                <div class="col-lg-3">
+                    <div class="profile-card">
+                        <div class="profile-img-wrapper">
+                            @if (Model.Picture != null)
+                            {
+                                var base64 = Convert.ToBase64String(Model.Picture);
+                                var imgSrc = $"data:image/jpeg;base64,{base64}";
+                                <img src="@imgSrc" alt="Profile" class="profile-img">
+                            }
+                            else
+                            {
+                                <img src="~/images/default-profile.png" alt="Profile" class="profile-img">
+                            }
+                        </div>
+
+                        <h5 class="profile-name">@Model.FullName</h5>
+                        <p class="profile-role">Barangay Resident</p>
+
+                        <hr style="border-color: #eee;">
+
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #e6f0ff; color: #4d79ff;"><i class="fa-regular fa-envelope"></i></div>
+                                <div class="info-text"><p class="info-label">Email Information</p><p class="info-value text-break">@Model.Email</p></div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #fff8e6; color: #ffcc00;"><i class="fa-solid fa-phone"></i></div>
+                                <div class="info-text"><p class="info-label">Contact Number</p><p class="info-value">@Model.MobileNumber</p></div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #ffe6e6; color: #ff4d4d;"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="info-text"><p class="info-label">Address</p><p class="info-value">@Model.Address</p></div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #e6e6ff; color: #6666ff;"><i class="fa-solid fa-calendar-days"></i></div>
+                                <div class="info-text"><p class="info-label">Birthday</p><p class="info-value">@(Model.Birthday.HasValue ? Model.Birthday.Value.ToString("MMMM dd, yyyy") : "N/A")</p></div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #fffbe6; color: #e6b800;"><i class="fa-solid fa-baby-carriage"></i></div>
+                                <div class="info-text"><p class="info-label">Birthplace</p><p class="info-value">@Model.BirthPlace</p></div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #ffe6eb; color: #ff4d79;"><i class="fa-solid fa-venus-mars"></i></div>
+                                <div class="info-text"><p class="info-label">Gender</p><p class="info-value">@Model.Gender</p></div>
+                            </li>
+                            <li class="info-item">
+                                <div class="info-icon" style="background-color: #e6e6fa; color: #8c8cbf;"><i class="fa-solid fa-rings-wedding"></i></div>
+                                <div class="info-text"><p class="info-label">Civil Status</p><p class="info-value">@Model.CivilStatus</p></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Column: Table -->
+                <div class="col-lg-9">
+                    <div class="table-card h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <h5 class="table-header-title mb-0">Appointment Request</h5>
+                            <div>
+                                <!-- Pinalitan ang button para mag-trigger ng Modal Pop-up -->
+                                <button type="button" class="btn btn-custom-dark px-3 me-1" data-bs-toggle="modal" data-bs-target="#createAppointmentModal">
+                                    Create Request
+                                </button>
+                                <button class="btn btn-custom-light px-3">refresh</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Control No.</th>
+                                        <th>Request Type</th>
+                                        <th>Purpose</th>
+                                        <th>Department</th>
+                                        <th>Date Submitted</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6" class="empty-table">No appointment requests found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CREATE APPOINTMENT MODAL (POP-UP FORM) -->
+    <div class="modal fade" id="createAppointmentModal" tabindex="-1" aria-labelledby="createAppointmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white py-3">
+                    <h5 class="modal-title fs-5" id="createAppointmentModalLabel">
+                        <i class="fa-solid fa-calendar-plus me-2"></i>Create Appointment Request
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-controller="Home" asp-action="CreateAppointment" method="post">
+                    <div class="modal-body p-4">
+
+                        <input type="hidden" name="ResidentID" value="@Model.ResidentID" />
+
+                        <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Personal Information (Auto-filled)</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Full Name</label>
+                                <input type="text" name="FullName" value="@Model.FullName" class="form-control bg-light" readonly />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Email Address</label>
+                                <input type="text" name="EmailAddress" value="@Model.Email" class="form-control bg-light" readonly />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Phone Number</label>
+                                <input type="text" name="PhoneNumber" value="@Model.MobileNumber" class="form-control bg-light" readonly />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Full Address</label>
+                                <textarea name="FullAddress" class="form-control bg-light" rows="2" readonly>@Model.Address</textarea>
+                            </div>
+                        </div>
+
+                        <hr class="mb-4">
+
+                        <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Appointment Details</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Request Type</label>
+                                <select name="RequestType" class="form-select" required>
+                                    <option value="">-- Select Request Type --</option>
+                                    <option value="Barangay Clearance">Barangay Clearance</option>
+                                    <option value="Certificate of Indigency">Certificate of Indigency</option>
+                                    <option value="Certificate of Residency">Certificate of Residency</option>
+                                    <option value="Business Permit">Business Permit</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Department</label>
+                                <select name="Department" class="form-select" required>
+                                    <option value="">-- Select Department --</option>
+                                    <option value="Lupon Tagapamayapa">Lupon Tagapamayapa</option>
+                                    <option value="Social Services">Social Services</option>
+                                    <option value="Clearance & Certification">Clearance & Certification</option>
+                                    <option value="Treasurer Office">Treasurer Office</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Appointment Date</label>
+                                <input type="date" name="AppointmentDate" class="form-control" required />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Appointment Type</label>
+                                <select name="AppointmentType" class="form-select" required>
+                                    <option value="Walk-in">Walk-in</option>
+                                    <option value="Online">Online</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Purpose</label>
+                                <textarea name="Purpose" class="form-control" rows="3" placeholder="Ilagay ang layunin ng iyong appointment..." required></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer bg-light px-4 py-3">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const body = document.body;
+
+            toggleBtn.addEventListener('click', () => {
+                if (window.innerWidth <= 991.98) {
+                    body.classList.toggle('mobile-sidebar-open');
+                } else {
+                    body.classList.toggle('sidebar-collapsed');
+                }
+            });
+    </script>
+</body>
+</html>
