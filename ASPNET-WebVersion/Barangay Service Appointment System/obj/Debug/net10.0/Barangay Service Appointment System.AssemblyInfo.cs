@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Barangay Service Appointment System")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13d0e80a59412a8b1c9921cc5a6d5ddc2a698868")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e3994139b23cb2215b4557e1b131118753ce9db")]
 [assembly: System.Reflection.AssemblyProductAttribute("Barangay Service Appointment System")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Barangay Service Appointment System")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

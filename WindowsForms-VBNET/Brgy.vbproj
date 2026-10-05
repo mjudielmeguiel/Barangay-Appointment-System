@@ -178,192 +178,192 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ADMIN\frmAccountRecovery.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmAccountRecovery.Designer.vb">
       <DependentUpon>frmAccountRecovery.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmAccountRecovery.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmAccountRecovery.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\frmActivityLogs.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmActivityLogs.Designer.vb">
       <DependentUpon>frmActivityLogs.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmActivityLogs.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmActivityLogs.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\frmManagePurpose.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmManagePurpose.Designer.vb">
       <DependentUpon>frmManagePurpose.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmManagePurpose.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmManagePurpose.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CREATE APPOINTMENT\frmAppointmentHistory.Designer.vb">
+    <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmAppointmentHistory.Designer.vb">
       <DependentUpon>frmAppointmentHistory.vb</DependentUpon>
     </Compile>
-    <Compile Include="CREATE APPOINTMENT\frmAppointmentHistory.vb">
+    <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmAppointmentHistory.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmCancelReason.Designer.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmCancelReason.Designer.vb">
       <DependentUpon>frmCancelReason.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmCancelReason.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmCancelReason.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmChange_Password.Designer.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmChange_Password.Designer.vb">
       <DependentUpon>frmChange_Password.vb</DependentUpon>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmChange_Password.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmChange_Password.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmConfirmPasswordDelete.Designer.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmConfirmPasswordDelete.Designer.vb">
       <DependentUpon>frmConfirmPasswordDelete.vb</DependentUpon>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmConfirmPasswordDelete.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmConfirmPasswordDelete.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmCreateEvent.Designer.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmCreateEvent.Designer.vb">
       <DependentUpon>frmCreateEvent.vb</DependentUpon>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmCreateEvent.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmCreateEvent.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LOGIN FORMS\frmForgotPassword.Designer.vb">
+    <Compile Include="PRESENTATION\LOGIN FORMS\frmForgotPassword.Designer.vb">
       <DependentUpon>frmForgotPassword.vb</DependentUpon>
     </Compile>
-    <Compile Include="LOGIN FORMS\frmForgotPassword.vb">
+    <Compile Include="PRESENTATION\LOGIN FORMS\frmForgotPassword.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\frmReportGeneration.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmReportGeneration.Designer.vb">
       <DependentUpon>frmReportGeneration.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmReportGeneration.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmReportGeneration.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CREATE APPOINTMENT\frmSpecificAppointments.Designer.vb">
+    <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmSpecificAppointments.Designer.vb">
       <DependentUpon>frmSpecificAppointments.vb</DependentUpon>
     </Compile>
-    <Compile Include="CREATE APPOINTMENT\frmSpecificAppointments.vb">
+    <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmSpecificAppointments.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GlobalVars.vb" />
-    <Compile Include="RESIDENCE\Barangay_Residences.Designer.vb">
+    <Compile Include="MODULES\GlobalVars.vb" />
+    <Compile Include="PRESENTATION\RESIDENCE\Barangay_Residences.Designer.vb">
       <DependentUpon>Barangay_Residences.vb</DependentUpon>
     </Compile>
-    <Compile Include="RESIDENCE\Barangay_Residences.vb">
+    <Compile Include="PRESENTATION\RESIDENCE\Barangay_Residences.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\frmAdmin_Dashboard.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmAdmin_Dashboard.Designer.vb">
       <DependentUpon>frmAdmin_Dashboard.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmAdmin_Dashboard.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmAdmin_Dashboard.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DBconnection.vb" />
-    <Compile Include="ADMIN\frmDocumentServices.Designer.vb">
+    <Compile Include="MODULES\DBconnection.vb" />
+    <Compile Include="PRESENTATION\ADMIN\frmDocumentServices.Designer.vb">
       <DependentUpon>frmDocumentServices.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmDocumentServices.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmDocumentServices.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RESIDENCE\frmResidence_Records.Designer.vb">
+    <Compile Include="PRESENTATION\RESIDENCE\frmResidence_Records.Designer.vb">
       <DependentUpon>frmResidence_Records.vb</DependentUpon>
     </Compile>
-    <Compile Include="RESIDENCE\frmResidence_Records.vb">
+    <Compile Include="PRESENTATION\RESIDENCE\frmResidence_Records.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Satellite Offices\frmCreateNewSateliteOffice.Designer.vb">
+    <Compile Include="PRESENTATION\SATELLITE OFFICES\frmCreateNewSateliteOffice.Designer.vb">
       <DependentUpon>frmCreateNewSateliteOffice.vb</DependentUpon>
     </Compile>
-    <Compile Include="Satellite Offices\frmCreateNewSateliteOffice.vb">
+    <Compile Include="PRESENTATION\SATELLITE OFFICES\frmCreateNewSateliteOffice.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Satellite Offices\frmSatelliteOfficeList.Designer.vb">
+    <Compile Include="PRESENTATION\SATELLITE OFFICES\frmSatelliteOfficeList.Designer.vb">
       <DependentUpon>frmSatelliteOfficeList.vb</DependentUpon>
     </Compile>
-    <Compile Include="Satellite Offices\frmSatelliteOfficeList.vb">
+    <Compile Include="PRESENTATION\SATELLITE OFFICES\frmSatelliteOfficeList.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RESIDENCE\frmResidencelist.Designer.vb">
+    <Compile Include="PRESENTATION\RESIDENCE\frmResidencelist.Designer.vb">
       <DependentUpon>frmResidencelist.vb</DependentUpon>
     </Compile>
-    <Compile Include="RESIDENCE\frmResidencelist.vb">
+    <Compile Include="PRESENTATION\RESIDENCE\frmResidencelist.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmAppointmentDetails.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmAppointmentDetails.Designer.vb">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmAppointmentDetails.vb">
+    <Compile Include="PRESENTATION\STAFF\frmAppointmentDetails.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmBarangayCalendar.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmBarangayCalendar.Designer.vb">
       <DependentUpon>frmBarangayCalendar.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmBarangayCalendar.vb">
+    <Compile Include="PRESENTATION\STAFF\frmBarangayCalendar.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmCouponView.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmCouponView.Designer.vb">
       <DependentUpon>frmCouponView.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmCouponView.vb">
+    <Compile Include="PRESENTATION\STAFF\frmCouponView.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CREATE APPOINTMENT\frmCreateAppointment.Designer.vb">
+    <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmCreateAppointment.Designer.vb">
       <DependentUpon>frmCreateAppointment.vb</DependentUpon>
     </Compile>
-    <Compile Include="CREATE APPOINTMENT\frmCreateAppointment.vb">
+    <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmCreateAppointment.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmDayAppointmentsList.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmDayAppointmentsList.Designer.vb">
       <DependentUpon>frmDayAppointmentsList.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmDayAppointmentsList.vb">
+    <Compile Include="PRESENTATION\STAFF\frmDayAppointmentsList.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmPayments.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmPayments.Designer.vb">
       <DependentUpon>frmPayments.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmPayments.vb">
+    <Compile Include="PRESENTATION\STAFF\frmPayments.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmRoleManagement.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmRoleManagement.Designer.vb">
       <DependentUpon>frmRoleManagement.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmRoleManagement.vb">
+    <Compile Include="PRESENTATION\STAFF\frmRoleManagement.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="STAFF\frmUser_Dashboard.Designer.vb">
+    <Compile Include="PRESENTATION\STAFF\frmUser_Dashboard.Designer.vb">
       <DependentUpon>frmUser_Dashboard.vb</DependentUpon>
     </Compile>
-    <Compile Include="STAFF\frmUser_Dashboard.vb">
+    <Compile Include="PRESENTATION\STAFF\frmUser_Dashboard.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\frmManage_Users.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmManage_Users.Designer.vb">
       <DependentUpon>frmManage_Users.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmManage_Users.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmManage_Users.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LOGIN FORMS\frmcreateadmin.Designer.vb">
+    <Compile Include="PRESENTATION\LOGIN FORMS\frmcreateadmin.Designer.vb">
       <DependentUpon>frmcreateadmin.vb</DependentUpon>
     </Compile>
-    <Compile Include="LOGIN FORMS\frmcreateadmin.vb">
+    <Compile Include="PRESENTATION\LOGIN FORMS\frmcreateadmin.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ADMIN\frmcreateuser.Designer.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmcreateuser.Designer.vb">
       <DependentUpon>frmcreateuser.vb</DependentUpon>
     </Compile>
-    <Compile Include="ADMIN\frmcreateuser.vb">
+    <Compile Include="PRESENTATION\ADMIN\frmcreateuser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LOGIN FORMS\frmlogin.Designer.vb">
+    <Compile Include="PRESENTATION\LOGIN FORMS\frmlogin.Designer.vb">
       <DependentUpon>frmlogin.vb</DependentUpon>
     </Compile>
-    <Compile Include="LOGIN FORMS\frmlogin.vb">
+    <Compile Include="PRESENTATION\LOGIN FORMS\frmlogin.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmMain.Designer.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmMain.Designer.vb">
       <DependentUpon>frmMain.vb</DependentUpon>
     </Compile>
-    <Compile Include="GENERAL FORMS\frmMain.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmMain.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -384,97 +384,97 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ADMIN\frmAccountRecovery.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmAccountRecovery.resx">
       <DependentUpon>frmAccountRecovery.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmActivityLogs.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmActivityLogs.resx">
       <DependentUpon>frmActivityLogs.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmManagePurpose.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmManagePurpose.resx">
       <DependentUpon>frmManagePurpose.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CREATE APPOINTMENT\frmAppointmentHistory.resx">
+    <EmbeddedResource Include="PRESENTATION\CREATE APPOINTMENT\frmAppointmentHistory.resx">
       <DependentUpon>frmAppointmentHistory.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmCancelReason.resx">
+    <EmbeddedResource Include="PRESENTATION\GENERAL FORMS\frmCancelReason.resx">
       <DependentUpon>frmCancelReason.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GENERAL FORMS\frmChange_Password.resx">
+    <EmbeddedResource Include="PRESENTATION\GENERAL FORMS\frmChange_Password.resx">
       <DependentUpon>frmChange_Password.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GENERAL FORMS\frmConfirmPasswordDelete.resx">
+    <EmbeddedResource Include="PRESENTATION\GENERAL FORMS\frmConfirmPasswordDelete.resx">
       <DependentUpon>frmConfirmPasswordDelete.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GENERAL FORMS\frmCreateEvent.resx">
+    <EmbeddedResource Include="PRESENTATION\GENERAL FORMS\frmCreateEvent.resx">
       <DependentUpon>frmCreateEvent.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LOGIN FORMS\frmForgotPassword.resx">
+    <EmbeddedResource Include="PRESENTATION\LOGIN FORMS\frmForgotPassword.resx">
       <DependentUpon>frmForgotPassword.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmReportGeneration.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmReportGeneration.resx">
       <DependentUpon>frmReportGeneration.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CREATE APPOINTMENT\frmSpecificAppointments.resx">
+    <EmbeddedResource Include="PRESENTATION\CREATE APPOINTMENT\frmSpecificAppointments.resx">
       <DependentUpon>frmSpecificAppointments.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RESIDENCE\Barangay_Residences.resx">
+    <EmbeddedResource Include="PRESENTATION\RESIDENCE\Barangay_Residences.resx">
       <DependentUpon>Barangay_Residences.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmAdmin_Dashboard.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmAdmin_Dashboard.resx">
       <DependentUpon>frmAdmin_Dashboard.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmDocumentServices.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmDocumentServices.resx">
       <DependentUpon>frmDocumentServices.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RESIDENCE\frmResidence_Records.resx">
+    <EmbeddedResource Include="PRESENTATION\RESIDENCE\frmResidence_Records.resx">
       <DependentUpon>frmResidence_Records.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Satellite Offices\frmCreateNewSateliteOffice.resx">
+    <EmbeddedResource Include="PRESENTATION\SATELLITE OFFICES\frmCreateNewSateliteOffice.resx">
       <DependentUpon>frmCreateNewSateliteOffice.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Satellite Offices\frmSatelliteOfficeList.resx">
+    <EmbeddedResource Include="PRESENTATION\SATELLITE OFFICES\frmSatelliteOfficeList.resx">
       <DependentUpon>frmSatelliteOfficeList.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RESIDENCE\frmResidencelist.resx">
+    <EmbeddedResource Include="PRESENTATION\RESIDENCE\frmResidencelist.resx">
       <DependentUpon>frmResidencelist.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmAppointmentDetails.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmAppointmentDetails.resx">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmBarangayCalendar.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmBarangayCalendar.resx">
       <DependentUpon>frmBarangayCalendar.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmCouponView.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmCouponView.resx">
       <DependentUpon>frmCouponView.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CREATE APPOINTMENT\frmCreateAppointment.resx">
+    <EmbeddedResource Include="PRESENTATION\CREATE APPOINTMENT\frmCreateAppointment.resx">
       <DependentUpon>frmCreateAppointment.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmDayAppointmentsList.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmDayAppointmentsList.resx">
       <DependentUpon>frmDayAppointmentsList.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmPayments.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmPayments.resx">
       <DependentUpon>frmPayments.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmRoleManagement.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmRoleManagement.resx">
       <DependentUpon>frmRoleManagement.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="STAFF\frmUser_Dashboard.resx">
+    <EmbeddedResource Include="PRESENTATION\STAFF\frmUser_Dashboard.resx">
       <DependentUpon>frmUser_Dashboard.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmManage_Users.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmManage_Users.resx">
       <DependentUpon>frmManage_Users.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LOGIN FORMS\frmcreateadmin.resx">
+    <EmbeddedResource Include="PRESENTATION\LOGIN FORMS\frmcreateadmin.resx">
       <DependentUpon>frmcreateadmin.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ADMIN\frmcreateuser.resx">
+    <EmbeddedResource Include="PRESENTATION\ADMIN\frmcreateuser.resx">
       <DependentUpon>frmcreateuser.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LOGIN FORMS\frmlogin.resx">
+    <EmbeddedResource Include="PRESENTATION\LOGIN FORMS\frmlogin.resx">
       <DependentUpon>frmlogin.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GENERAL FORMS\frmMain.resx">
+    <EmbeddedResource Include="PRESENTATION\GENERAL FORMS\frmMain.resx">
       <DependentUpon>frmMain.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
