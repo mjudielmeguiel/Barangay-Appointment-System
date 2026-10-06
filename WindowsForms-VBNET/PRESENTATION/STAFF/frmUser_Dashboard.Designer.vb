@@ -24,15 +24,15 @@ Partial Class frmUser_Dashboard
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmUser_Dashboard))
         Me.lblCancelled = New System.Windows.Forms.Label()
-        Me.lblApproved = New System.Windows.Forms.Label()
-        Me.lblCompleted = New System.Windows.Forms.Label()
+        Me.lblApprove = New System.Windows.Forms.Label()
+        Me.lblComplete = New System.Windows.Forms.Label()
         Me.lblRejected = New System.Windows.Forms.Label()
         Me.lblPending = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.btnRef = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txtSearch = New System.Windows.Forms.TextBox()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.lblSectionTitle = New System.Windows.Forms.Label()
         Me.dgvRequests = New System.Windows.Forms.DataGridView()
         Me.btnCreateRequest = New System.Windows.Forms.Button()
         Me.Panel8 = New System.Windows.Forms.Panel()
@@ -65,6 +65,21 @@ Partial Class frmUser_Dashboard
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.Panel10 = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.lblProcessing = New System.Windows.Forms.Label()
+        Me.Panel11 = New System.Windows.Forms.Panel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.lblTopay = New System.Windows.Forms.Label()
+        Me.Panel12 = New System.Windows.Forms.Panel()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.lblRelease = New System.Windows.Forms.Label()
+        Me.Panel13 = New System.Windows.Forms.Panel()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.lblUnclaimed = New System.Windows.Forms.Label()
         Me.Panel7.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.dgvRequests, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -76,6 +91,10 @@ Partial Class frmUser_Dashboard
         Me.Panel9.SuspendLayout()
         CType(Me.picProfile, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
+        Me.Panel10.SuspendLayout()
+        Me.Panel11.SuspendLayout()
+        Me.Panel12.SuspendLayout()
+        Me.Panel13.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblCancelled
@@ -91,31 +110,31 @@ Partial Class frmUser_Dashboard
         Me.lblCancelled.TabIndex = 528
         Me.lblCancelled.Text = "-"
         '
-        'lblApproved
+        'lblApprove
         '
-        Me.lblApproved.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lblApprove.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblApproved.AutoSize = True
-        Me.lblApproved.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblApproved.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblApproved.Location = New System.Drawing.Point(16, 10)
-        Me.lblApproved.Name = "lblApproved"
-        Me.lblApproved.Size = New System.Drawing.Size(20, 25)
-        Me.lblApproved.TabIndex = 527
-        Me.lblApproved.Text = "-"
+        Me.lblApprove.AutoSize = True
+        Me.lblApprove.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblApprove.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblApprove.Location = New System.Drawing.Point(16, 10)
+        Me.lblApprove.Name = "lblApprove"
+        Me.lblApprove.Size = New System.Drawing.Size(20, 25)
+        Me.lblApprove.TabIndex = 527
+        Me.lblApprove.Text = "-"
         '
-        'lblCompleted
+        'lblComplete
         '
-        Me.lblCompleted.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lblComplete.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblCompleted.AutoSize = True
-        Me.lblCompleted.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCompleted.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblCompleted.Location = New System.Drawing.Point(17, 10)
-        Me.lblCompleted.Name = "lblCompleted"
-        Me.lblCompleted.Size = New System.Drawing.Size(20, 25)
-        Me.lblCompleted.TabIndex = 526
-        Me.lblCompleted.Text = "-"
+        Me.lblComplete.AutoSize = True
+        Me.lblComplete.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblComplete.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblComplete.Location = New System.Drawing.Point(17, 10)
+        Me.lblComplete.Name = "lblComplete"
+        Me.lblComplete.Size = New System.Drawing.Size(20, 25)
+        Me.lblComplete.TabIndex = 526
+        Me.lblComplete.Text = "-"
         '
         'lblRejected
         '
@@ -151,12 +170,12 @@ Partial Class frmUser_Dashboard
         Me.Panel7.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel7.Controls.Add(Me.btnRef)
         Me.Panel7.Controls.Add(Me.Panel2)
-        Me.Panel7.Controls.Add(Me.Label5)
+        Me.Panel7.Controls.Add(Me.lblSectionTitle)
         Me.Panel7.Controls.Add(Me.dgvRequests)
         Me.Panel7.Controls.Add(Me.btnCreateRequest)
-        Me.Panel7.Location = New System.Drawing.Point(374, 273)
+        Me.Panel7.Location = New System.Drawing.Point(374, 336)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(948, 483)
+        Me.Panel7.Size = New System.Drawing.Size(948, 420)
         Me.Panel7.TabIndex = 522
         '
         'btnRef
@@ -198,16 +217,16 @@ Partial Class frmUser_Dashboard
         Me.txtSearch.Size = New System.Drawing.Size(254, 28)
         Me.txtSearch.TabIndex = 223
         '
-        'Label5
+        'lblSectionTitle
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI Semibold", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.MidnightBlue
-        Me.Label5.Location = New System.Drawing.Point(10, 16)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(199, 25)
-        Me.Label5.TabIndex = 188
-        Me.Label5.Text = "Appointment Request"
+        Me.lblSectionTitle.AutoSize = True
+        Me.lblSectionTitle.Font = New System.Drawing.Font("Segoe UI Semibold", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSectionTitle.ForeColor = System.Drawing.Color.MidnightBlue
+        Me.lblSectionTitle.Location = New System.Drawing.Point(10, 16)
+        Me.lblSectionTitle.Name = "lblSectionTitle"
+        Me.lblSectionTitle.Size = New System.Drawing.Size(20, 25)
+        Me.lblSectionTitle.TabIndex = 188
+        Me.lblSectionTitle.Text = "-"
         '
         'dgvRequests
         '
@@ -222,7 +241,7 @@ Partial Class frmUser_Dashboard
         Me.dgvRequests.Location = New System.Drawing.Point(3, 100)
         Me.dgvRequests.Name = "dgvRequests"
         Me.dgvRequests.ReadOnly = True
-        Me.dgvRequests.Size = New System.Drawing.Size(945, 383)
+        Me.dgvRequests.Size = New System.Drawing.Size(945, 320)
         Me.dgvRequests.TabIndex = 508
         '
         'btnCreateRequest
@@ -244,11 +263,12 @@ Partial Class frmUser_Dashboard
         '
         'Panel8
         '
+        Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel8.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel8.Controls.Add(Me.Label3)
         Me.Panel8.Controls.Add(Me.lblPending)
-        Me.Panel8.Location = New System.Drawing.Point(374, 108)
+        Me.Panel8.Location = New System.Drawing.Point(224, 107)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(170, 86)
         Me.Panel8.TabIndex = 538
@@ -260,18 +280,19 @@ Partial Class frmUser_Dashboard
         Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Label3.Location = New System.Drawing.Point(12, 51)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(58, 17)
+        Me.Label3.Size = New System.Drawing.Size(109, 17)
         Me.Label3.TabIndex = 164
-        Me.Label3.Text = "Pending"
+        Me.Label3.Text = "Pending (Online)"
         '
         'Panel1
         '
+        Me.Panel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.Label23)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Controls.Add(Me.lblApproved)
-        Me.Panel1.Location = New System.Drawing.Point(560, 108)
+        Me.Panel1.Controls.Add(Me.lblApprove)
+        Me.Panel1.Location = New System.Drawing.Point(410, 107)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(170, 86)
         Me.Panel1.TabIndex = 539
@@ -300,11 +321,12 @@ Partial Class frmUser_Dashboard
         '
         'Panel3
         '
+        Me.Panel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel3.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel3.Controls.Add(Me.Label4)
-        Me.Panel3.Controls.Add(Me.lblCompleted)
-        Me.Panel3.Location = New System.Drawing.Point(929, 108)
+        Me.Panel3.Controls.Add(Me.lblComplete)
+        Me.Panel3.Location = New System.Drawing.Point(1152, 107)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(170, 86)
         Me.Panel3.TabIndex = 541
@@ -316,17 +338,18 @@ Partial Class frmUser_Dashboard
         Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Label4.Location = New System.Drawing.Point(19, 51)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(74, 17)
+        Me.Label4.Size = New System.Drawing.Size(66, 17)
         Me.Label4.TabIndex = 164
-        Me.Label4.Text = "Completed"
+        Me.Label4.Text = "Complete"
         '
         'Panel5
         '
+        Me.Panel5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel5.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel5.Controls.Add(Me.Label6)
         Me.Panel5.Controls.Add(Me.lblRejected)
-        Me.Panel5.Location = New System.Drawing.Point(744, 108)
+        Me.Panel5.Location = New System.Drawing.Point(967, 211)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(170, 86)
         Me.Panel5.TabIndex = 540
@@ -344,11 +367,12 @@ Partial Class frmUser_Dashboard
         '
         'Panel6
         '
+        Me.Panel6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel6.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel6.Controls.Add(Me.Label7)
         Me.Panel6.Controls.Add(Me.lblCancelled)
-        Me.Panel6.Location = New System.Drawing.Point(1117, 108)
+        Me.Panel6.Location = New System.Drawing.Point(1155, 211)
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(170, 86)
         Me.Panel6.TabIndex = 542
@@ -384,9 +408,9 @@ Partial Class frmUser_Dashboard
         Me.Panel9.Controls.Add(Me.Label8)
         Me.Panel9.Controls.Add(Me.lblEmail)
         Me.Panel9.Controls.Add(Me.Label12)
-        Me.Panel9.Location = New System.Drawing.Point(43, 273)
+        Me.Panel9.Location = New System.Drawing.Point(43, 336)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(295, 483)
+        Me.Panel9.Size = New System.Drawing.Size(295, 420)
         Me.Panel9.TabIndex = 628
         '
         'lblDepartment
@@ -540,7 +564,7 @@ Partial Class frmUser_Dashboard
         '
         Me.picProfile.BackColor = System.Drawing.SystemColors.Control
         Me.picProfile.Image = CType(resources.GetObject("picProfile.Image"), System.Drawing.Image)
-        Me.picProfile.Location = New System.Drawing.Point(125, 205)
+        Me.picProfile.Location = New System.Drawing.Point(112, 284)
         Me.picProfile.Name = "picProfile"
         Me.picProfile.Size = New System.Drawing.Size(143, 130)
         Me.picProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -580,14 +604,198 @@ Partial Class frmUser_Dashboard
         Me.Label9.TabIndex = 519
         Me.Label9.Text = "Appointments"
         '
+        'Panel10
+        '
+        Me.Panel10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel10.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel10.Controls.Add(Me.Label10)
+        Me.Panel10.Controls.Add(Me.Label11)
+        Me.Panel10.Controls.Add(Me.lblProcessing)
+        Me.Panel10.Location = New System.Drawing.Point(594, 107)
+        Me.Panel10.Name = "Panel10"
+        Me.Panel10.Size = New System.Drawing.Size(170, 86)
+        Me.Panel10.TabIndex = 540
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label10.Location = New System.Drawing.Point(732, 10)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(77, 21)
+        Me.Label10.TabIndex = 164
+        Me.Label10.Text = "Cancelled"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label11.Location = New System.Drawing.Point(18, 51)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(73, 17)
+        Me.Label11.TabIndex = 164
+        Me.Label11.Text = "Processing"
+        '
+        'lblProcessing
+        '
+        Me.lblProcessing.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblProcessing.AutoSize = True
+        Me.lblProcessing.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblProcessing.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblProcessing.Location = New System.Drawing.Point(16, 10)
+        Me.lblProcessing.Name = "lblProcessing"
+        Me.lblProcessing.Size = New System.Drawing.Size(20, 25)
+        Me.lblProcessing.TabIndex = 527
+        Me.lblProcessing.Text = "-"
+        '
+        'Panel11
+        '
+        Me.Panel11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel11.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel11.Controls.Add(Me.Label13)
+        Me.Panel11.Controls.Add(Me.Label14)
+        Me.Panel11.Controls.Add(Me.lblTopay)
+        Me.Panel11.Location = New System.Drawing.Point(780, 107)
+        Me.Panel11.Name = "Panel11"
+        Me.Panel11.Size = New System.Drawing.Size(170, 86)
+        Me.Panel11.TabIndex = 541
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label13.Location = New System.Drawing.Point(732, 10)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(77, 21)
+        Me.Label13.TabIndex = 164
+        Me.Label13.Text = "Cancelled"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label14.Location = New System.Drawing.Point(18, 51)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(48, 17)
+        Me.Label14.TabIndex = 164
+        Me.Label14.Text = "To Pay"
+        '
+        'lblTopay
+        '
+        Me.lblTopay.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTopay.AutoSize = True
+        Me.lblTopay.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTopay.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblTopay.Location = New System.Drawing.Point(16, 10)
+        Me.lblTopay.Name = "lblTopay"
+        Me.lblTopay.Size = New System.Drawing.Size(20, 25)
+        Me.lblTopay.TabIndex = 527
+        Me.lblTopay.Text = "-"
+        '
+        'Panel12
+        '
+        Me.Panel12.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel12.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel12.Controls.Add(Me.Label17)
+        Me.Panel12.Controls.Add(Me.Label19)
+        Me.Panel12.Controls.Add(Me.lblRelease)
+        Me.Panel12.Location = New System.Drawing.Point(967, 107)
+        Me.Panel12.Name = "Panel12"
+        Me.Panel12.Size = New System.Drawing.Size(170, 86)
+        Me.Panel12.TabIndex = 542
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label17.Location = New System.Drawing.Point(732, 10)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(77, 21)
+        Me.Label17.TabIndex = 164
+        Me.Label17.Text = "Cancelled"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label19.Location = New System.Drawing.Point(18, 51)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(53, 17)
+        Me.Label19.TabIndex = 164
+        Me.Label19.Text = "Release"
+        '
+        'lblRelease
+        '
+        Me.lblRelease.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblRelease.AutoSize = True
+        Me.lblRelease.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRelease.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblRelease.Location = New System.Drawing.Point(16, 10)
+        Me.lblRelease.Name = "lblRelease"
+        Me.lblRelease.Size = New System.Drawing.Size(20, 25)
+        Me.lblRelease.TabIndex = 527
+        Me.lblRelease.Text = "-"
+        '
+        'Panel13
+        '
+        Me.Panel13.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel13.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel13.Controls.Add(Me.Label15)
+        Me.Panel13.Controls.Add(Me.lblUnclaimed)
+        Me.Panel13.Location = New System.Drawing.Point(780, 211)
+        Me.Panel13.Name = "Panel13"
+        Me.Panel13.Size = New System.Drawing.Size(170, 86)
+        Me.Panel13.TabIndex = 541
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label15.Location = New System.Drawing.Point(16, 51)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(71, 17)
+        Me.Label15.TabIndex = 164
+        Me.Label15.Text = "Unclaimed"
+        '
+        'lblUnclaimed
+        '
+        Me.lblUnclaimed.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblUnclaimed.AutoSize = True
+        Me.lblUnclaimed.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUnclaimed.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblUnclaimed.Location = New System.Drawing.Point(14, 10)
+        Me.lblUnclaimed.Name = "lblUnclaimed"
+        Me.lblUnclaimed.Size = New System.Drawing.Size(20, 25)
+        Me.lblUnclaimed.TabIndex = 525
+        Me.lblUnclaimed.Text = "-"
+        '
         'frmUser_Dashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ClientSize = New System.Drawing.Size(1366, 768)
-        Me.Controls.Add(Me.Panel4)
+        Me.Controls.Add(Me.Panel13)
+        Me.Controls.Add(Me.Panel12)
+        Me.Controls.Add(Me.Panel11)
+        Me.Controls.Add(Me.Panel10)
         Me.Controls.Add(Me.picProfile)
+        Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel9)
         Me.Controls.Add(Me.Panel6)
         Me.Controls.Add(Me.Panel3)
@@ -620,19 +828,27 @@ Partial Class frmUser_Dashboard
         CType(Me.picProfile, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        Me.Panel10.ResumeLayout(False)
+        Me.Panel10.PerformLayout()
+        Me.Panel11.ResumeLayout(False)
+        Me.Panel11.PerformLayout()
+        Me.Panel12.ResumeLayout(False)
+        Me.Panel12.PerformLayout()
+        Me.Panel13.ResumeLayout(False)
+        Me.Panel13.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents lblCancelled As Label
-    Friend WithEvents lblApproved As Label
-    Friend WithEvents lblCompleted As Label
+    Friend WithEvents lblApprove As Label
+    Friend WithEvents lblComplete As Label
     Friend WithEvents lblRejected As Label
     Friend WithEvents lblPending As Label
     Friend WithEvents Panel7 As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents txtSearch As TextBox
-    Friend WithEvents Label5 As Label
+    Friend WithEvents lblSectionTitle As Label
     Friend WithEvents dgvRequests As DataGridView
     Friend WithEvents btnCreateRequest As Button
     Friend WithEvents btnRef As Button
@@ -666,4 +882,19 @@ Partial Class frmUser_Dashboard
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Label2 As Label
     Friend WithEvents Label9 As Label
+    Friend WithEvents Panel10 As Panel
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label11 As Label
+    Friend WithEvents lblProcessing As Label
+    Friend WithEvents Panel11 As Panel
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Label14 As Label
+    Friend WithEvents lblTopay As Label
+    Friend WithEvents Panel12 As Panel
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label19 As Label
+    Friend WithEvents lblRelease As Label
+    Friend WithEvents Panel13 As Panel
+    Friend WithEvents Label15 As Label
+    Friend WithEvents lblUnclaimed As Label
 End Class

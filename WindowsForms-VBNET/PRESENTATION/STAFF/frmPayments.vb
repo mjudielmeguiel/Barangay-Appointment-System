@@ -13,7 +13,6 @@ Public Class frmPayments
     Private currentFullName As String = ""
     Private currentDocumentType As String = ""
 
-    ' === 1. CONSTRUCTORS PARA MATANGGAP ANG CONTROL NO ===
     Public Sub New()
         InitializeComponent()
     End Sub
@@ -22,7 +21,6 @@ Public Class frmPayments
         InitializeComponent()
         SelectedControlNo = controlNo
     End Sub
-    ' ====================================================
 
     Private Sub UpdatePayButtonText()
         If isWaived Then
@@ -69,20 +67,16 @@ Public Class frmPayments
 
         SetOnlinePaymentVisibility(False)
 
-        ' ✅ CANCEL button — Papalitan natin ang function para bumalik sa Dashboard
         btnClose.Text = "CANCEL / BACK"
         btnClose.BackColor = Color.FromArgb(220, 53, 69)
         btnClose.ForeColor = Color.White
         btnClose.Font = New Font("Segoe UI", 9.5F, FontStyle.Bold)
 
-        ' === 2. AUTO-LOAD KAPAG MAY IPINASANG CONTROL NO ===
         If Not String.IsNullOrEmpty(SelectedControlNo) Then
             AutoSelectAppointment(SelectedControlNo)
         End If
-        ' ===================================================
     End Sub
 
-    ' === AUTO-SELECT LOGIC ===
     Private Sub AutoSelectAppointment(ctrlNo As String)
         For Each row As DataGridViewRow In dgvPayments.Rows
             If row.Cells("Control No.").Value IsNot Nothing AndAlso row.Cells("Control No.").Value.ToString() = ctrlNo Then
@@ -93,7 +87,6 @@ Public Class frmPayments
         Next
     End Sub
 
-    ' === 3. GO BACK TO DASHBOARD LOGIC ===
     Private Sub GoBackToDashboard()
         Dim frm As New frmUser_Dashboard()
         frm.TopLevel = False
@@ -188,12 +181,6 @@ Public Class frmPayments
         lblError.Visible = True
     End Sub
 
-    Private Sub ShowSuccess(msg As String)
-        lblError.Text = "✔ " & msg
-        lblError.ForeColor = Color.FromArgb(16, 124, 65)
-        lblError.Visible = True
-    End Sub
-
     Private Sub ClearError()
         lblError.Text = ""
         lblError.Visible = False
@@ -205,7 +192,6 @@ Public Class frmPayments
         lblFullName.Visible = show
         lblDocumentType.Visible = show
 
-        ' Hide OR Number and Amount Paid fields if waived
         If isWaived Then
             lblORNumber.Visible = False
             txtORNo.Visible = False
@@ -254,7 +240,7 @@ Public Class frmPayments
                                     "a.DateSubmitted AS `Date Submitted`, a.FullName, " &
                                     "a.PaymentStatus, a.Status, a.Amount AS DocAmount " &
                                     "FROM appointments a " &
-                                    "WHERE a.Status = 'APPROVED' " &
+                                    "WHERE (UPPER(a.Status) = 'UNPAID' OR UPPER(a.Status) = 'TO PAY' OR UPPER(a.Status) = 'APPROVED') " &
                                     "AND (a.PaymentStatus = 'UNPAID' OR a.PaymentStatus IS NULL OR a.PaymentStatus = '') "
 
             If Not String.IsNullOrWhiteSpace(searchKeyword) Then
@@ -330,7 +316,6 @@ Public Class frmPayments
         lblFullName.Text = fullname
         lblDocumentType.Text = requestType
 
-        ' Update visibility after setting isWaived
         SetPaymentFieldsVisibility(True)
     End Sub
 
@@ -352,7 +337,7 @@ Public Class frmPayments
                                      $"Document: {currentDocumentType}{Environment.NewLine}" &
                                      $"Control No.: {SelectedControlNo}"
             If MessageBox.Show(waiveMsg, "Confirm Waive",
-                             MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
+                               MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
                 Return
             End If
             UpdatePaymentStatus("WAIVED", "", 0D, "", "", "")
@@ -365,14 +350,21 @@ Public Class frmPayments
             Return
         End If
 
-        Dim paidAmount As Decimal
-        If Not Decimal.TryParse(txtAmountPaid.Text.Trim(), paidAmount) OrElse paidAmount <= 0 Then
+        Dim enteredAmount As Decimal
+        If Not Decimal.TryParse(txtAmountPaid.Text.Trim(), enteredAmount) OrElse enteredAmount <= 0 Then
             ShowError("Ilagay ang tamang halaga.")
             txtAmountPaid.Focus()
             Return
         End If
 
         Dim totalDue As Decimal = docPrice + adminFee
+
+        If enteredAmount < totalDue Then
+            ShowError("Ang ibinayad ay kulang sa kailangang halaga (Total Due).")
+            txtAmountPaid.Focus()
+            Return
+        End If
+
         Dim paymentMethod As String = If(chkOnlinePayment.Checked, "Online Payment", "Cash Payment")
         Dim walletInfo As String = If(chkOnlinePayment.Checked, txtWalletUsed.Text.Trim(), "CASH")
 
@@ -394,18 +386,21 @@ Public Class frmPayments
             End If
         End If
 
+        Dim changeAmount As Decimal = enteredAmount - totalDue
+
         Dim confirmMsg As String = $"Are you sure you want to PROCESS PAYMENT?{Environment.NewLine}" &
                                    $"{Environment.NewLine}" &
                                    $"Name: {currentFullName}{Environment.NewLine}" &
                                    $"Document: {currentDocumentType}{Environment.NewLine}" &
                                    $"Control No.: {SelectedControlNo}{Environment.NewLine}" &
                                    $"OR Number: {txtORNo.Text.Trim()}{Environment.NewLine}" &
-                                   $"Total Amount: {totalDue:N2}{Environment.NewLine}" &
-                                   $"Amount Paid: {paidAmount:N2}{Environment.NewLine}" &
+                                   $"Total Due: {totalDue:N2}{Environment.NewLine}" &
+                                   $"Amount Tendered: {enteredAmount:N2}{Environment.NewLine}" &
+                                   $"Change: {changeAmount:N2}{Environment.NewLine}" &
                                    $"Payment Method: {paymentMethod} ({walletInfo})"
 
         If MessageBox.Show(confirmMsg, "Confirm Payment",
-                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
+                           MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
             Return
         End If
 
@@ -413,26 +408,28 @@ Public Class frmPayments
         Dim transNo As String = If(chkOnlinePayment.Checked, txtTransactionNo.Text.Trim(), "")
         Dim walletUsedFinal As String = If(chkOnlinePayment.Checked, txtWalletUsed.Text.Trim(), "CASH")
 
-        UpdatePaymentStatus("PAID", txtORNo.Text.Trim(), paidAmount, senderName, transNo, walletUsedFinal)
+        UpdatePaymentStatus("PAID", txtORNo.Text.Trim(), totalDue, senderName, transNo, walletUsedFinal)
     End Sub
 
     Private Sub UpdatePaymentStatus(paymentStatus As String, orNo As String, amount As Decimal,
                                     senderName As String, transNo As String, walletUsed As String)
         Try
             DBconnection.connection()
-            Dim sql As String = "UPDATE appointments " &
-                               "SET PaymentStatus = @PaymentStatus, " &
-                               "    OfficialReceiptNo = @ORNo, " &
-                               "    Amount = @Amount, " &
-                               "    SenderName = @SenderName, " &
-                               "    TransactionNumber = @TransNo, " &
-                               "    WalletUsed = @WalletUsed, " &
-                               "    ProcessedBy = @ProcessedBy, " &
-                               "    PaymentDate = NOW(), " &
-                               "    UpdatedAt = NOW() " &
-                               "WHERE ControlNo = @ControlNo"
+            ' ✅ Dito natin binabago ang Status ng appointment patungong 'TO RELEASE' pagkatapos magbayad
+            Dim updateSql As String = "UPDATE appointments " &
+                                "SET PaymentStatus = @PaymentStatus, " &
+                                "    Status = 'TO RELEASE', " &
+                                "    OfficialReceiptNo = @ORNo, " &
+                                "    Amount = @Amount, " &
+                                "    SenderName = @SenderName, " &
+                                "    TransactionNumber = @TransNo, " &
+                                "    WalletUsed = @WalletUsed, " &
+                                "    ProcessedBy = @ProcessedBy, " &
+                                "    PaymentDate = NOW(), " &
+                                "    UpdatedAt = NOW() " &
+                                "WHERE ControlNo = @ControlNo"
 
-            Using cmd As New MySqlCommand(sql, DBconnection.cn)
+            Using cmd As New MySqlCommand(updateSql, DBconnection.cn)
                 cmd.Parameters.AddWithValue("@PaymentStatus", paymentStatus)
                 cmd.Parameters.AddWithValue("@ORNo", orNo)
                 cmd.Parameters.AddWithValue("@Amount", amount)
@@ -444,10 +441,10 @@ Public Class frmPayments
                 cmd.ExecuteNonQuery()
             End Using
 
-            MessageBox.Show($"Payment Successful!{Environment.NewLine}{Environment.NewLine}" &
-                           $"Status: {paymentStatus}{Environment.NewLine}" &
-                           $"Processed By: {currentProcessedByName}",
-                           "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show($"Payment Successful! Status updated to TO RELEASE.{Environment.NewLine}{Environment.NewLine}" &
+                            $"Status: {paymentStatus}{Environment.NewLine}" &
+                            $"Processed By: {currentProcessedByName}",
+                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             GoBackToDashboard()
 

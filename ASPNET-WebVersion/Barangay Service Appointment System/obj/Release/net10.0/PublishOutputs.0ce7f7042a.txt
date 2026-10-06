@@ -1,0 +1,30 @@
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Barangay Service Appointment System.exe
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\appsettings.Development.json
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\appsettings.json
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Barangay Service Appointment System.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Barangay Service Appointment System.deps.json
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Barangay Service Appointment System.runtimeconfig.json
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Barangay Service Appointment System.pdb
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\BouncyCastle.Cryptography.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Google.Protobuf.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\K4os.Compression.LZ4.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\K4os.Compression.LZ4.Streams.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\K4os.Hash.xxHash.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Microsoft.EntityFrameworkCore.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\MySql.Data.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\MySqlConnector.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Newtonsoft.Json.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\System.Configuration.ConfigurationManager.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\System.Security.Permissions.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\System.Windows.Extensions.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\ZstdSharp.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\runtimes\win-x64\native\comerr64.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\runtimes\win-x64\native\gssapi64.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\runtimes\win-x64\native\k5sprt64.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\runtimes\win-x64\native\krb5_64.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\runtimes\win-x64\native\krbcc64.dll
+C:\Users\mjudi\Desktop\Barangay Appointment System\ASPNET-WebVersion\Barangay Service Appointment System\obj\Release\net10.0\PubTmp\Out\runtimes\win\lib\net10.0\System.Windows.Extensions.dll

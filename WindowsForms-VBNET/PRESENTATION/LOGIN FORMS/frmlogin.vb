@@ -59,12 +59,12 @@ Public Class frmlogin
         Try
             If cn.State <> ConnectionState.Open Then connection()
             Dim sqlCheck As String = "SELECT COUNT(*) FROM activity_logs " &
-                                       "WHERE ActionType = 'ACCESS_DENIED' " &
-                                       "AND ActionDate >= NOW() - INTERVAL 1 HOUR"
+                                     "WHERE ActionType = 'ACCESS_DENIED' " &
+                                     "AND ActionDate >= NOW() - INTERVAL 1 HOUR"
             Using cmdCheck As New MySqlCommand(sqlCheck, cn)
                 Dim deniedCount As Integer = CInt(cmdCheck.ExecuteScalar())
                 If deniedCount > 0 Then
-                    MsgBox("⚠️ SECURITY NOTICE" & vbCrLf &
+                    MsgBox("⚠ SECURITY NOTICE" & vbCrLf &
                            "Someone attempted to access restricted area(s) without login." & vbCrLf &
                            deniedCount & " attempt(s) have been recorded.",
                            MsgBoxStyle.Exclamation, "System Alert")
@@ -120,8 +120,8 @@ Public Class frmlogin
         Dim passInput As String = txtPassword.Text.Trim()
 
         If userInput = "" OrElse userInput = "Please Enter your username" OrElse
-           passInput = "" OrElse passInput = "Please Enter your Password" Then
-            lblError.Text = "⚠️️ Please enter your username and password."
+            passInput = "" OrElse passInput = "Please Enter your Password" Then
+            lblError.Text = "⚠ Please enter your username and password."
             RecordActivityLog(0, userInput, "Anonymous", "EMPTY_ATTEMPT", "Authentication",
                               $"Empty attempt — Username: [{userInput}]")
             Return
@@ -146,7 +146,7 @@ Public Class frmlogin
         Dim dbPass As String = ""
         Dim fullName As String = ""
         Dim roleName As String = ""
-        Dim accStatus As String = "Active"
+        Dim accStatus As String = "Offline"
 
         Try
             If cn.State <> ConnectionState.Open Then connection()
@@ -258,7 +258,7 @@ Public Class frmlogin
             If String.IsNullOrEmpty(foundUserType) Then
                 lblError.Text = "⚠️ User does not exist. Please check your username."
                 RecordActivityLog(0, userInput, "Unknown", "FAILED_LOGIN", "Authentication",
-                                 note & $"Username not found — Input: [{userInput}]")
+                                  note & $"Username not found — Input: [{userInput}]")
                 Return
             End If
 
@@ -287,7 +287,7 @@ Public Class frmlogin
                 lblError.Text = "⚠️ Account pending approval. Please wait for admin confirmation."
                 txtPassword.Clear()
                 RecordActivityLog(recordId, userInput, roleName, "LOGIN_DENIED", "Authentication",
-                                  note & $"Pending account attempted to login — Input: [ {userInput}]")
+                                  note & $"Pending account attempted to login — Input: [{userInput}]")
                 Return
             End If
 
@@ -298,7 +298,7 @@ Public Class frmlogin
                 txtPassword.Clear()
                 Timer1.Start()
                 RecordActivityLog(recordId, userInput, roleName, "FAILED_LOGIN", "Authentication",
-                                 note & $"Attempt during lockout period — Input: [{userInput}]")
+                                  note & $"Attempt during lockout period — Input: [{userInput}]")
                 Return
             End If
 
@@ -313,7 +313,7 @@ Public Class frmlogin
 
                 ResetAttempts(foundUserType, userInput)
                 RecordActivityLog(recordId, LoggedInFullname, LoggedInRole, "LOGIN", "Authentication",
-                                 $"{roleName} logged in successfully — Username used: [{userInput}]")
+                                  $"{roleName} logged in successfully — Username used: [{userInput}]")
 
                 isLoginSuccess = True
                 lblError.Text = "✅ Login Success! Redirecting..."
@@ -362,7 +362,7 @@ Public Class frmlogin
                 End If
 
                 RecordActivityLog(recordId, userInput, roleName, "FAILED_LOGIN", "Authentication",
-                                 note & $"Wrong password — Attempt {attempts} of 3 — Input: [{userInput}]")
+                                  note & $"Wrong password — Attempt {attempts} of 3 — Input: [{userInput}]")
             End If
         Catch ex As Exception
             MsgBox("System encountered an error during login: " & ex.Message, MsgBoxStyle.Critical, "Login Error")
@@ -377,7 +377,8 @@ Public Class frmlogin
     Private Sub ResetAttempts(tableName As String, user As String)
         Try
             If cn.State <> ConnectionState.Open Then connection()
-            Dim updateSql As String = $"UPDATE {tableName} SET LoginAttempts=0, LockoutExpiry=NULL WHERE Username=@user"
+            ' ✅ Hahayaan na maging Active ang status nang walang harang sa pag-login
+            Dim updateSql As String = $"UPDATE {tableName} SET LoginAttempts=0, LockoutExpiry=NULL, AccountStatus='Active' WHERE Username=@user"
             Using cmd As New MySqlCommand(updateSql, cn)
                 cmd.Parameters.AddWithValue("@user", user)
                 cmd.ExecuteNonQuery()

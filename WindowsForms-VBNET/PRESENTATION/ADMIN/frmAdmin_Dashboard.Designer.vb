@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmAdmin_Dashboard
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,13 +20,31 @@ Partial Class frmAdmin_Dashboard
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmAdmin_Dashboard))
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lblDateTime = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel15 = New System.Windows.Forms.Panel()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.dgvTickets = New System.Windows.Forms.DataGridView()
+        Me.dgvActivityLogs = New System.Windows.Forms.DataGridView()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.dgvUsers = New System.Windows.Forms.DataGridView()
+        Me.lblTime = New System.Windows.Forms.Label()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.lblnewResident = New System.Windows.Forms.Label()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.lblAccountRecovery = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.lblUsers = New System.Windows.Forms.Label()
@@ -58,23 +76,18 @@ Partial Class frmAdmin_Dashboard
         Me.Label13 = New System.Windows.Forms.Label()
         Me.lblActive = New System.Windows.Forms.Label()
         Me.Panel13 = New System.Windows.Forms.Panel()
+        Me.lblLocked = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
-        Me.lblnewResident = New System.Windows.Forms.Label()
         Me.Panel14 = New System.Windows.Forms.Panel()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.lblStaff = New System.Windows.Forms.Label()
         Me.object_229da1f4_9cd3_4f72_b5f4_825c60d6ad66 = New System.Windows.Forms.DataGridView()
-        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.lblLocked = New System.Windows.Forms.Label()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
+        CType(Me.dgvTickets, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvActivityLogs, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvUsers, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel6.SuspendLayout()
+        Me.Panel5.SuspendLayout()
         Me.Panel9.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel11.SuspendLayout()
@@ -87,7 +100,6 @@ Partial Class frmAdmin_Dashboard
         Me.Panel13.SuspendLayout()
         Me.Panel14.SuspendLayout()
         CType(Me.object_229da1f4_9cd3_4f72_b5f4_825c60d6ad66, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel6.SuspendLayout()
         Me.SuspendLayout()
         '
         'Timer1
@@ -110,13 +122,18 @@ Partial Class frmAdmin_Dashboard
         'Panel1
         '
         Me.Panel1.AutoScroll = True
-        Me.Panel1.Controls.Add(Me.Label20)
+        Me.Panel1.Controls.Add(Me.Panel15)
+        Me.Panel1.Controls.Add(Me.Label25)
+        Me.Panel1.Controls.Add(Me.Label17)
+        Me.Panel1.Controls.Add(Me.dgvTickets)
+        Me.Panel1.Controls.Add(Me.dgvActivityLogs)
+        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.dgvUsers)
+        Me.Panel1.Controls.Add(Me.lblTime)
         Me.Panel1.Controls.Add(Me.Panel6)
         Me.Panel1.Controls.Add(Me.Panel5)
         Me.Panel1.Controls.Add(Me.Label14)
         Me.Panel1.Controls.Add(Me.Label12)
-        Me.Panel1.Controls.Add(Me.Label3)
-        Me.Panel1.Controls.Add(Me.DateTimePicker1)
         Me.Panel1.Controls.Add(Me.Panel9)
         Me.Panel1.Controls.Add(Me.Label11)
         Me.Panel1.Controls.Add(Me.PictureBox1)
@@ -137,6 +154,222 @@ Partial Class frmAdmin_Dashboard
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1366, 768)
         Me.Panel1.TabIndex = 520
+        '
+        'Panel15
+        '
+        Me.Panel15.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel15.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel15.Location = New System.Drawing.Point(997, 756)
+        Me.Panel15.Name = "Panel15"
+        Me.Panel15.Size = New System.Drawing.Size(325, 1109)
+        Me.Panel15.TabIndex = 748
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label25.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label25.Location = New System.Drawing.Point(60, 1116)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(208, 21)
+        Me.Label25.TabIndex = 751
+        Me.Label25.Text = "Account Recovery Request"
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label17.Location = New System.Drawing.Point(60, 1524)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(161, 21)
+        Me.Label17.TabIndex = 750
+        Me.Label17.Text = "Activity System Logs"
+        '
+        'dgvTickets
+        '
+        Me.dgvTickets.AllowUserToAddRows = False
+        Me.dgvTickets.AllowUserToDeleteRows = False
+        Me.dgvTickets.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvTickets.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.dgvTickets.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvTickets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvTickets.Location = New System.Drawing.Point(64, 1168)
+        Me.dgvTickets.Name = "dgvTickets"
+        Me.dgvTickets.ReadOnly = True
+        Me.dgvTickets.Size = New System.Drawing.Size(908, 290)
+        Me.dgvTickets.TabIndex = 749
+        '
+        'dgvActivityLogs
+        '
+        Me.dgvActivityLogs.AllowUserToAddRows = False
+        Me.dgvActivityLogs.AllowUserToDeleteRows = False
+        Me.dgvActivityLogs.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvActivityLogs.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.dgvActivityLogs.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvActivityLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvActivityLogs.Location = New System.Drawing.Point(64, 1575)
+        Me.dgvActivityLogs.Name = "dgvActivityLogs"
+        Me.dgvActivityLogs.ReadOnly = True
+        Me.dgvActivityLogs.Size = New System.Drawing.Size(908, 290)
+        Me.dgvActivityLogs.TabIndex = 748
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label3.Location = New System.Drawing.Point(60, 706)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(194, 21)
+        Me.Label3.TabIndex = 747
+        Me.Label3.Text = "User Accounts Active List"
+        '
+        'dgvUsers
+        '
+        Me.dgvUsers.AllowUserToAddRows = False
+        Me.dgvUsers.AllowUserToDeleteRows = False
+        Me.dgvUsers.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvUsers.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.dgvUsers.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvUsers.Location = New System.Drawing.Point(64, 756)
+        Me.dgvUsers.Name = "dgvUsers"
+        Me.dgvUsers.ReadOnly = True
+        Me.dgvUsers.Size = New System.Drawing.Size(908, 290)
+        Me.dgvUsers.TabIndex = 745
+        '
+        'lblTime
+        '
+        Me.lblTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTime.AutoSize = True
+        Me.lblTime.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTime.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblTime.Location = New System.Drawing.Point(960, 151)
+        Me.lblTime.Name = "lblTime"
+        Me.lblTime.Size = New System.Drawing.Size(84, 21)
+        Me.lblTime.TabIndex = 744
+        Me.lblTime.Text = "Date/time"
+        '
+        'Panel6
+        '
+        Me.Panel6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel6.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel6.Controls.Add(Me.Label24)
+        Me.Panel6.Controls.Add(Me.Label18)
+        Me.Panel6.Controls.Add(Me.lblnewResident)
+        Me.Panel6.Location = New System.Drawing.Point(997, 321)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(325, 191)
+        Me.Panel6.TabIndex = 639
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label24.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label24.Location = New System.Drawing.Point(16, 21)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(240, 25)
+        Me.Label24.TabIndex = 748
+        Me.Label24.Text = "New Residents Registered"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label18.Location = New System.Drawing.Point(20, 46)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(190, 17)
+        Me.Label18.TabIndex = 746
+        Me.Label18.Text = "New Residence Portal Created"
+        '
+        'lblnewResident
+        '
+        Me.lblnewResident.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblnewResident.AutoSize = True
+        Me.lblnewResident.Font = New System.Drawing.Font("Segoe UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblnewResident.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblnewResident.Location = New System.Drawing.Point(14, 72)
+        Me.lblnewResident.Name = "lblnewResident"
+        Me.lblnewResident.Size = New System.Drawing.Size(43, 50)
+        Me.lblnewResident.TabIndex = 525
+        Me.lblnewResident.Text = "0"
+        '
+        'Panel5
+        '
+        Me.Panel5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel5.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel5.Controls.Add(Me.lblAccountRecovery)
+        Me.Panel5.Controls.Add(Me.Label19)
+        Me.Panel5.Controls.Add(Me.Label21)
+        Me.Panel5.Location = New System.Drawing.Point(997, 534)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(325, 191)
+        Me.Panel5.TabIndex = 638
+        '
+        'lblAccountRecovery
+        '
+        Me.lblAccountRecovery.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblAccountRecovery.AutoSize = True
+        Me.lblAccountRecovery.Font = New System.Drawing.Font("Segoe UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAccountRecovery.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblAccountRecovery.Location = New System.Drawing.Point(14, 67)
+        Me.lblAccountRecovery.Name = "lblAccountRecovery"
+        Me.lblAccountRecovery.Size = New System.Drawing.Size(43, 50)
+        Me.lblAccountRecovery.TabIndex = 747
+        Me.lblAccountRecovery.Text = "0"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label19.Location = New System.Drawing.Point(18, 41)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(106, 17)
+        Me.Label19.TabIndex = 527
+        Me.Label19.Text = "Take action now"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label21.Location = New System.Drawing.Point(16, 16)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(249, 25)
+        Me.Label21.TabIndex = 745
+        Me.Label21.Text = "Account Recovery Request"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label14.Location = New System.Drawing.Point(60, 485)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(173, 21)
+        Me.Label14.TabIndex = 743
+        Me.Label14.Text = "Appointment Services"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label12.Location = New System.Drawing.Point(60, 264)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(108, 21)
+        Me.Label12.TabIndex = 521
+        Me.Label12.Text = "User Account"
         '
         'Panel9
         '
@@ -180,7 +413,7 @@ Partial Class frmAdmin_Dashboard
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label11.Location = New System.Drawing.Point(963, 3742)
+        Me.Label11.Location = New System.Drawing.Point(963, 13679)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(20, 25)
         Me.Label11.TabIndex = 529
@@ -224,7 +457,7 @@ Partial Class frmAdmin_Dashboard
         Me.Panel11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel11.Controls.Add(Me.Label7)
         Me.Panel11.Controls.Add(Me.lblTotalAppointments)
-        Me.Panel11.Location = New System.Drawing.Point(434, 594)
+        Me.Panel11.Location = New System.Drawing.Point(434, 534)
         Me.Panel11.Name = "Panel11"
         Me.Panel11.Size = New System.Drawing.Size(170, 86)
         Me.Panel11.TabIndex = 642
@@ -257,7 +490,7 @@ Partial Class frmAdmin_Dashboard
         '
         Me.Panel10.Location = New System.Drawing.Point(12, 66)
         Me.Panel10.Name = "Panel10"
-        Me.Panel10.Size = New System.Drawing.Size(10, 1604)
+        Me.Panel10.Size = New System.Drawing.Size(10, 1907)
         Me.Panel10.TabIndex = 646
         '
         'Panel8
@@ -299,7 +532,7 @@ Partial Class frmAdmin_Dashboard
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel2.Controls.Add(Me.Label6)
         Me.Panel2.Controls.Add(Me.lblCancelledWalkIn)
-        Me.Panel2.Location = New System.Drawing.Point(807, 594)
+        Me.Panel2.Location = New System.Drawing.Point(807, 534)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(170, 86)
         Me.Panel2.TabIndex = 641
@@ -334,7 +567,7 @@ Partial Class frmAdmin_Dashboard
         Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel3.Controls.Add(Me.Label2)
         Me.Panel3.Controls.Add(Me.lblOnline)
-        Me.Panel3.Location = New System.Drawing.Point(64, 594)
+        Me.Panel3.Location = New System.Drawing.Point(64, 534)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(170, 86)
         Me.Panel3.TabIndex = 639
@@ -369,7 +602,7 @@ Partial Class frmAdmin_Dashboard
         Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel4.Controls.Add(Me.Label4)
         Me.Panel4.Controls.Add(Me.lblCancelledOnline)
-        Me.Panel4.Location = New System.Drawing.Point(621, 594)
+        Me.Panel4.Location = New System.Drawing.Point(621, 534)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(170, 86)
         Me.Panel4.TabIndex = 640
@@ -404,7 +637,7 @@ Partial Class frmAdmin_Dashboard
         Me.Panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel7.Controls.Add(Me.Label10)
         Me.Panel7.Controls.Add(Me.lblWalkIn)
-        Me.Panel7.Location = New System.Drawing.Point(249, 594)
+        Me.Panel7.Location = New System.Drawing.Point(249, 534)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(170, 86)
         Me.Panel7.TabIndex = 638
@@ -491,6 +724,19 @@ Partial Class frmAdmin_Dashboard
         Me.Panel13.Size = New System.Drawing.Size(170, 86)
         Me.Panel13.TabIndex = 637
         '
+        'lblLocked
+        '
+        Me.lblLocked.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblLocked.AutoSize = True
+        Me.lblLocked.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLocked.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblLocked.Location = New System.Drawing.Point(15, 10)
+        Me.lblLocked.Name = "lblLocked"
+        Me.lblLocked.Size = New System.Drawing.Size(20, 25)
+        Me.lblLocked.TabIndex = 526
+        Me.lblLocked.Text = "-"
+        '
         'Label15
         '
         Me.Label15.AutoSize = True
@@ -501,19 +747,6 @@ Partial Class frmAdmin_Dashboard
         Me.Label15.Size = New System.Drawing.Size(50, 17)
         Me.Label15.TabIndex = 164
         Me.Label15.Text = "Locked"
-        '
-        'lblnewResident
-        '
-        Me.lblnewResident.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblnewResident.AutoSize = True
-        Me.lblnewResident.Font = New System.Drawing.Font("Segoe UI", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblnewResident.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblnewResident.Location = New System.Drawing.Point(14, 95)
-        Me.lblnewResident.Name = "lblnewResident"
-        Me.lblnewResident.Size = New System.Drawing.Size(43, 50)
-        Me.lblnewResident.TabIndex = 525
-        Me.lblnewResident.Text = "0"
         '
         'Panel14
         '
@@ -566,117 +799,6 @@ Partial Class frmAdmin_Dashboard
         Me.object_229da1f4_9cd3_4f72_b5f4_825c60d6ad66.Size = New System.Drawing.Size(928, 383)
         Me.object_229da1f4_9cd3_4f72_b5f4_825c60d6ad66.TabIndex = 508
         '
-        'DateTimePicker1
-        '
-        Me.DateTimePicker1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DateTimePicker1.Location = New System.Drawing.Point(80, 453)
-        Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(272, 29)
-        Me.DateTimePicker1.TabIndex = 742
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label3.Location = New System.Drawing.Point(76, 431)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(161, 19)
-        Me.Label3.TabIndex = 521
-        Me.Label3.Text = "Filter By Month and year"
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label12.Location = New System.Drawing.Point(60, 264)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(108, 21)
-        Me.Label12.TabIndex = 521
-        Me.Label12.Text = "User Account"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label14.Location = New System.Drawing.Point(60, 545)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(108, 21)
-        Me.Label14.TabIndex = 743
-        Me.Label14.Text = "User Account"
-        '
-        'Panel5
-        '
-        Me.Panel5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel5.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel5.Location = New System.Drawing.Point(1002, 534)
-        Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(325, 413)
-        Me.Panel5.TabIndex = 638
-        '
-        'Panel6
-        '
-        Me.Panel6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel6.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel6.Controls.Add(Me.Label19)
-        Me.Panel6.Controls.Add(Me.Label17)
-        Me.Panel6.Controls.Add(Me.lblnewResident)
-        Me.Panel6.Location = New System.Drawing.Point(1002, 321)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(325, 191)
-        Me.Panel6.TabIndex = 639
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Font = New System.Drawing.Font("Segoe UI Semibold", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label17.Location = New System.Drawing.Point(16, 20)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(288, 37)
-        Me.Label17.TabIndex = 744
-        Me.Label17.Text = "New Residence Added"
-        '
-        'lblLocked
-        '
-        Me.lblLocked.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblLocked.AutoSize = True
-        Me.lblLocked.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLocked.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblLocked.Location = New System.Drawing.Point(15, 10)
-        Me.lblLocked.Name = "lblLocked"
-        Me.lblLocked.Size = New System.Drawing.Size(20, 25)
-        Me.lblLocked.TabIndex = 526
-        Me.lblLocked.Text = "-"
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = True
-        Me.Label19.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label19.Location = New System.Drawing.Point(20, 57)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(106, 17)
-        Me.Label19.TabIndex = 527
-        Me.Label19.Text = "Take action now"
-        '
-        'Label20
-        '
-        Me.Label20.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label20.AutoSize = True
-        Me.Label20.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label20.Location = New System.Drawing.Point(1022, 148)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(84, 21)
-        Me.Label20.TabIndex = 744
-        Me.Label20.Text = "Date/time"
-        '
         'frmAdmin_Dashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -691,6 +813,13 @@ Partial Class frmAdmin_Dashboard
         Me.Text = "frmAdmin_Dashboard"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.dgvTickets, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvActivityLogs, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvUsers, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
         Me.Panel9.ResumeLayout(False)
         Me.Panel9.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -713,8 +842,6 @@ Partial Class frmAdmin_Dashboard
         Me.Panel14.ResumeLayout(False)
         Me.Panel14.PerformLayout()
         CType(Me.object_229da1f4_9cd3_4f72_b5f4_825c60d6ad66, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel6.ResumeLayout(False)
-        Me.Panel6.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -759,14 +886,22 @@ Partial Class frmAdmin_Dashboard
     Friend WithEvents Panel9 As Panel
     Friend WithEvents Label8 As Label
     Friend WithEvents lblUsers As Label
-    Friend WithEvents Label3 As Label
-    Friend WithEvents DateTimePicker1 As DateTimePicker
     Friend WithEvents Panel5 As Panel
     Friend WithEvents Label14 As Label
     Friend WithEvents Label12 As Label
     Friend WithEvents Panel6 As Panel
-    Friend WithEvents Label17 As Label
     Friend WithEvents lblLocked As Label
     Friend WithEvents Label19 As Label
-    Friend WithEvents Label20 As Label
+    Friend WithEvents lblTime As Label
+    Friend WithEvents dgvUsers As DataGridView
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Label18 As Label
+    Friend WithEvents lblAccountRecovery As Label
+    Friend WithEvents dgvActivityLogs As DataGridView
+    Friend WithEvents Label24 As Label
+    Friend WithEvents dgvTickets As DataGridView
+    Friend WithEvents Label25 As Label
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Panel15 As Panel
 End Class

@@ -148,7 +148,7 @@ Partial Class frmCreateAppointment
         Me.btnClearAll.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClearAll.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.btnClearAll.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClearAll.Location = New System.Drawing.Point(885, 838)
+        Me.btnClearAll.Location = New System.Drawing.Point(919, 838)
         Me.btnClearAll.Name = "btnClearAll"
         Me.btnClearAll.Size = New System.Drawing.Size(161, 37)
         Me.btnClearAll.TabIndex = 714
@@ -165,7 +165,7 @@ Partial Class frmCreateAppointment
         Me.btnCreateRequest.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCreateRequest.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnCreateRequest.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnCreateRequest.Location = New System.Drawing.Point(1052, 838)
+        Me.btnCreateRequest.Location = New System.Drawing.Point(1086, 838)
         Me.btnCreateRequest.Name = "btnCreateRequest"
         Me.btnCreateRequest.Size = New System.Drawing.Size(161, 37)
         Me.btnCreateRequest.TabIndex = 713
@@ -200,7 +200,7 @@ Partial Class frmCreateAppointment
         Me.pnlaccountsystem.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlaccountsystem.Location = New System.Drawing.Point(37, 126)
         Me.pnlaccountsystem.Name = "pnlaccountsystem"
-        Me.pnlaccountsystem.Size = New System.Drawing.Size(1278, 235)
+        Me.pnlaccountsystem.Size = New System.Drawing.Size(1210, 235)
         Me.pnlaccountsystem.TabIndex = 711
         '
         'cboPurpose
@@ -372,7 +372,7 @@ Partial Class frmCreateAppointment
         Me.Panel3.Controls.Add(Me.lblLastnameError)
         Me.Panel3.Location = New System.Drawing.Point(37, 415)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(1278, 401)
+        Me.Panel3.Size = New System.Drawing.Size(1210, 401)
         Me.Panel3.TabIndex = 710
         '
         'btnSelectResident
@@ -384,7 +384,7 @@ Partial Class frmCreateAppointment
         Me.btnSelectResident.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSelectResident.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.btnSelectResident.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSelectResident.Location = New System.Drawing.Point(1227, 13)
+        Me.btnSelectResident.Location = New System.Drawing.Point(1159, 13)
         Me.btnSelectResident.Name = "btnSelectResident"
         Me.btnSelectResident.Size = New System.Drawing.Size(36, 30)
         Me.btnSelectResident.TabIndex = 724

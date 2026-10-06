@@ -23,6 +23,9 @@ Public Class frmMain
         End Get
     End Property
 
+    ' === FLAG PARA SA PROPER LOGOUT ===
+    Private isLoggedOutProperly As Boolean = False
+
     ' === PANEL DIMENSIONS PARA SA TOGGLE LOGIC LANG ===
     Private Const ICON_RAIL_WIDTH As Integer = 70
     Private Const MENU_PANEL_WIDTH As Integer = 200
@@ -30,29 +33,90 @@ Public Class frmMain
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' --- SECURITY CHECK ---
         If String.IsNullOrWhiteSpace(frmlogin.LoggedInUsername) OrElse
-       String.IsNullOrWhiteSpace(frmlogin.LoggedInFullname) Then
+           String.IsNullOrWhiteSpace(frmlogin.LoggedInFullname) Then
             LogUnauthorizedAttempt()
+            isLoggedOutProperly = True
             Me.Close()
             frmlogin.Show()
             Return
         End If
 
         ' --- ROLE-BASED VISIBILITY ---
-        Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
-
-        ' ✅ Admin lang makakakita sa mga ito
-        btnUsers.Visible = isAdmin
-        Button1.Visible = isAdmin
-        Button2.Visible = isAdmin
-        btnRecoverAccount.Visible = isAdmin   ' ← DAGDAG ITO
+        AccessorRoleVisibility()
 
         ' --- LOAD DEFAULT DASHBOARD ---
         Panel2.Controls.Clear()
+        Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
         Dim defaultForm As Form = If(isAdmin,
-        New frmAdmin_Dashboard With {.TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill},
-        New frmUser_Dashboard With {.TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill})
+            New frmAdmin_Dashboard With {.TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill},
+            New frmUser_Dashboard With {.TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill})
         Panel2.Controls.Add(defaultForm)
         defaultForm.Show()
+    End Sub
+
+    Private Sub AccessorRoleVisibility()
+        Dim isAdmin As Boolean = String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase)
+
+        ' Admin-only buttons
+        btnUsers.Visible = isAdmin
+        Button1.Visible = isAdmin
+        Button2.Visible = isAdmin
+        btnRecoverAccount.Visible = isAdmin
+
+        ' 🛑 TANGGALIN SA ADMIN ANG PAYMENT AT APPOINTMENT CREATION ACCESS
+        ' Halimbawa, itatago natin ang btnPayments kapag Admin ang nakalogin:
+        If btnPayments IsNot Nothing Then
+            btnPayments.Visible = Not isAdmin
+        End If
+    End Sub
+
+    ' === ✅ AUTOMATIC OFFLINE KAHIT NAG-CRASH O BIGLANG NAG-EXIT ===
+    Private Sub frmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        If Not isLoggedOutProperly AndAlso LoggedUserID > 0 Then
+            ForceSetOfflineAndLog()
+        End If
+    End Sub
+
+    Private Sub ForceSetOfflineAndLog()
+        Try
+            If cn.State <> ConnectionState.Open Then connection()
+            Dim userId As Integer = LoggedUserID
+            Dim targetTable As String = "users"
+            Dim idColumnName As String = "UserID"
+
+            If String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase) Then
+                targetTable = "admin"
+                idColumnName = "AdminID"
+            ElseIf String.Equals(LoggedRole, "Residence", StringComparison.OrdinalIgnoreCase) OrElse
+                   String.Equals(LoggedRole, "Resident", StringComparison.OrdinalIgnoreCase) Then
+                targetTable = "residences"
+                idColumnName = "ResidentID"
+            End If
+
+            ' 1. I-update ang status pabalik sa Offline
+            Using cmdUpdate As New MySqlCommand($"UPDATE {targetTable} SET AccountStatus='Offline' WHERE {idColumnName}=@userId", cn)
+                cmdUpdate.Parameters.AddWithValue("@userId", userId)
+                cmdUpdate.ExecuteNonQuery()
+            End Using
+
+            ' 2. Mag-iwan ng security/crash log sa activity_logs
+            Dim ipAddress As String = GetLocalIPAddress()
+            Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
+
+            Using cmdLog As New MySqlCommand(
+                "INSERT INTO activity_logs (UserID,FullName,UserRole,ActionType,Module,Details,ActionDate,IPAddress,DeviceInfo) " &
+                "VALUES (@uid,@fn,@role,'FORCE_OFFLINE','Authentication','Session terminated unexpectedly or crashed',NOW(),@ip,@dev)", cn)
+                cmdLog.Parameters.AddWithValue("@uid", userId)
+                cmdLog.Parameters.AddWithValue("@fn", If(String.IsNullOrEmpty(LoggedFullname), "Unknown", LoggedFullname))
+                cmdLog.Parameters.AddWithValue("@role", If(String.IsNullOrEmpty(LoggedRole), "System", LoggedRole))
+                cmdLog.Parameters.AddWithValue("@ip", ipAddress)
+                cmdLog.Parameters.AddWithValue("@dev", deviceInfo)
+                cmdLog.ExecuteNonQuery()
+            End Using
+        Catch ex As Exception
+        Finally
+            CloseConnection()
+        End Try
     End Sub
 
     ' === KAPAG NAG-RESIZE ANG FORM ===
@@ -70,8 +134,6 @@ Public Class frmMain
         End If
     End Sub
 
-    ' === TOGGLE SIDEBAR ===
-
     ' === MENU NAVIGATION ===
     Private Sub btnHome_Click(sender As Object, e As EventArgs) Handles btnHome.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
@@ -87,6 +149,12 @@ Public Class frmMain
     End Sub
 
     Private Sub btnPayments_Click(sender As Object, e As EventArgs) Handles btnPayments.Click
+        ' 🛑 HARANGAN ANG ADMIN NA PUMUNTA SA PAYMENT
+        If String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase) Then
+            MsgBox("Access Denied: Administrators are not allowed to access payment transactions.", MsgBoxStyle.Exclamation, "Restricted")
+            Return
+        End If
+
         Dim Payments As New frmPayments With {
             .TopLevel = False, .FormBorderStyle = FormBorderStyle.None, .Dock = DockStyle.Fill, .PreviousForm = Me}
         Panel2.Controls.Clear()
@@ -112,25 +180,34 @@ Public Class frmMain
     Private Sub btnClose_Click_1(sender As Object, e As EventArgs) Handles btnClose.Click
         If MsgBox("Are you sure you want to logout?",
                   MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Logout") = MsgBoxResult.No Then Return
+
+        isLoggedOutProperly = True
+
         Try
             connection()
             Dim userId As Integer = LoggedUserID
             Dim targetTable As String = "users"
             Dim idColumnName As String = "UserID"
+
             If String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase) Then
-                targetTable = "admin" : idColumnName = "AdminID"
+                targetTable = "admin"
+                idColumnName = "AdminID"
             ElseIf String.Equals(LoggedRole, "Residence", StringComparison.OrdinalIgnoreCase) OrElse
                    String.Equals(LoggedRole, "Resident", StringComparison.OrdinalIgnoreCase) Then
-                targetTable = "residences" : idColumnName = "ResidentID"
+                targetTable = "residences"
+                idColumnName = "ResidentID"
             End If
+
             If userId > 0 Then
                 Using cmdUpdate As New MySqlCommand($"UPDATE {targetTable} SET AccountStatus='Offline' WHERE {idColumnName}=@userId", cn)
                     cmdUpdate.Parameters.AddWithValue("@userId", userId)
                     cmdUpdate.ExecuteNonQuery()
                 End Using
             End If
+
             Dim ipAddress As String = GetLocalIPAddress()
             Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
+
             Using cmdLog As New MySqlCommand(
                 "INSERT INTO activity_logs (UserID,FullName,UserRole,ActionType,Module,Details,ActionDate,IPAddress,DeviceInfo) " &
                 "VALUES (@uid,@fn,@role,'LOGOUT','Authentication','User logged out',NOW(),@ip,@dev)", cn)
@@ -141,6 +218,7 @@ Public Class frmMain
                 cmdLog.Parameters.AddWithValue("@dev", deviceInfo)
                 cmdLog.ExecuteNonQuery()
             End Using
+
         Catch ex As Exception
             MsgBox("Logout error: " & ex.Message, MsgBoxStyle.Critical)
         Finally
@@ -225,7 +303,7 @@ Public Class frmMain
             GetType(Barangay_Residences), GetType(Barangay_Residences)))
     End Sub
 
-    ' === HELPER: LOAD FORM SA PANEL ===
+    ' === HELPER: TOGGLE SIDEBAR ===
     Private Sub btnToggleSidebar_Click(sender As Object, e As EventArgs) Handles btnToggleSidebar.Click
         If panelMenu.Visible Then
             panelMenu.Visible = False
@@ -238,15 +316,15 @@ Public Class frmMain
         End If
     End Sub
 
-    'Create a new Sattelite Office Form
+    ' === SATELLITE OFFICE NAVIGATION ===
     Private Sub btnCreateSatelliteOffice_Click(sender As Object, e As EventArgs) Handles btnCreateSatelliteOffice.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
-    GetType(frmCreateNewSateliteOffice), GetType(frmCreateNewSateliteOffice)))
+            GetType(frmCreateNewSateliteOffice), GetType(frmCreateNewSateliteOffice)))
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         LoadFormIntoPanel(If(String.Equals(LoggedRole, "Administrator", StringComparison.OrdinalIgnoreCase),
-GetType(frmSatelliteOfficeList), GetType(frmSatelliteOfficeList)))
+            GetType(frmSatelliteOfficeList), GetType(frmSatelliteOfficeList)))
     End Sub
 
     Private Sub btnRecoverAccount_Click(sender As Object, e As EventArgs) Handles btnRecoverAccount.Click

@@ -1,10 +1,15 @@
-using Barangay_Service_Appointment_System.Models;
 using Barangay_Service_Appointment_System.Data;
-using Microsoft.AspNetCore.Mvc;
+using Barangay_Service_Appointment_System.Models;
+using Barangay_Service_Appointment_System.ViewModels;
 using Microsoft.AspNetCore.Http;
-using System.Diagnostics;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Barangay_Service_Appointment_System.Controllers
 {
@@ -35,11 +40,41 @@ namespace Barangay_Service_Appointment_System.Controllers
                 return NotFound("Resident profile not found.");
             }
 
-            return View(resident);
+            var appointments = _context.Appointments
+                .Where(a => a.ResidentID == resident.ResidentID)
+                .OrderByDescending(a => a.DateSubmitted)
+                .ToList();
+
+            // Kunin ang buong Document Services kung saan IsActive == true
+            var documentServicesList = _context.DocumentServices
+                .Where(ds => ds.IsActive == true)
+                .ToList();
+
+            // Kunin ang buong Service Details (may kasamang Service_ID at Purpose)
+            var serviceDetailsList = _context.ServiceDetails
+                .ToList();
+
+            var savedRelatives = _context.Relatives
+                .Where(r => r.UserID == resident.ResidentID)
+                .ToList();
+
+            var viewModel = new ResidentDashboardViewModel
+            {
+                Resident = resident,
+                Appointments = appointments,
+                DocumentServicesList = documentServicesList,
+                ServiceDetailsList = serviceDetailsList,
+                SavedRelatives = savedRelatives
+            };
+
+            return View(viewModel);
         }
 
-        [HttpGet]
-        public IActionResult CreateAppointment()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAppointment(ResidentDashboardViewModel model,
+      string? RelativeFirstname, string? RelativeLastname, string? RelativeRelationship,
+      string? RelativeMobileNumber, string? RelativeEmail, string? RelativeAddress)
         {
             string? userEmail = HttpContext.Session.GetString("UserEmail");
 
@@ -49,42 +84,46 @@ namespace Barangay_Service_Appointment_System.Controllers
             }
 
             var resident = _context.Residences.FirstOrDefault(r => r.Email == userEmail);
+            var appt = model.NewAppointment;
 
-            if (resident == null)
+            appt.ControlNo = "APP-" + new Random().Next(1000, 9999);
+            appt.Status = "PENDING";
+            appt.PaymentStatus = "UNPAID";
+            appt.DateSubmitted = DateTime.Now;
+            appt.AppointmentType = "Online";
+
+            // Siguraduhing may laman ang FullAddress galing sa Resident profile kung sakaling null
+            if (string.IsNullOrEmpty(appt.FullAddress) && resident != null)
             {
-                return NotFound("Resident profile not found.");
+                appt.FullAddress = resident.Address;
+                appt.FullName = resident.FullName;
+                appt.EmailAddress = resident.Email;
+                appt.PhoneNumber = resident.MobileNumber;
             }
 
-            var appointment = new AppointmentModel
+            // Kung hindi "Self" ang pinili, i-save ang impormasyon sa Relatives table
+            if (appt.RequestFor != "Self" && !string.IsNullOrEmpty(RelativeFirstname))
             {
-                ResidentID = resident.ResidentID,
-                FullName = resident.FullName,
-                EmailAddress = resident.Email,
-                PhoneNumber = resident.MobileNumber,
-                FullAddress = resident.Address
-            };
+                var newRelative = new RelativesModel
+                {
+                    UserID = appt.ResidentID,
+                    Firstname = RelativeFirstname,
+                    Lastname = RelativeLastname,
+                    Relationship = RelativeRelationship,
+                    MobileNumber = RelativeMobileNumber,
+                    Email = RelativeEmail,
+                    Address = RelativeAddress
+                };
 
-            return View(appointment);
-        }
-
-        [HttpPost]
-        public IActionResult CreateAppointment(AppointmentModel model)
-        {
-            string? userEmail = HttpContext.Session.GetString("UserEmail");
-
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                return RedirectToAction("Login", "Account");
+                _context.Relatives.Add(newRelative);
+                await _context.SaveChangesAsync();
             }
 
-            model.ControlNo = "BP-" + DateTime.Now.ToString("yyyyMMdd") + "-" + new Random().Next(1000, 9999);
-            model.Status = "PENDING";
-            model.PaymentStatus = "UNPAID";
-            model.DateSubmitted = DateTime.Now;
+            _context.Appointments.Add(appt);
+            await _context.SaveChangesAsync();
 
-            // Alisin ang comment sa ibaba kapag naidagdag na ang DbSet<AppointmentModel> sa ApplicationDbContext
-            // _context.Appointments.Add(model);
-            // _context.SaveChanges();
+            TempData["SuccessMessage"] = "Appointment Submitted Successfully!";
+            TempData["ControlNo"] = appt.ControlNo;
 
             return RedirectToAction("Index", "Home");
         }

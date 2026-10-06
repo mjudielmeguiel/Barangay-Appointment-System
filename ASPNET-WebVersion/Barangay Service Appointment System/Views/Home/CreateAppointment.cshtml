@@ -14,6 +14,16 @@
 
                 <input type="hidden" asp-for="ResidentID" />
 
+                <!-- Control Number Field (Auto-generated & Readonly) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-primary">Control No.</label>
+                        <input asp-for="ControlNo" class="form-control bg-light fw-bold text-dark" readonly />
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+
                 <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Personal Information (Auto-filled)</h6>
                 <div class="row g-3 mb-4">
                     <div class="col-md-12">

@@ -8,8 +8,9 @@ Public Class frmCreateAppointment
     Private _skipClosePrompt As Boolean = False
     Private selectedRepresentativeID As Integer = 0
 
-    Public isEditMode As Boolean = False
+    Public IsEditMode As Boolean = False
     Public editControlNo As String = ""
+    Private currentAppointmentStatus As String = "PROCESSING"
 
     Private allServices As New List(Of ServiceItem)()
     Private allPurposes As New List(Of String)()
@@ -29,10 +30,11 @@ Public Class frmCreateAppointment
         InitializeComponent()
     End Sub
 
-    Public Sub New(ByVal controlNo As String)
+    Public Sub New(ByVal controlNo As String, Optional ByVal status As String = "PROCESSING")
         InitializeComponent()
-        isEditMode = True
+        IsEditMode = True
         editControlNo = controlNo
+        currentAppointmentStatus = status.ToUpper()
     End Sub
 
     Private Sub frmCreateAppointment_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -54,18 +56,35 @@ Public Class frmCreateAppointment
         ToggleRepresentativeFields(False)
         LoadDocumentServices()
 
-        If isEditMode Then
+        If IsEditMode Then
             lblControlNo.Text = editControlNo
             LoadExistingDataForEdit()
-            btnCreateRequest.Text = "Update Request"
+
+            Select Case currentAppointmentStatus
+                Case "PENDING"
+                    btnCreateRequest.Text = "Review & Approve"
+                Case "APPROVE", "APPROVED"
+                    btnCreateRequest.Text = "Proceed to Processing"
+                Case "PROCESSING"
+                    btnCreateRequest.Text = "Update & Move Next"
+                Case Else
+                    btnCreateRequest.Text = "Update Request"
+            End Select
         Else
             lblControlNo.Text = GenerateControlNumber()
             LoadLoggedUserDefault()
+            currentAppointmentStatus = "APPROVE" ' ✅ Nagsisimula na sa APPROVE kapag bago
+            btnCreateRequest.Text = "Submit Request"
         End If
     End Sub
 
     Private Sub cboRequestType_TextUpdate(sender As Object, e As EventArgs) Handles cboRequestType.TextUpdate
         isFilteringType = True
+        RefilterRequestTypes()
+        isFilteringType = False
+    End Sub
+
+    Private Sub RefilterRequestTypes()
         Dim typedText As String = cboRequestType.Text
         Dim cursorPos As Integer = cboRequestType.SelectionStart
 
@@ -82,7 +101,6 @@ Public Class frmCreateAppointment
         cboRequestType.SelectionStart = cursorPos
         cboRequestType.DroppedDown = True
         Cursor.Current = Cursors.Default
-        isFilteringType = False
     End Sub
 
     Private Sub cboPurpose_TextUpdate(sender As Object, e As EventArgs) Handles cboPurpose.TextUpdate
@@ -183,6 +201,10 @@ Public Class frmCreateAppointment
                 repName = If(IsDBNull(dr("RepresentativeName")), "", dr("RepresentativeName").ToString())
                 reqType = If(IsDBNull(dr("RequestType")), "", dr("RequestType").ToString())
                 purpose = If(IsDBNull(dr("Purpose")), "", dr("Purpose").ToString())
+
+                If Not IsDBNull(dr("Status")) Then
+                    currentAppointmentStatus = dr("Status").ToString().Trim().ToUpper()
+                End If
             End If
             dr.Close()
         Catch ex As Exception
@@ -229,6 +251,24 @@ Public Class frmCreateAppointment
             End If
         Next
         Return ""
+    End Function
+
+    Private Function GetDocumentPrice(serviceName As String) As Decimal
+        Try
+            If cn.State <> ConnectionState.Open Then connection()
+            sql = "SELECT Amount FROM document_services WHERE ServiceName LIKE @Name LIMIT 1"
+            Using cmdPrice As New MySqlCommand(sql, cn)
+                cmdPrice.Parameters.AddWithValue("@Name", "%" & serviceName & "%")
+                Dim result = cmdPrice.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                    Return Convert.ToDecimal(result)
+                End If
+            End Using
+        Catch ex As Exception
+        Finally
+            CloseConnection()
+        End Try
+        Return 0D
     End Function
 
     Private Function GenerateControlNumber() As String
@@ -279,7 +319,6 @@ Public Class frmCreateAppointment
         End Using
     End Sub
 
-    ' === PINATIBAY NA LOGIC (MAY KANYA-KANYANG TRY-CATCH) ===
     Private Sub LoadResidentData(resID As Integer)
         Try
             If cn.State <> ConnectionState.Open Then connection()
@@ -291,124 +330,26 @@ Public Class frmCreateAppointment
             If dr.Read() Then
                 selectedResidentID = resID
 
-                ' 1. Lastname
-                Try
-                    If IsDBNull(dr("Lastname")) OrElse String.IsNullOrWhiteSpace(dr("Lastname").ToString()) Then
-                        txtLastname.Text = "N/A"
-                    Else
-                        txtLastname.Text = dr("Lastname").ToString().Trim()
-                    End If
-                Catch : End Try
+                If Not IsDBNull(dr("Lastname")) Then txtLastname.Text = dr("Lastname").ToString().Trim() Else txtLastname.Text = "N/A"
+                If Not IsDBNull(dr("Firstname")) Then txtFirstname.Text = dr("Firstname").ToString().Trim() Else txtFirstname.Text = "N/A"
+                If Not IsDBNull(dr("Middlename")) Then txtMiddle.Text = dr("Middlename").ToString().Trim() Else txtMiddle.Text = "N/A"
+                If Not IsDBNull(dr("Suffix")) Then cboSuffix.Text = dr("Suffix").ToString().Trim() Else cboSuffix.Text = "N/A"
 
-                ' 2. Firstname
-                Try
-                    If IsDBNull(dr("Firstname")) OrElse String.IsNullOrWhiteSpace(dr("Firstname").ToString()) Then
-                        txtFirstname.Text = "N/A"
-                    Else
-                        txtFirstname.Text = dr("Firstname").ToString().Trim()
-                    End If
-                Catch : End Try
+                If Not IsDBNull(dr("Birthday")) Then
+                    dtpDateOfBirth.Value = Convert.ToDateTime(dr("Birthday"))
+                End If
 
-                ' 3. Middlename
-                Try
-                    If IsDBNull(dr("Middlename")) OrElse String.IsNullOrWhiteSpace(dr("Middlename").ToString()) Then
-                        txtMiddle.Text = "N/A"
-                    Else
-                        txtMiddle.Text = dr("Middlename").ToString().Trim()
-                    End If
-                Catch : End Try
+                If Not IsDBNull(dr("BirthPlace")) Then txtBirthPlace.Text = dr("BirthPlace").ToString().Trim() Else txtBirthPlace.Text = "N/A"
+                If Not IsDBNull(dr("Gender")) Then cboGender.Text = dr("Gender").ToString().Trim() Else cboGender.Text = "N/A"
+                If Not IsDBNull(dr("CivilStatus")) Then cboCivilStatus.Text = dr("CivilStatus").ToString().Trim() Else cboCivilStatus.Text = "N/A"
+                If Not IsDBNull(dr("FatherName")) Then txtFatherName.Text = dr("FatherName").ToString().Trim() Else txtFatherName.Text = "N/A"
+                If Not IsDBNull(dr("MotherName")) Then txtMotherName.Text = dr("MotherName").ToString().Trim() Else txtMotherName.Text = "N/A"
+                If Not IsDBNull(dr("MobileNumber")) Then txtMobileNumber.Text = dr("MobileNumber").ToString().Trim() Else txtMobileNumber.Text = "N/A"
+                If Not IsDBNull(dr("Email")) Then txtEmail.Text = dr("Email").ToString().Trim() Else txtEmail.Text = "N/A"
 
-                ' 4. Suffix
-                Try
-                    If IsDBNull(dr("Suffix")) OrElse String.IsNullOrWhiteSpace(dr("Suffix").ToString()) Then
-                        cboSuffix.Text = "N/A"
-                    Else
-                        cboSuffix.Text = dr("Suffix").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 5. Birthday
-                Try
-                    If Not IsDBNull(dr("Birthday")) Then
-                        dtpDateOfBirth.Value = Convert.ToDateTime(dr("Birthday"))
-                    End If
-                Catch : End Try
-
-                ' 6. BirthPlace
-                Try
-                    If IsDBNull(dr("BirthPlace")) OrElse String.IsNullOrWhiteSpace(dr("BirthPlace").ToString()) Then
-                        txtBirthPlace.Text = "N/A"
-                    Else
-                        txtBirthPlace.Text = dr("BirthPlace").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 7. Gender
-                Try
-                    If IsDBNull(dr("Gender")) OrElse String.IsNullOrWhiteSpace(dr("Gender").ToString()) Then
-                        cboGender.Text = "N/A"
-                    Else
-                        cboGender.Text = dr("Gender").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 8. Civil Status
-                Try
-                    If IsDBNull(dr("CivilStatus")) OrElse String.IsNullOrWhiteSpace(dr("CivilStatus").ToString()) Then
-                        cboCivilStatus.Text = "N/A"
-                    Else
-                        cboCivilStatus.Text = dr("CivilStatus").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 9. FatherName
-                Try
-                    If IsDBNull(dr("FatherName")) OrElse String.IsNullOrWhiteSpace(dr("FatherName").ToString()) Then
-                        txtFatherName.Text = "N/A"
-                    Else
-                        txtFatherName.Text = dr("FatherName").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 10. MotherName
-                Try
-                    If IsDBNull(dr("MotherName")) OrElse String.IsNullOrWhiteSpace(dr("MotherName").ToString()) Then
-                        txtMotherName.Text = "N/A"
-                    Else
-                        txtMotherName.Text = dr("MotherName").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 11. Mobile Number
-                Try
-                    If IsDBNull(dr("MobileNumber")) OrElse String.IsNullOrWhiteSpace(dr("MobileNumber").ToString()) Then
-                        txtMobileNumber.Text = "N/A"
-                    Else
-                        txtMobileNumber.Text = dr("MobileNumber").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 12. Email
-                Try
-                    If IsDBNull(dr("Email")) OrElse String.IsNullOrWhiteSpace(dr("Email").ToString()) Then
-                        txtEmail.Text = "N/A"
-                    Else
-                        txtEmail.Text = dr("Email").ToString().Trim()
-                    End If
-                Catch : End Try
-
-                ' 13. Full Address (Pinalitan ang lumang Street/Barangay/City logic)
-                Try
-                    If IsDBNull(dr("Address")) OrElse String.IsNullOrWhiteSpace(dr("Address").ToString()) Then
-                        txtAddress.Text = "N/A"
-                        selectedResidentAddress = ""
-                    Else
-                        Dim fAddress As String = dr("Address").ToString().Trim()
-                        txtAddress.Text = fAddress
-                        selectedResidentAddress = fAddress
-                    End If
-                Catch : End Try
-
+                Dim fAddress As String = If(IsDBNull(dr("Address")), "N/A", dr("Address").ToString().Trim())
+                txtAddress.Text = fAddress
+                selectedResidentAddress = fAddress
             Else
                 MsgBox("Walang nahanap na impormasyon sa database para sa Resident ID: " & resID, MsgBoxStyle.Exclamation)
             End If
@@ -420,15 +361,15 @@ Public Class frmCreateAppointment
         End Try
     End Sub
 
-    Private Function SaveAppointment(ByVal status As String) As Boolean
+    Private Function SaveAppointment(ByVal statusToSave As String) As Boolean
         Try
             If cn.State <> ConnectionState.Open Then connection()
             Dim isRepresentative As Boolean = (cboRequestFor.Text.Trim() = "Family Member / Relative" OrElse cboRequestFor.Text.Trim() = "Representative / On Behalf")
             Dim autoDepartment As String = GetSelectedDepartment()
             Dim combinedFullName As String = $"{txtFirstname.Text.Trim()} {txtLastname.Text.Trim()}".Trim()
 
-            If isEditMode Then
-                sql = "UPDATE appointments SET ResidentID=@resID, FullName=@name, FullAddress=@address, RequestFor=@reqFor, RepresentativeName=@repName, RequestType=@reqType, Purpose=@purpose, Department=@dept, UpdatedAt=NOW() WHERE ControlNo=@ctrl"
+            If IsEditMode Then
+                sql = "UPDATE appointments SET ResidentID=@resID, FullName=@name, FullAddress=@address, RequestFor=@reqFor, RepresentativeName=@repName, RequestType=@reqType, Purpose=@purpose, Department=@dept, Status=@status, UpdatedAt=NOW() WHERE ControlNo=@ctrl"
             Else
                 sql = "INSERT INTO appointments (ControlNo, ResidentID, FullName, FullAddress, RequestFor, RepresentativeName, RequestType, Purpose, Department, DateSubmitted, ScheduledDate, Status, CreatedAt) VALUES (@ctrl, @resID, @name, @address, @reqFor, @repName, @reqType, @purpose, @dept, NOW(), NOW(), @status, NOW())"
             End If
@@ -437,17 +378,13 @@ Public Class frmCreateAppointment
             cmd.Parameters.AddWithValue("@ctrl", lblControlNo.Text.Trim())
             cmd.Parameters.AddWithValue("@resID", If(selectedResidentID > 0, selectedResidentID, DBNull.Value))
             cmd.Parameters.AddWithValue("@name", combinedFullName)
-
-            ' Kinukuha ang address mula mismo sa txtAddress para kapag na-edit sa form ay ma-update sa database
             cmd.Parameters.AddWithValue("@address", If(String.IsNullOrWhiteSpace(txtAddress.Text), "", txtAddress.Text.Trim()))
-
             cmd.Parameters.AddWithValue("@reqFor", If(String.IsNullOrWhiteSpace(cboRequestFor.Text.Trim()), "", cboRequestFor.Text.Trim()))
             cmd.Parameters.AddWithValue("@repName", If(isRepresentative AndAlso Not String.IsNullOrWhiteSpace(txtNameOfRepresentative.Text.Trim()), txtNameOfRepresentative.Text.Trim(), ""))
             cmd.Parameters.AddWithValue("@reqType", If(String.IsNullOrWhiteSpace(cboRequestType.Text.Trim()), "", cboRequestType.Text.Trim()))
             cmd.Parameters.AddWithValue("@purpose", If(String.IsNullOrWhiteSpace(cboPurpose.Text.Trim()), "", cboPurpose.Text.Trim()))
             cmd.Parameters.AddWithValue("@dept", If(String.IsNullOrWhiteSpace(autoDepartment), "", autoDepartment))
-
-            If Not isEditMode Then cmd.Parameters.AddWithValue("@status", status)
+            cmd.Parameters.AddWithValue("@status", statusToSave)
 
             Return cmd.ExecuteNonQuery() > 0
         Catch ex As Exception
@@ -483,19 +420,28 @@ Public Class frmCreateAppointment
             Return
         End If
 
-        If SaveAppointment("APPROVED") Then
-            _skipClosePrompt = True
-            If isEditMode Then
-                MsgBox($"Pick-up appointment request {lblControlNo.Text.Trim()} successfully UPDATED!", MsgBoxStyle.Information)
-            Else
-                MsgBox($"Pick-up appointment request {lblControlNo.Text.Trim()} submitted and APPROVED successfully!", MsgBoxStyle.Information)
-                Dim newControlNo As String = GenerateControlNumber()
-                If Not String.IsNullOrEmpty(newControlNo) Then
-                    Using frmCoupon As New frmCouponView(lblControlNo.Text.Trim())
-                        frmCoupon.ShowDialog()
-                    End Using
+        Dim targetNextStatus As String = currentAppointmentStatus
+        If Not IsEditMode Then
+            targetNextStatus = "APPROVE" ' ✅ Kapag bagong gawa, rekta sa APPROVE
+        Else
+            If currentAppointmentStatus = "PENDING" Then
+                targetNextStatus = "APPROVE"
+            ElseIf currentAppointmentStatus = "APPROVE" OrElse currentAppointmentStatus = "APPROVED" Then
+                targetNextStatus = "PROCESSING" ' ✅ Galing Approve papuntang Processing
+            ElseIf currentAppointmentStatus = "PROCESSING" Then
+                ' ✅ Suriin kung libre o may bayad ang dokumento
+                Dim docPrice As Decimal = GetDocumentPrice(cboRequestType.Text.Trim())
+                If docPrice <= 0 Then
+                    targetNextStatus = "TO RELEASE" ' Kapag walang bayad, rekta sa For Pickup / Release
+                Else
+                    targetNextStatus = "UNPAID"     ' Kapag may bayad, dadaan sa Payment
                 End If
             End If
+        End If
+
+        If SaveAppointment(targetNextStatus) Then
+            _skipClosePrompt = True
+            MsgBox($"Appointment {lblControlNo.Text.Trim()} successfully updated to status: {targetNextStatus}!", MsgBoxStyle.Information)
 
             Dim dashboard As New frmUser_Dashboard()
             dashboard.TopLevel = False
@@ -505,7 +451,7 @@ Public Class frmCreateAppointment
             frmMain.Panel2.Controls.Add(dashboard)
             dashboard.Show()
         Else
-            MsgBox("Failed to process pick-up appointment request.", MsgBoxStyle.Exclamation)
+            MsgBox("Failed to update appointment process.", MsgBoxStyle.Exclamation)
         End If
     End Sub
 
@@ -518,9 +464,6 @@ Public Class frmCreateAppointment
         frmMain.Panel2.Controls.Clear()
         frmMain.Panel2.Controls.Add(dashboard)
         dashboard.Show()
-    End Sub
-
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
     End Sub
 End Class
 

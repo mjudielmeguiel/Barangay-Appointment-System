@@ -23,211 +23,48 @@ Partial Class frmReportGeneration
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmReportGeneration))
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.lblUncompletedTasks = New System.Windows.Forms.Label()
-        Me.lblTotalTasks = New System.Windows.Forms.Label()
-        Me.lblTotalDocuments = New System.Windows.Forms.Label()
-        Me.lblAmount = New System.Windows.Forms.Label()
-        Me.lblPending = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.lblCompleted = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.lblShipped = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.lblPaid = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.DateTimePickerFrom = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePickerTo = New System.Windows.Forms.DateTimePicker()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.dgvReport = New System.Windows.Forms.DataGridView()
         Me.btnExportAll = New System.Windows.Forms.Button()
-        Me.Panel4.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblTotalDocuments = New System.Windows.Forms.Label()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.lblPaid = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.lblCompleted = New System.Windows.Forms.Label()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.lblShipped = New System.Windows.Forms.Label()
+        Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.lblPending = New System.Windows.Forms.Label()
+        Me.Panel9 = New System.Windows.Forms.Panel()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.lblAmount = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel7.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.dgvReport, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        Me.Panel6.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        Me.Panel4.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.Panel8.SuspendLayout()
+        Me.Panel9.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'Panel4
-        '
-        Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel4.Controls.Add(Me.Label2)
-        Me.Panel4.Controls.Add(Me.PictureBox2)
-        Me.Panel4.Controls.Add(Me.Label9)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel4.Location = New System.Drawing.Point(0, 0)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1366, 60)
-        Me.Panel4.TabIndex = 519
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(67, 33)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(179, 19)
-        Me.Label2.TabIndex = 520
-        Me.Label2.Text = "View All Completed Reports"
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(11, 11)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(50, 41)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox2.TabIndex = 518
-        Me.PictureBox2.TabStop = False
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(66, 11)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(160, 22)
-        Me.Label9.TabIndex = 519
-        Me.Label9.Text = "Report Generation"
-        '
-        'lblUncompletedTasks
-        '
-        Me.lblUncompletedTasks.AutoSize = True
-        Me.lblUncompletedTasks.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUncompletedTasks.ForeColor = System.Drawing.Color.Navy
-        Me.lblUncompletedTasks.Location = New System.Drawing.Point(551, 82)
-        Me.lblUncompletedTasks.Name = "lblUncompletedTasks"
-        Me.lblUncompletedTasks.Size = New System.Drawing.Size(149, 22)
-        Me.lblUncompletedTasks.TabIndex = 569
-        Me.lblUncompletedTasks.Text = "Total Documents"
-        '
-        'lblTotalTasks
-        '
-        Me.lblTotalTasks.AutoSize = True
-        Me.lblTotalTasks.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalTasks.ForeColor = System.Drawing.Color.Navy
-        Me.lblTotalTasks.Location = New System.Drawing.Point(756, 82)
-        Me.lblTotalTasks.Name = "lblTotalTasks"
-        Me.lblTotalTasks.Size = New System.Drawing.Size(76, 22)
-        Me.lblTotalTasks.TabIndex = 568
-        Me.lblTotalTasks.Text = "Amount"
-        '
-        'lblTotalDocuments
-        '
-        Me.lblTotalDocuments.AutoSize = True
-        Me.lblTotalDocuments.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalDocuments.ForeColor = System.Drawing.Color.Navy
-        Me.lblTotalDocuments.Location = New System.Drawing.Point(551, 114)
-        Me.lblTotalDocuments.Name = "lblTotalDocuments"
-        Me.lblTotalDocuments.Size = New System.Drawing.Size(20, 22)
-        Me.lblTotalDocuments.TabIndex = 571
-        Me.lblTotalDocuments.Text = "0"
-        '
-        'lblAmount
-        '
-        Me.lblAmount.AutoSize = True
-        Me.lblAmount.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAmount.ForeColor = System.Drawing.Color.Navy
-        Me.lblAmount.Location = New System.Drawing.Point(756, 114)
-        Me.lblAmount.Name = "lblAmount"
-        Me.lblAmount.Size = New System.Drawing.Size(20, 22)
-        Me.lblAmount.TabIndex = 570
-        Me.lblAmount.Text = "0"
-        '
-        'lblPending
-        '
-        Me.lblPending.AutoSize = True
-        Me.lblPending.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPending.ForeColor = System.Drawing.Color.Navy
-        Me.lblPending.Location = New System.Drawing.Point(12, 114)
-        Me.lblPending.Name = "lblPending"
-        Me.lblPending.Size = New System.Drawing.Size(20, 22)
-        Me.lblPending.TabIndex = 577
-        Me.lblPending.Text = "0"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.Color.Navy
-        Me.Label4.Location = New System.Drawing.Point(12, 82)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(77, 22)
-        Me.Label4.TabIndex = 576
-        Me.Label4.Text = "Pending"
-        '
-        'lblCompleted
-        '
-        Me.lblCompleted.AutoSize = True
-        Me.lblCompleted.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCompleted.ForeColor = System.Drawing.Color.Navy
-        Me.lblCompleted.Location = New System.Drawing.Point(151, 114)
-        Me.lblCompleted.Name = "lblCompleted"
-        Me.lblCompleted.Size = New System.Drawing.Size(20, 22)
-        Me.lblCompleted.TabIndex = 579
-        Me.lblCompleted.Text = "0"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.Navy
-        Me.Label6.Location = New System.Drawing.Point(151, 82)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(100, 22)
-        Me.Label6.TabIndex = 578
-        Me.Label6.Text = "Completed"
-        '
-        'lblShipped
-        '
-        Me.lblShipped.AutoSize = True
-        Me.lblShipped.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblShipped.ForeColor = System.Drawing.Color.Navy
-        Me.lblShipped.Location = New System.Drawing.Point(299, 114)
-        Me.lblShipped.Name = "lblShipped"
-        Me.lblShipped.Size = New System.Drawing.Size(20, 22)
-        Me.lblShipped.TabIndex = 581
-        Me.lblShipped.Text = "0"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.Navy
-        Me.Label5.Location = New System.Drawing.Point(299, 82)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(77, 22)
-        Me.Label5.TabIndex = 580
-        Me.Label5.Text = "Shipped"
-        '
-        'lblPaid
-        '
-        Me.lblPaid.AutoSize = True
-        Me.lblPaid.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPaid.ForeColor = System.Drawing.Color.Navy
-        Me.lblPaid.Location = New System.Drawing.Point(430, 114)
-        Me.lblPaid.Name = "lblPaid"
-        Me.lblPaid.Size = New System.Drawing.Size(20, 22)
-        Me.lblPaid.TabIndex = 583
-        Me.lblPaid.Text = "0"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.ForeColor = System.Drawing.Color.Navy
-        Me.Label7.Location = New System.Drawing.Point(430, 82)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(46, 22)
-        Me.Label7.TabIndex = 582
-        Me.Label7.Text = "Paid"
         '
         'Panel7
         '
@@ -236,9 +73,9 @@ Partial Class frmReportGeneration
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel7.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel7.Controls.Add(Me.Label3)
         Me.Panel7.Controls.Add(Me.btnRefresh)
         Me.Panel7.Controls.Add(Me.Panel2)
-        Me.Panel7.Controls.Add(Me.Label3)
         Me.Panel7.Controls.Add(Me.dgvReport)
         Me.Panel7.Controls.Add(Me.btnExportAll)
         Me.Panel7.Location = New System.Drawing.Point(12, 229)
@@ -252,8 +89,8 @@ Partial Class frmReportGeneration
         Me.btnRefresh.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRefresh.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnRefresh.ForeColor = System.Drawing.Color.DarkBlue
+        Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnRefresh.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnRefresh.Location = New System.Drawing.Point(1195, 12)
         Me.btnRefresh.Name = "btnRefresh"
@@ -280,39 +117,28 @@ Partial Class frmReportGeneration
         '
         Me.txtSearch.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtSearch.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSearch.Location = New System.Drawing.Point(15, 5)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtSearch.Size = New System.Drawing.Size(254, 28)
+        Me.txtSearch.Size = New System.Drawing.Size(254, 29)
         Me.txtSearch.TabIndex = 553
         '
         'DateTimePickerFrom
         '
-        Me.DateTimePickerFrom.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DateTimePickerFrom.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateTimePickerFrom.Location = New System.Drawing.Point(275, 5)
         Me.DateTimePickerFrom.Name = "DateTimePickerFrom"
-        Me.DateTimePickerFrom.Size = New System.Drawing.Size(292, 28)
+        Me.DateTimePickerFrom.Size = New System.Drawing.Size(292, 29)
         Me.DateTimePickerFrom.TabIndex = 586
         '
         'DateTimePickerTo
         '
-        Me.DateTimePickerTo.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DateTimePickerTo.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateTimePickerTo.Location = New System.Drawing.Point(573, 5)
         Me.DateTimePickerTo.Name = "DateTimePickerTo"
-        Me.DateTimePickerTo.Size = New System.Drawing.Size(292, 28)
+        Me.DateTimePickerTo.Size = New System.Drawing.Size(292, 29)
         Me.DateTimePickerTo.TabIndex = 587
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft YaHei UI", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.MidnightBlue
-        Me.Label3.Location = New System.Drawing.Point(9, 12)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(279, 31)
-        Me.Label3.TabIndex = 188
-        Me.Label3.Text = "Appointment Reports"
         '
         'dgvReport
         '
@@ -333,10 +159,10 @@ Partial Class frmReportGeneration
         'btnExportAll
         '
         Me.btnExportAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnExportAll.BackColor = System.Drawing.Color.Navy
+        Me.btnExportAll.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.btnExportAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnExportAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnExportAll.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExportAll.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnExportAll.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnExportAll.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnExportAll.Location = New System.Drawing.Point(1058, 12)
@@ -347,66 +173,341 @@ Partial Class frmReportGeneration
         Me.btnExportAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnExportAll.UseVisualStyleBackColor = False
         '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1366, 60)
+        Me.Panel1.TabIndex = 632
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(12, 30)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(170, 17)
+        Me.Label1.TabIndex = 520
+        Me.Label1.Text = "View all Completed Reports"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label8.Location = New System.Drawing.Point(12, 9)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(139, 21)
+        Me.Label8.TabIndex = 519
+        Me.Label8.Text = "Generate Reports"
+        '
+        'Panel6
+        '
+        Me.Panel6.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel6.Controls.Add(Me.Label2)
+        Me.Panel6.Controls.Add(Me.lblTotalDocuments)
+        Me.Panel6.Location = New System.Drawing.Point(771, 98)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(170, 86)
+        Me.Panel6.TabIndex = 637
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label2.Location = New System.Drawing.Point(15, 51)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(110, 17)
+        Me.Label2.TabIndex = 164
+        Me.Label2.Text = "Total Documents"
+        '
+        'lblTotalDocuments
+        '
+        Me.lblTotalDocuments.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTotalDocuments.AutoSize = True
+        Me.lblTotalDocuments.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalDocuments.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblTotalDocuments.Location = New System.Drawing.Point(13, 10)
+        Me.lblTotalDocuments.Name = "lblTotalDocuments"
+        Me.lblTotalDocuments.Size = New System.Drawing.Size(20, 25)
+        Me.lblTotalDocuments.TabIndex = 528
+        Me.lblTotalDocuments.Text = "-"
+        '
+        'Panel3
+        '
+        Me.Panel3.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel3.Controls.Add(Me.Label9)
+        Me.Panel3.Controls.Add(Me.lblPaid)
+        Me.Panel3.Location = New System.Drawing.Point(583, 98)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(170, 86)
+        Me.Panel3.TabIndex = 636
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label9.Location = New System.Drawing.Point(19, 51)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(34, 17)
+        Me.Label9.TabIndex = 164
+        Me.Label9.Text = "Paid"
+        '
+        'lblPaid
+        '
+        Me.lblPaid.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblPaid.AutoSize = True
+        Me.lblPaid.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPaid.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblPaid.Location = New System.Drawing.Point(17, 10)
+        Me.lblPaid.Name = "lblPaid"
+        Me.lblPaid.Size = New System.Drawing.Size(20, 25)
+        Me.lblPaid.TabIndex = 526
+        Me.lblPaid.Text = "-"
+        '
+        'Panel4
+        '
+        Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel4.Controls.Add(Me.Label23)
+        Me.Panel4.Controls.Add(Me.Label11)
+        Me.Panel4.Controls.Add(Me.lblCompleted)
+        Me.Panel4.Location = New System.Drawing.Point(214, 98)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(170, 86)
+        Me.Panel4.TabIndex = 634
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = True
+        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label23.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label23.Location = New System.Drawing.Point(732, 10)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(77, 21)
+        Me.Label23.TabIndex = 164
+        Me.Label23.Text = "Cancelled"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label11.Location = New System.Drawing.Point(18, 51)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(74, 17)
+        Me.Label11.TabIndex = 164
+        Me.Label11.Text = "Completed"
+        '
+        'lblCompleted
+        '
+        Me.lblCompleted.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblCompleted.AutoSize = True
+        Me.lblCompleted.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCompleted.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblCompleted.Location = New System.Drawing.Point(16, 10)
+        Me.lblCompleted.Name = "lblCompleted"
+        Me.lblCompleted.Size = New System.Drawing.Size(20, 25)
+        Me.lblCompleted.TabIndex = 527
+        Me.lblCompleted.Text = "-"
+        '
+        'Panel5
+        '
+        Me.Panel5.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel5.Controls.Add(Me.Label12)
+        Me.Panel5.Controls.Add(Me.lblShipped)
+        Me.Panel5.Location = New System.Drawing.Point(398, 98)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(170, 86)
+        Me.Panel5.TabIndex = 635
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label12.Location = New System.Drawing.Point(16, 51)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(57, 17)
+        Me.Label12.TabIndex = 164
+        Me.Label12.Text = "Shipped"
+        '
+        'lblShipped
+        '
+        Me.lblShipped.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblShipped.AutoSize = True
+        Me.lblShipped.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblShipped.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblShipped.Location = New System.Drawing.Point(14, 10)
+        Me.lblShipped.Name = "lblShipped"
+        Me.lblShipped.Size = New System.Drawing.Size(20, 25)
+        Me.lblShipped.TabIndex = 525
+        Me.lblShipped.Text = "-"
+        '
+        'Panel8
+        '
+        Me.Panel8.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel8.Controls.Add(Me.Label13)
+        Me.Panel8.Controls.Add(Me.lblPending)
+        Me.Panel8.Location = New System.Drawing.Point(28, 98)
+        Me.Panel8.Name = "Panel8"
+        Me.Panel8.Size = New System.Drawing.Size(170, 86)
+        Me.Panel8.TabIndex = 633
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label13.Location = New System.Drawing.Point(12, 51)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(58, 17)
+        Me.Label13.TabIndex = 164
+        Me.Label13.Text = "Pending"
+        '
+        'lblPending
+        '
+        Me.lblPending.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblPending.AutoSize = True
+        Me.lblPending.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPending.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblPending.Location = New System.Drawing.Point(10, 10)
+        Me.lblPending.Name = "lblPending"
+        Me.lblPending.Size = New System.Drawing.Size(20, 25)
+        Me.lblPending.TabIndex = 524
+        Me.lblPending.Text = "-"
+        '
+        'Panel9
+        '
+        Me.Panel9.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel9.Controls.Add(Me.Label15)
+        Me.Panel9.Controls.Add(Me.lblAmount)
+        Me.Panel9.Location = New System.Drawing.Point(962, 98)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Size = New System.Drawing.Size(170, 86)
+        Me.Panel9.TabIndex = 638
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label15.Location = New System.Drawing.Point(15, 51)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(58, 17)
+        Me.Label15.TabIndex = 164
+        Me.Label15.Text = "Amount"
+        '
+        'lblAmount
+        '
+        Me.lblAmount.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblAmount.AutoSize = True
+        Me.lblAmount.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAmount.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblAmount.Location = New System.Drawing.Point(13, 10)
+        Me.lblAmount.Name = "lblAmount"
+        Me.lblAmount.Size = New System.Drawing.Size(20, 25)
+        Me.lblAmount.TabIndex = 528
+        Me.lblAmount.Text = "-"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label3.Location = New System.Drawing.Point(11, 17)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(170, 21)
+        Me.Label3.TabIndex = 521
+        Me.Label3.Text = "Appointment Reports"
+        '
         'frmReportGeneration
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1366, 768)
-        Me.Controls.Add(Me.Panel7)
-        Me.Controls.Add(Me.lblPaid)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.lblShipped)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.lblCompleted)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.lblPending)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.lblTotalDocuments)
-        Me.Controls.Add(Me.lblAmount)
-        Me.Controls.Add(Me.lblUncompletedTasks)
-        Me.Controls.Add(Me.lblTotalTasks)
+        Me.Controls.Add(Me.Panel9)
+        Me.Controls.Add(Me.Panel6)
+        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel4)
+        Me.Controls.Add(Me.Panel5)
+        Me.Controls.Add(Me.Panel8)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.Panel7)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmReportGeneration"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "frmReportGeneration"
-        Me.Panel4.ResumeLayout(False)
-        Me.Panel4.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel7.ResumeLayout(False)
         Me.Panel7.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         CType(Me.dgvReport, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        Me.Panel8.ResumeLayout(False)
+        Me.Panel8.PerformLayout()
+        Me.Panel9.ResumeLayout(False)
+        Me.Panel9.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents Panel4 As Panel
-    Friend WithEvents Label2 As Label
-    Friend WithEvents PictureBox2 As PictureBox
-    Friend WithEvents Label9 As Label
-    Friend WithEvents lblUncompletedTasks As Label
-    Friend WithEvents lblTotalTasks As Label
-    Friend WithEvents lblTotalDocuments As Label
-    Friend WithEvents lblAmount As Label
-    Friend WithEvents lblPending As Label
-    Friend WithEvents Label4 As Label
-    Friend WithEvents lblCompleted As Label
-    Friend WithEvents Label6 As Label
-    Friend WithEvents lblShipped As Label
-    Friend WithEvents Label5 As Label
-    Friend WithEvents lblPaid As Label
-    Friend WithEvents Label7 As Label
     Friend WithEvents Panel7 As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents DateTimePickerFrom As DateTimePicker
     Friend WithEvents DateTimePickerTo As DateTimePicker
-    Friend WithEvents Label3 As Label
     Friend WithEvents dgvReport As DataGridView
     Friend WithEvents btnExportAll As Button
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents btnRefresh As Button
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Panel6 As Panel
+    Friend WithEvents Label2 As Label
+    Friend WithEvents lblTotalDocuments As Label
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Label9 As Label
+    Friend WithEvents lblPaid As Label
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents Label23 As Label
+    Friend WithEvents Label11 As Label
+    Friend WithEvents lblCompleted As Label
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents Label12 As Label
+    Friend WithEvents lblShipped As Label
+    Friend WithEvents Panel8 As Panel
+    Friend WithEvents Label13 As Label
+    Friend WithEvents lblPending As Label
+    Friend WithEvents Panel9 As Panel
+    Friend WithEvents Label15 As Label
+    Friend WithEvents lblAmount As Label
+    Friend WithEvents Label3 As Label
 End Class

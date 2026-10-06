@@ -151,6 +151,7 @@ Partial Class frmCancelReason
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnSubmit)
         Me.Controls.Add(Me.rtbReason)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmCancelReason"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

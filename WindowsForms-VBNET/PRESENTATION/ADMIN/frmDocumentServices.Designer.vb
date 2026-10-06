@@ -32,6 +32,10 @@ Partial Class frmDocumentServices
         Me.dgvServices = New System.Windows.Forms.DataGridView()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.pnlaccountsystem = New System.Windows.Forms.Panel()
+        Me.btnBrowse = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtTemplatePath = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.btnClear = New System.Windows.Forms.Button()
         Me.btnManagePurposes = New System.Windows.Forms.Button()
         Me.lblServiceCode = New System.Windows.Forms.Label()
@@ -174,6 +178,10 @@ Partial Class frmDocumentServices
         Me.pnlaccountsystem.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pnlaccountsystem.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.pnlaccountsystem.Controls.Add(Me.btnBrowse)
+        Me.pnlaccountsystem.Controls.Add(Me.Label2)
+        Me.pnlaccountsystem.Controls.Add(Me.txtTemplatePath)
+        Me.pnlaccountsystem.Controls.Add(Me.Label7)
         Me.pnlaccountsystem.Controls.Add(Me.btnClear)
         Me.pnlaccountsystem.Controls.Add(Me.btnManagePurposes)
         Me.pnlaccountsystem.Controls.Add(Me.lblServiceCode)
@@ -192,6 +200,53 @@ Partial Class frmDocumentServices
         Me.pnlaccountsystem.Name = "pnlaccountsystem"
         Me.pnlaccountsystem.Size = New System.Drawing.Size(1281, 235)
         Me.pnlaccountsystem.TabIndex = 745
+        '
+        'btnBrowse
+        '
+        Me.btnBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnBrowse.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnBrowse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnBrowse.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnBrowse.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnBrowse.Location = New System.Drawing.Point(1122, 71)
+        Me.btnBrowse.Name = "btnBrowse"
+        Me.btnBrowse.Size = New System.Drawing.Size(131, 37)
+        Me.btnBrowse.TabIndex = 748
+        Me.btnBrowse.Text = "Browse Documents"
+        Me.btnBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnBrowse.UseVisualStyleBackColor = False
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(337, 192)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(13, 17)
+        Me.Label2.TabIndex = 745
+        Me.Label2.Text = "-"
+        '
+        'txtTemplatePath
+        '
+        Me.txtTemplatePath.BackColor = System.Drawing.SystemColors.Control
+        Me.txtTemplatePath.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTemplatePath.Location = New System.Drawing.Point(334, 161)
+        Me.txtTemplatePath.Name = "txtTemplatePath"
+        Me.txtTemplatePath.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtTemplatePath.Size = New System.Drawing.Size(291, 28)
+        Me.txtTemplatePath.TabIndex = 746
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(330, 139)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(94, 19)
+        Me.Label7.TabIndex = 747
+        Me.Label7.Text = "Service Name"
         '
         'btnClear
         '
@@ -435,4 +490,8 @@ Partial Class frmDocumentServices
     Friend WithEvents dgvServices As DataGridView
     Friend WithEvents btnManagePurposes As Button
     Friend WithEvents btnClear As Button
+    Friend WithEvents btnBrowse As Button
+    Friend WithEvents Label2 As Label
+    Friend WithEvents txtTemplatePath As TextBox
+    Friend WithEvents Label7 As Label
 End Class

@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Text
+Imports System.IO
 Imports MySql.Data.MySqlClient
 
 Public Class frmDocumentServices
@@ -84,7 +85,7 @@ Public Class frmDocumentServices
         Try
             DBconnection.connection()
             Dim query As String = "SELECT d.ID AS 'ServiceInternalID', d.ServiceCode AS 'Code', d.ServiceName AS 'Document / Service', " &
-                                   "d.Amount, IFNULL(dept.DepartmentName, 'N/A') AS 'Department', d.DepartmentID " &
+                                   "d.Amount, IFNULL(dept.DepartmentName, 'N/A') AS 'Department', d.DepartmentID, d.DocumentTemplate " &
                                    "FROM document_services d " &
                                    "LEFT JOIN departments dept ON d.DepartmentID = dept.DepartmentID " &
                                    "WHERE d.IsActive = 1 "
@@ -110,6 +111,7 @@ Public Class frmDocumentServices
             End Using
 
             If dgvServices.Columns.Contains("ServiceInternalID") Then dgvServices.Columns("ServiceInternalID").Visible = False
+            If dgvServices.Columns.Contains("DocumentTemplate") Then dgvServices.Columns("DocumentTemplate").Visible = False
             If dgvServices.Columns.Contains("Code") Then
                 dgvServices.Columns("Code").Width = 90
                 dgvServices.Columns("Code").DefaultCellStyle.BackColor = Color.FromArgb(200, 215, 240)
@@ -153,6 +155,13 @@ Public Class frmDocumentServices
         lblServiceCode.Text = "Service Code — " & originalCode
         txtServiceName.Text = selectedRow.Cells("Document / Service").Value.ToString()
         txtAmount.Text = Convert.ToDecimal(selectedRow.Cells("Amount").Value).ToString("F2")
+
+        ' ✅ I-load ang template text kung meron man sa database
+        If selectedRow.Cells("DocumentTemplate").Value IsNot DBNull.Value Then
+            txtTemplatePath.Text = selectedRow.Cells("DocumentTemplate").Value.ToString()
+        Else
+            txtTemplatePath.Clear()
+        End If
 
         If selectedRow.Cells("DepartmentID").Value IsNot DBNull.Value Then
             cboDepartment.SelectedValue = Convert.ToInt32(selectedRow.Cells("DepartmentID").Value)
@@ -256,6 +265,7 @@ Public Class frmDocumentServices
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         txtServiceName.Clear()
         txtAmount.Clear()
+        txtTemplatePath.Clear()
         cboDepartment.SelectedIndex = -1
         lblServiceCode.Text = "Service Code — (AUTO)"
         originalCode = ""
@@ -274,6 +284,8 @@ Public Class frmDocumentServices
         If cboDepartment.SelectedValue IsNot Nothing Then
             deptId = cboDepartment.SelectedValue
         End If
+
+        Dim templateContent As Object = If(String.IsNullOrWhiteSpace(txtTemplatePath.Text), DBNull.Value, txtTemplatePath.Text.Trim())
 
         Try
             DBconnection.connection()
@@ -294,27 +306,29 @@ Public Class frmDocumentServices
                     Loop
                 End Using
 
-                Using cmd As New MySqlCommand("INSERT INTO document_services (ServiceCode, ServiceName, Amount, DepartmentID) VALUES (@Code, @Name, @Amount, @DeptID)", DBconnection.cn)
+                Using cmd As New MySqlCommand("INSERT INTO document_services (ServiceCode, ServiceName, Amount, DepartmentID, DocumentTemplate) VALUES (@Code, @Name, @Amount, @DeptID, @Template)", DBconnection.cn)
                     cmd.Parameters.AddWithValue("@Code", finalCode)
                     cmd.Parameters.AddWithValue("@Name", txtServiceName.Text.Trim())
                     cmd.Parameters.AddWithValue("@Amount", Decimal.Parse(txtAmount.Text.Trim()))
                     cmd.Parameters.AddWithValue("@DeptID", deptId)
+                    cmd.Parameters.AddWithValue("@Template", templateContent)
                     cmd.ExecuteNonQuery()
                 End Using
 
-                SaveActivityLog("CREATE", "Added Document Service: " & finalCode)
+                SaveActivityLog("CREATE", "Added Document Service with Template: " & finalCode)
                 MessageBox.Show("Service added successfully! CODE: " & finalCode, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             Else
-                Using cmd As New MySqlCommand("UPDATE document_services SET ServiceName = @Name, Amount = @Amount, DepartmentID = @DeptID WHERE ServiceCode = @Code", DBconnection.cn)
+                Using cmd As New MySqlCommand("UPDATE document_services SET ServiceName = @Name, Amount = @Amount, DepartmentID = @DeptID, DocumentTemplate = @Template WHERE ServiceCode = @Code", DBconnection.cn)
                     cmd.Parameters.AddWithValue("@Name", txtServiceName.Text.Trim())
                     cmd.Parameters.AddWithValue("@Amount", Decimal.Parse(txtAmount.Text.Trim()))
                     cmd.Parameters.AddWithValue("@DeptID", deptId)
+                    cmd.Parameters.AddWithValue("@Template", templateContent)
                     cmd.Parameters.AddWithValue("@Code", originalCode)
                     cmd.ExecuteNonQuery()
                 End Using
 
-                SaveActivityLog("UPDATE", "Updated Document Service: " & originalCode)
+                SaveActivityLog("UPDATE", "Updated Document Service and Template: " & originalCode)
                 MessageBox.Show("Service updated successfully! CODE: " & originalCode, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
 
@@ -363,5 +377,17 @@ Public Class frmDocumentServices
                 DBconnection.CloseConnection()
             End Try
         End If
+    End Sub
+
+    ' === BROWSE TEMPLATE FILE BUTTON EVENT (I-save ang File Path) ===
+    Private Sub btnBrowse_Click(sender As Object, e As EventArgs) Handles btnBrowse.Click
+        Using ofd As New OpenFileDialog()
+            ofd.Filter = "Word & Document Files (*.docx;*.pdf;*.txt)|*.docx;*.pdf;*.txt|All Files (*.*)|*.*"
+            ofd.Title = "Select Document Template File"
+            If ofd.ShowDialog() = DialogResult.OK Then
+                ' Ilalagay ang buong file path sa textbox
+                txtTemplatePath.Text = ofd.FileName
+            End If
+        End Using
     End Sub
 End Class
