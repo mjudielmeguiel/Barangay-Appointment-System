@@ -23,6 +23,14 @@ Partial Class frmCreateNewSateliteOffice
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCreateNewSateliteOffice))
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.btnClearAll = New System.Windows.Forms.Button()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.txtSearchResident = New System.Windows.Forms.TextBox()
+        Me.dgvSatelliteResidents = New System.Windows.Forms.DataGridView()
+        Me.btnSubmit = New System.Windows.Forms.Button()
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.lblOperationStatusError = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
@@ -34,8 +42,9 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblFacilityTypeError = New System.Windows.Forms.Label()
         Me.cboHasPermanentStaff = New System.Windows.Forms.ComboBox()
         Me.lblRoleError = New System.Windows.Forms.Label()
-        Me.btnSubmit = New System.Windows.Forms.Button()
-        Me.btnClearAll = New System.Windows.Forms.Button()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -55,19 +64,133 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblFacilityNameError = New System.Windows.Forms.Label()
         Me.txtLocationDetails = New System.Windows.Forms.TextBox()
         Me.lblLocationDetailsError = New System.Windows.Forms.Label()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Panel1.SuspendLayout()
+        Me.Panel7.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        CType(Me.dgvSatelliteResidents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel6.SuspendLayout()
-        Me.Panel2.SuspendLayout()
         Me.Panel4.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'Panel1
+        '
+        Me.Panel1.AutoScroll = True
+        Me.Panel1.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.Panel1.Controls.Add(Me.Panel7)
+        Me.Panel1.Controls.Add(Me.Panel6)
+        Me.Panel1.Controls.Add(Me.Panel4)
+        Me.Panel1.Controls.Add(Me.Panel2)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1366, 768)
+        Me.Panel1.TabIndex = 0
+        '
+        'Panel7
+        '
+        Me.Panel7.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel7.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel7.Controls.Add(Me.Label3)
+        Me.Panel7.Controls.Add(Me.btnClearAll)
+        Me.Panel7.Controls.Add(Me.Panel5)
+        Me.Panel7.Controls.Add(Me.dgvSatelliteResidents)
+        Me.Panel7.Controls.Add(Me.btnSubmit)
+        Me.Panel7.Location = New System.Drawing.Point(37, 613)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(1259, 143)
+        Me.Panel7.TabIndex = 687
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label3.Location = New System.Drawing.Point(25, 17)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(228, 21)
+        Me.Label3.TabIndex = 521
+        Me.Label3.Text = "Sattelite Office Residence List"
+        '
+        'btnClearAll
+        '
+        Me.btnClearAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClearAll.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnClearAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnClearAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnClearAll.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnClearAll.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnClearAll.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnClearAll.Location = New System.Drawing.Point(1114, 12)
+        Me.btnClearAll.Name = "btnClearAll"
+        Me.btnClearAll.Size = New System.Drawing.Size(131, 37)
+        Me.btnClearAll.TabIndex = 552
+        Me.btnClearAll.Text = "refresh"
+        Me.btnClearAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnClearAll.UseVisualStyleBackColor = False
+        '
+        'Panel5
+        '
+        Me.Panel5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.Panel5.Controls.Add(Me.txtSearchResident)
+        Me.Panel5.Location = New System.Drawing.Point(0, 61)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(1259, 38)
+        Me.Panel5.TabIndex = 509
+        '
+        'txtSearchResident
+        '
+        Me.txtSearchResident.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.txtSearchResident.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtSearchResident.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSearchResident.Location = New System.Drawing.Point(15, 5)
+        Me.txtSearchResident.Name = "txtSearchResident"
+        Me.txtSearchResident.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
+        Me.txtSearchResident.Size = New System.Drawing.Size(254, 28)
+        Me.txtSearchResident.TabIndex = 223
+        '
+        'dgvSatelliteResidents
+        '
+        Me.dgvSatelliteResidents.AllowUserToAddRows = False
+        Me.dgvSatelliteResidents.AllowUserToDeleteRows = False
+        Me.dgvSatelliteResidents.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvSatelliteResidents.BackgroundColor = System.Drawing.SystemColors.ButtonFace
+        Me.dgvSatelliteResidents.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvSatelliteResidents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvSatelliteResidents.Location = New System.Drawing.Point(0, 100)
+        Me.dgvSatelliteResidents.Name = "dgvSatelliteResidents"
+        Me.dgvSatelliteResidents.ReadOnly = True
+        Me.dgvSatelliteResidents.Size = New System.Drawing.Size(1259, 43)
+        Me.dgvSatelliteResidents.TabIndex = 508
+        '
+        'btnSubmit
+        '
+        Me.btnSubmit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSubmit.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnSubmit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSubmit.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSubmit.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnSubmit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnSubmit.Location = New System.Drawing.Point(977, 12)
+        Me.btnSubmit.Name = "btnSubmit"
+        Me.btnSubmit.Size = New System.Drawing.Size(131, 37)
+        Me.btnSubmit.TabIndex = 506
+        Me.btnSubmit.Text = "Create"
+        Me.btnSubmit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnSubmit.UseVisualStyleBackColor = False
         '
         'Panel6
         '
         Me.Panel6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel6.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.Panel6.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel6.Controls.Add(Me.lblOperationStatusError)
         Me.Panel6.Controls.Add(Me.Label25)
         Me.Panel6.Controls.Add(Me.cboOperationStatus)
@@ -78,10 +201,10 @@ Partial Class frmCreateNewSateliteOffice
         Me.Panel6.Controls.Add(Me.lblFacilityTypeError)
         Me.Panel6.Controls.Add(Me.cboHasPermanentStaff)
         Me.Panel6.Controls.Add(Me.lblRoleError)
-        Me.Panel6.Location = New System.Drawing.Point(37, 390)
+        Me.Panel6.Location = New System.Drawing.Point(37, 362)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(1293, 223)
-        Me.Panel6.TabIndex = 678
+        Me.Panel6.Size = New System.Drawing.Size(1259, 223)
+        Me.Panel6.TabIndex = 683
         '
         'lblOperationStatusError
         '
@@ -184,45 +307,44 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblRoleError.TabIndex = 567
         Me.lblRoleError.Text = "-"
         '
-        'btnSubmit
+        'Panel4
         '
-        Me.btnSubmit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSubmit.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.btnSubmit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSubmit.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSubmit.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnSubmit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSubmit.Location = New System.Drawing.Point(1169, 633)
-        Me.btnSubmit.Name = "btnSubmit"
-        Me.btnSubmit.Size = New System.Drawing.Size(161, 37)
-        Me.btnSubmit.TabIndex = 675
-        Me.btnSubmit.Text = "Create new Office"
-        Me.btnSubmit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnSubmit.UseVisualStyleBackColor = False
+        Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel4.Controls.Add(Me.Label2)
+        Me.Panel4.Controls.Add(Me.Label1)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel4.Location = New System.Drawing.Point(0, 0)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(1366, 60)
+        Me.Panel4.TabIndex = 684
         '
-        'btnClearAll
+        'Label2
         '
-        Me.btnClearAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClearAll.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnClearAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnClearAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnClearAll.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnClearAll.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.btnClearAll.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClearAll.Location = New System.Drawing.Point(1002, 633)
-        Me.btnClearAll.Name = "btnClearAll"
-        Me.btnClearAll.Size = New System.Drawing.Size(161, 37)
-        Me.btnClearAll.TabIndex = 676
-        Me.btnClearAll.Text = "Clear All"
-        Me.btnClearAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnClearAll.UseVisualStyleBackColor = False
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label2.Location = New System.Drawing.Point(12, 30)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(254, 19)
+        Me.Label2.TabIndex = 520
+        Me.Label2.Text = "Fill in Saltellite Office Information Below"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(12, 9)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(118, 21)
+        Me.Label1.TabIndex = 519
+        Me.Label1.Text = "Satellite Office"
         '
         'Panel2
         '
         Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.Panel2.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel2.Controls.Add(Me.Label9)
         Me.Panel2.Controls.Add(Me.Label10)
         Me.Panel2.Controls.Add(Me.Label11)
@@ -241,10 +363,10 @@ Partial Class frmCreateNewSateliteOffice
         Me.Panel2.Controls.Add(Me.lblFacilityNameError)
         Me.Panel2.Controls.Add(Me.txtLocationDetails)
         Me.Panel2.Controls.Add(Me.lblLocationDetailsError)
-        Me.Panel2.Location = New System.Drawing.Point(37, 125)
+        Me.Panel2.Location = New System.Drawing.Point(37, 97)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1293, 223)
-        Me.Panel2.TabIndex = 677
+        Me.Panel2.Size = New System.Drawing.Size(1259, 223)
+        Me.Panel2.TabIndex = 682
         '
         'Label9
         '
@@ -429,65 +551,35 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblLocationDetailsError.TabIndex = 522
         Me.lblLocationDetailsError.Text = "-"
         '
-        'Panel4
-        '
-        Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Panel4.Controls.Add(Me.Label2)
-        Me.Panel4.Controls.Add(Me.Label1)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel4.Location = New System.Drawing.Point(0, 0)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1366, 60)
-        Me.Panel4.TabIndex = 679
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label2.Location = New System.Drawing.Point(12, 30)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(254, 19)
-        Me.Label2.TabIndex = 520
-        Me.Label2.Text = "Fill in Saltellite Office Information Below"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(118, 21)
-        Me.Label1.TabIndex = 519
-        Me.Label1.Text = "Satellite Office"
-        '
         'frmCreateNewSateliteOffice
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1366, 768)
-        Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.Panel6)
-        Me.Controls.Add(Me.btnSubmit)
-        Me.Controls.Add(Me.btnClearAll)
-        Me.Controls.Add(Me.Panel2)
+        Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmCreateNewSateliteOffice"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "frmCreateNewSateliteOffice"
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel7.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        CType(Me.dgvSatelliteResidents, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel6.ResumeLayout(False)
         Me.Panel6.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
+    Friend WithEvents Panel1 As Panel
     Friend WithEvents Panel6 As Panel
     Friend WithEvents lblOperationStatusError As Label
     Friend WithEvents Label25 As Label
@@ -499,8 +591,9 @@ Partial Class frmCreateNewSateliteOffice
     Friend WithEvents lblFacilityTypeError As Label
     Friend WithEvents cboHasPermanentStaff As ComboBox
     Friend WithEvents lblRoleError As Label
-    Friend WithEvents btnSubmit As Button
-    Friend WithEvents btnClearAll As Button
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Label9 As Label
     Friend WithEvents Label10 As Label
@@ -520,7 +613,11 @@ Partial Class frmCreateNewSateliteOffice
     Friend WithEvents lblFacilityNameError As Label
     Friend WithEvents txtLocationDetails As TextBox
     Friend WithEvents lblLocationDetailsError As Label
-    Friend WithEvents Panel4 As Panel
-    Friend WithEvents Label2 As Label
-    Friend WithEvents Label1 As Label
+    Friend WithEvents Panel7 As Panel
+    Friend WithEvents btnClearAll As Button
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents txtSearchResident As TextBox
+    Friend WithEvents dgvSatelliteResidents As DataGridView
+    Friend WithEvents btnSubmit As Button
+    Friend WithEvents Label3 As Label
 End Class

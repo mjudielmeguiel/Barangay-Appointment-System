@@ -17,6 +17,11 @@ Public Class frmCreateEvent
         })
         cboCategory.SelectedIndex = 0
 
+        ' Itakda ang minimum date ng DateTimePicker sa unang araw ng kasalukuyang buwan para maiwasan ang nakaraang buwan
+        Dim firstDayOfCurrentMonth As New DateTime(DateTime.Today.Year, DateTime.Today.Month, 1)
+        dtpEventDate.MinDate = firstDayOfCurrentMonth
+        dtpEventDate.Value = DateTime.Today
+
         PopulateTimeComboBoxes()
     End Sub
 
@@ -78,6 +83,16 @@ Public Class frmCreateEvent
             Return
         End If
 
+        ' Karagdagang Validation: Bawal mag-set ng petsa na lumipas na o mas maaga kaysa sa kasalukuyang buwan
+        Dim selectedDateOnly As DateTime = dtpEventDate.Value.Date
+        Dim firstDayOfCurrentMonth As New DateTime(DateTime.Today.Year, DateTime.Today.Month, 1)
+
+        If selectedDateOnly < firstDayOfCurrentMonth Then
+            MsgBox("Hindi na pinapayagan ang pag-set ng event sa mga nakaraang buwan o petsa.", MsgBoxStyle.Exclamation, "Validation Error")
+            dtpEventDate.Focus()
+            Return
+        End If
+
         ' Verify start time is before end time
         If SelectedStartTime >= SelectedEndTime Then
             MsgBox("End time must be later than start time.", MsgBoxStyle.Exclamation, "Validation Error")
@@ -99,7 +114,8 @@ Public Class frmCreateEvent
             cmd.Parameters.AddWithValue("@start", SelectedStartTime.ToString())
             cmd.Parameters.AddWithValue("@end", SelectedEndTime.ToString())
             cmd.Parameters.AddWithValue("@cat", cboCategory.Text.Trim())
-            cmd.Parameters.AddWithValue("@createdBy", LoggedFullname)
+            ' Siguraduhing nakatutok sa angkop na global variable ang CreatedBy (LoggedInFullname)
+            cmd.Parameters.AddWithValue("@createdBy", If(String.IsNullOrEmpty(LoggedInFullname), "Admin", LoggedInFullname))
 
             Dim rows As Integer = cmd.ExecuteNonQuery()
             If rows > 0 Then

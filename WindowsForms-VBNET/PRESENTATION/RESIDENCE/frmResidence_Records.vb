@@ -13,7 +13,7 @@ Public Class frmResidence_Records
         SetupSearchPlaceholder()
         StyleDataGridView(dgvResidences)
         LoadResidenceRecords()
-        LoadSummaryMetrics() ' Loads counts for New Today and Active Residents
+        LoadSummaryMetrics()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -24,10 +24,11 @@ Public Class frmResidence_Records
         Try
             connection()
 
+            ' Sinasala ang query para itago sa DataGridView ang mga may status na 'Removed'
             sql = "SELECT ResidentID, ResidentCode AS 'Resident Code', FullName AS 'Full Name', Gender, " &
                   "Birthday, MobileNumber AS 'Mobile No.', Email, CivilStatus AS 'Civil Status', " &
-                  "Address, AccountStatus AS 'Status', CreatedAt AS 'Date Registered' " &
-                  "FROM residences WHERE AccountStatus <> 'Deleted' "
+                  "Address, SatelliteOffice AS 'Satellite Office', AccountStatus AS 'Status', CreatedAt AS 'Date Registered' " &
+                  "FROM residences WHERE AccountStatus <> 'Removed' "
 
             If Not String.IsNullOrEmpty(searchKeyword) AndAlso searchKeyword <> placeholderText Then
                 sql &= "AND FullName LIKE @search "
@@ -52,12 +53,24 @@ Public Class frmResidence_Records
                 dgvResidences.Columns("ResidentID").Visible = False
             End If
 
-            ' Programmatically removes the View and Delete buttons from the DataGridView
             If dgvResidences.Columns.Contains("btnView") Then
                 dgvResidences.Columns.Remove("btnView")
             End If
+
+            ' MAG-ADD NG DELETE BUTTON KUNG WALA PA
+            If Not dgvResidences.Columns.Contains("btnDelete") Then
+                Dim btnDelete As New DataGridViewButtonColumn()
+                btnDelete.Name = "btnDelete"
+                btnDelete.HeaderText = "Action"
+                btnDelete.Text = "Delete"
+                btnDelete.UseColumnTextForButtonValue = True
+                btnDelete.FlatStyle = FlatStyle.Standard
+
+                dgvResidences.Columns.Add(btnDelete)
+            End If
+
             If dgvResidences.Columns.Contains("btnDelete") Then
-                dgvResidences.Columns.Remove("btnDelete")
+                dgvResidences.Columns("btnDelete").DisplayIndex = dgvResidences.Columns.Count - 1
             End If
 
         Catch ex As Exception
@@ -67,17 +80,112 @@ Public Class frmResidence_Records
         End Try
     End Sub
 
+    ' --- CUSTOM PAINT PARA SA SMOOTH ROUNDED DARK RED BUTTON ---
+    Private Sub dgvResidences_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvResidences.CellPainting
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 AndAlso dgvResidences.Columns(e.ColumnIndex).Name = "btnDelete" Then
+            e.Paint(e.CellBounds, DataGridViewPaintParts.All)
+
+            ' I-on ang Anti-Alias para mawala ang pixelated edges
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias
+
+            Dim buttonRect As Rectangle = e.CellBounds
+            buttonRect.Inflate(-6, -4) ' Margin sa paligid ng button
+
+            ' Gumawa ng rounded path para sa smooth pill style
+            Using path As System.Drawing.Drawing2D.GraphicsPath = GetRoundedRectPath(buttonRect, 8)
+                ' Kulay Dark Red
+                Using brush As New SolidBrush(Color.FromArgb(130, 0, 0))
+                    e.Graphics.FillPath(brush, path)
+                End Using
+
+                ' Smooth border line
+                Using pen As New Pen(Color.FromArgb(90, 0, 0), 1)
+                    e.Graphics.DrawPath(pen, path)
+                End Using
+            End Using
+
+            ' Pagsulat ng "DELETE" text sa gitna
+            TextRenderer.DrawText(e.Graphics, "DELETE", New Font("Segoe UI", 8.5F, FontStyle.Bold), buttonRect, Color.White, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
+
+            e.Handled = True
+        End If
+    End Sub
+
+    ' Helper function para sa smooth rounded corners
+    Private Function GetRoundedRectPath(rect As Rectangle, radius As Integer) As System.Drawing.Drawing2D.GraphicsPath
+        Dim path As New System.Drawing.Drawing2D.GraphicsPath()
+        Dim d As Integer = radius * 2
+        path.AddArc(rect.X, rect.Y, d, d, 180, 90)
+        path.AddArc(rect.X + rect.Width - d, rect.Y, d, d, 270, 90)
+        path.AddArc(rect.X + rect.Width - d, rect.Y + rect.Height - d, d, d, 0, 90)
+        path.AddArc(rect.X, rect.Y + rect.Height - d, d, d, 90, 90)
+        path.CloseFigure()
+        Return path
+    End Function
+
+    ' --- DELETE BUTTON CLICK EVENT HANDLER ---
+    Private Sub dgvResidences_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvResidences.CellContentClick
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            If dgvResidences.Columns(e.ColumnIndex).Name = "btnDelete" Then
+                Dim cellId = dgvResidences.Rows(e.RowIndex).Cells("ResidentID").Value
+                If cellId Is Nothing OrElse IsDBNull(cellId) Then Return
+
+                Dim residentID As Integer = Convert.ToInt32(cellId)
+                Dim residentCode As String = If(dgvResidences.Rows(e.RowIndex).Cells("Resident Code").Value IsNot Nothing, dgvResidences.Rows(e.RowIndex).Cells("Resident Code").Value.ToString(), "")
+                Dim residentName As String = If(dgvResidences.Rows(e.RowIndex).Cells("Full Name").Value IsNot Nothing, dgvResidences.Rows(e.RowIndex).Cells("Full Name").Value.ToString(), "")
+                Dim email As String = If(dgvResidences.Rows(e.RowIndex).Cells("Email").Value IsNot Nothing, dgvResidences.Rows(e.RowIndex).Cells("Email").Value.ToString(), "")
+                Dim satelliteOffice As String = If(dgvResidences.Rows(e.RowIndex).Cells("Satellite Office").Value IsNot Nothing, dgvResidences.Rows(e.RowIndex).Cells("Satellite Office").Value.ToString(), "")
+
+                ' Ipasa ang residentID kasama ang iba pang detalye sa frmDeleteReason
+                Using deleteForm As New frmDeleteReason(residentID, residentCode, residentName, email, satelliteOffice)
+                    If deleteForm.ShowDialog() = DialogResult.OK Then
+                        Dim reason As String = deleteForm.DeleteReason
+
+                        Dim confirm As DialogResult = MessageBox.Show($"Sigurado ka ba na gusto mong i-delete si {residentName}?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+
+                        If confirm = DialogResult.Yes Then
+                            ExecuteSoftDelete(residentID, residentName, reason)
+                        End If
+                    End If
+                End Using
+            End If
+        End If
+    End Sub
+
+    ' --- METHOD PARA SA SOFT DELETE (STATUS: REMOVED) ---
+    Private Sub ExecuteSoftDelete(residentID As Integer, residentName As String, reason As String)
+        Try
+            connection()
+
+            ' Ginagawang 'Removed' ang AccountStatus pero nananatili sa database para protektado ang email
+            Dim updateSql As String = "UPDATE residences SET AccountStatus = 'Removed', DeleteComment = @reason WHERE ResidentID = @id"
+            Using cmdUpdate As New MySqlCommand(updateSql, cn)
+                cmdUpdate.Parameters.AddWithValue("@reason", reason)
+                cmdUpdate.Parameters.AddWithValue("@id", residentID)
+                cmdUpdate.ExecuteNonQuery()
+            End Using
+
+            MessageBox.Show("Record successfully removed and hidden from the list.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            LoadResidenceRecords()
+            LoadSummaryMetrics()
+
+        Catch ex As Exception
+            MessageBox.Show("Error deleting record: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
     Private Sub LoadSummaryMetrics()
         Try
             connection()
 
-            ' 1. Count residents added today (resets daily)
-            Dim queryNewToday As String = "SELECT COUNT(*) FROM residences WHERE AccountStatus <> 'Deleted' AND DATE(CreatedAt) = CURDATE()"
+            Dim queryNewToday As String = "SELECT COUNT(*) FROM residences WHERE AccountStatus <> 'Removed' AND DATE(CreatedAt) = CURDATE()"
             cmd = New MySqlCommand(queryNewToday, cn)
             Dim newTodayCount As Integer = Convert.ToInt32(cmd.ExecuteScalar())
             lblNewToday.Text = newTodayCount.ToString()
 
-            ' 2. Count active residents (Change 'Active' if your status keyword is different)
             Dim queryActive As String = "SELECT COUNT(*) FROM residences WHERE AccountStatus = 'Active'"
             cmd = New MySqlCommand(queryActive, cn)
             Dim activeCount As Integer = Convert.ToInt32(cmd.ExecuteScalar())
@@ -91,27 +199,29 @@ Public Class frmResidence_Records
     End Sub
 
     Private Sub dgvResidences_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvResidences.CellDoubleClick
-        ' Make sure a valid row was clicked (not the header)
-        If e.RowIndex >= 0 Then
-            ' 1. Extract the ResidentID from the double-clicked row
-            Dim selectedResidentID As Integer = Convert.ToInt32(dgvResidences.Rows(e.RowIndex).Cells("ResidentID").Value)
+        Try
+            If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+                If dgvResidences.Columns(e.ColumnIndex).Name = "btnDelete" Then Return
 
-            ' 2. Clear the existing controls in the main panel
-            frmMain.Panel2.Controls.Clear()
+                Dim cellValue = dgvResidences.Rows(e.RowIndex).Cells("ResidentID").Value
 
-            ' 3. Initialize your form with the extracted ID
-            Dim editForm As New Barangay_Residences(selectedResidentID)
+                If cellValue IsNot Nothing AndAlso Not IsDBNull(cellValue) Then
+                    Dim selectedResidentID As Integer = Convert.ToInt32(cellValue)
 
-            ' 4. Set properties to make it act like a docked control instead of a window
-            editForm.TopLevel = False
-            editForm.FormBorderStyle = FormBorderStyle.None
-            editForm.Dock = DockStyle.Fill
+                    frmMain.Panel2.Controls.Clear()
+                    Dim editForm As New Barangay_Residences(selectedResidentID)
+                    editForm.TopLevel = False
+                    editForm.FormBorderStyle = FormBorderStyle.None
+                    editForm.Dock = DockStyle.Fill
 
-            ' 5. Add to panel, bring to front, and show
-            frmMain.Panel2.Controls.Add(editForm)
-            editForm.BringToFront()
-            editForm.Show()
-        End If
+                    frmMain.Panel2.Controls.Add(editForm)
+                    editForm.BringToFront()
+                    editForm.Show()
+                End If
+            End If
+        Catch ex As Exception
+            MsgBox("May problema sa pagbukas ng record: " & ex.Message, MsgBoxStyle.Critical, "Error")
+        End Try
     End Sub
 
     Private Sub SetupSearchPlaceholder()
@@ -192,7 +302,6 @@ Public Class frmResidence_Records
     Private Sub btnCreateRequest_Click(sender As Object, e As EventArgs) Handles btnCreateRequest.Click
         Dim addForm As New Barangay_Residences()
 
-        ' Ensure the new creation form is also docked inside frmMain.Panel2
         frmMain.Panel2.Controls.Clear()
         addForm.TopLevel = False
         addForm.FormBorderStyle = FormBorderStyle.None
@@ -200,5 +309,4 @@ Public Class frmResidence_Records
         frmMain.Panel2.Controls.Add(addForm)
         addForm.Show()
     End Sub
-
 End Class

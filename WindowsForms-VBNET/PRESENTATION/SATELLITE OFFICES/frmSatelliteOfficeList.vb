@@ -156,8 +156,24 @@ Public Class frmSatelliteOfficeList
         End If
     End Sub
 
+    ' --- BUTTON PARA SA PAGBUKAS NG CREATE NEW SATELLITE OFFICE FORM ---
     Private Sub btnCreateRequest_Click(sender As Object, e As EventArgs) Handles btnCreateRequest.Click
-        MessageBox.Show("This feature is currently under development.", "Developer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Dim main As frmMain = TryCast(Application.OpenForms("frmMain"), frmMain)
+        If main Is Nothing Then
+            MsgBox("Main form not found.", MsgBoxStyle.Exclamation)
+            Return
+        End If
+
+        main.Panel2.Controls.Clear()
+
+        ' ✅ Buksan sa ADD MODE (walang pinasang ID) at i-dock sa Panel2
+        Dim frmCreate As New frmCreateNewSateliteOffice()
+        frmCreate.TopLevel = False
+        frmCreate.FormBorderStyle = FormBorderStyle.None
+        frmCreate.Dock = DockStyle.Fill
+        main.Panel2.Controls.Add(frmCreate)
+        frmCreate.BringToFront()
+        frmCreate.Show()
     End Sub
 
 End Class

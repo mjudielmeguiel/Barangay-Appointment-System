@@ -26,6 +26,7 @@ Public Class Barangay_Residences
     Private ReadOnly PH_SUFFIX As String = "Select Suffix"
     Private ReadOnly PH_CIVIL As String = "Civil Status *"
     Private ReadOnly PH_GENDER As String = "Gender *"
+    Private ReadOnly PH_SATELLITE As String = "Select Satellite Office *"
 
     Private ReadOnly COLOR_PLACEHOLDER As Color = Color.Gray
     Private ReadOnly COLOR_NORMAL As Color = Color.FromArgb(30, 30, 30)
@@ -62,6 +63,8 @@ Public Class Barangay_Residences
         pnlaccountsystem.Enabled = False
         pnlaccountsystem.Visible = True
 
+        LoadSatelliteOffices()
+
         ClearAllValidationLabels()
         SetAllPlaceholders()
 
@@ -74,7 +77,48 @@ Public Class Barangay_Residences
         End If
     End Sub
 
-    ' --- NEW NAVIGATION METHOD ---
+    ' --- SATELLITE OFFICE LOADING & SEARCH SETUP ---
+    Private Sub LoadSatelliteOffices()
+        Try
+            cboSatelliteOffice.Items.Clear()
+            connection()
+            Using cmd As New MySqlCommand("SELECT facility_name FROM brgy_putatan_satellite_offices", cn)
+                Using dr = cmd.ExecuteReader()
+                    While dr.Read()
+                        cboSatelliteOffice.Items.Add(dr("facility_name").ToString())
+                    End While
+                End Using
+            End Using
+
+            cboSatelliteOffice.AutoCompleteMode = AutoCompleteMode.SuggestAppend
+            cboSatelliteOffice.AutoCompleteSource = AutoCompleteSource.ListItems
+        Catch ex As Exception
+            MsgBox("Error loading satellite offices: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
+    ' --- FUNCTION PARA KUNIN ANG ID NG NAPILING SATELLITE OFFICE AUTOMATICALLY ---
+    Private Function GetSatelliteOfficeID(facilityName As String) As Integer
+        Dim satID As Integer = 0
+        Try
+            connection()
+            Using cmd As New MySqlCommand("SELECT id FROM brgy_putatan_satellite_offices WHERE facility_name = @name", cn)
+                cmd.Parameters.AddWithValue("@name", facilityName)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                    satID = Convert.ToInt32(result)
+                End If
+            End Using
+        Catch
+            satID = 0
+        Finally
+            CloseConnection()
+        End Try
+        Return satID
+    End Function
+
     Private Sub ReturnToRecordList()
         frmMain.Panel2.Controls.Clear()
 
@@ -108,6 +152,7 @@ Public Class Barangay_Residences
         SetComboPlaceholder(cboSuffix, PH_SUFFIX)
         SetComboPlaceholder(cboCivilStatus, PH_CIVIL)
         SetComboPlaceholder(cboGender, PH_GENDER)
+        SetComboPlaceholder(cboSatelliteOffice, PH_SATELLITE)
     End Sub
 
     Private Sub SetPlaceholder(txt As TextBox, text As String)
@@ -312,6 +357,15 @@ Public Class Barangay_Residences
         End If
     End Sub
 
+    Private Sub cboSatelliteOffice_GotFocus(sender As Object, e As EventArgs) Handles cboSatelliteOffice.GotFocus
+        ClearComboPlaceholder(cboSatelliteOffice)
+    End Sub
+    Private Sub cboSatelliteOffice_LostFocus(sender As Object, e As EventArgs) Handles cboSatelliteOffice.LostFocus
+        If cboSatelliteOffice.SelectedIndex = -1 OrElse String.IsNullOrWhiteSpace(cboSatelliteOffice.Text) Then
+            SetComboPlaceholder(cboSatelliteOffice, PH_SATELLITE)
+        End If
+    End Sub
+
     Private Sub txtEmail_TextChanged(sender As Object, e As EventArgs) Handles txtEmail.TextChanged
         If Not HasPlaceholderText(txtEmail) AndAlso Not String.IsNullOrWhiteSpace(txtEmail.Text) Then
             pnlaccountsystem.Enabled = True
@@ -337,6 +391,7 @@ Public Class Barangay_Residences
         Dim addr As String = String.Empty
         Dim fathName As String = String.Empty
         Dim mothName As String = String.Empty
+        Dim satOffice As String = String.Empty
         Dim bDay As DateTime = DateTime.Now
         Dim hasBday As Boolean = False
         Dim picBytes As Byte() = Nothing
@@ -360,6 +415,9 @@ Public Class Barangay_Residences
                         addr = dr("Address").ToString()
                         fathName = If(IsDBNull(dr("FatherName")) OrElse String.IsNullOrWhiteSpace(dr("FatherName").ToString()) OrElse dr("FatherName").ToString() = "N/A", String.Empty, dr("FatherName").ToString())
                         mothName = If(IsDBNull(dr("MotherName")) OrElse String.IsNullOrWhiteSpace(dr("MotherName").ToString()) OrElse dr("MotherName").ToString() = "N/A", String.Empty, dr("MotherName").ToString())
+
+                        satOffice = If(IsDBNull(dr("SatelliteOffice")), "", dr("SatelliteOffice").ToString())
+
                         If Not IsDBNull(dr("Birthday")) Then
                             bDay = Convert.ToDateTime(dr("Birthday"))
                             hasBday = True
@@ -410,6 +468,12 @@ Public Class Barangay_Residences
             cboGender.Text = gen : cboGender.ForeColor = COLOR_NORMAL
         Else
             SetComboPlaceholder(cboGender, PH_GENDER)
+        End If
+
+        If Not String.IsNullOrWhiteSpace(satOffice) AndAlso cboSatelliteOffice.Items.Contains(satOffice) Then
+            cboSatelliteOffice.Text = satOffice : cboSatelliteOffice.ForeColor = COLOR_NORMAL
+        Else
+            cboSatelliteOffice.SelectedIndex = -1 : SetComboPlaceholder(cboSatelliteOffice, PH_SATELLITE)
         End If
 
         If String.IsNullOrWhiteSpace(fathName) Then
@@ -720,6 +784,11 @@ Public Class Barangay_Residences
         Dim fatherVal = If(HasPlaceholderText(txtFatherName) OrElse String.IsNullOrWhiteSpace(txtFatherName.Text), "N/A", txtFatherName.Text.Trim().ToUpper())
         Dim motherVal = If(HasPlaceholderText(txtMotherName) OrElse String.IsNullOrWhiteSpace(txtMotherName.Text), "N/A", txtMotherName.Text.Trim().ToUpper())
 
+        Dim satOfficeVal = If(cboSatelliteOffice.SelectedIndex = -1 OrElse cboSatelliteOffice.Text = PH_SATELLITE, "", cboSatelliteOffice.Text.Trim())
+
+        ' Awtomatikong kinukuha ang ID ng satellite office base sa napiling pangalan sa ComboBox
+        Dim satelliteOfficeIDVal As Integer = GetSatelliteOfficeID(satOfficeVal)
+
         Dim fullName = $"{txtLastname.Text.Trim().ToUpper()}, {txtFirstname.Text.Trim().ToUpper()}{If(midName = "N/A", "", $" {midName}")}{If(suffixVal = "N/A", "", $" {suffixVal}")}"
         Dim fullAddress = $"{txtStreetAddress.Text.Trim().ToUpper()}, {txtBarangay.Text.Trim().ToUpper()}, {txtCity.Text.Trim().ToUpper()}"
         Dim civilVal = If(cboCivilStatus.SelectedIndex = -1 OrElse cboCivilStatus.Text = PH_CIVIL, "", cboCivilStatus.Text.ToUpper())
@@ -822,7 +891,7 @@ Public Class Barangay_Residences
             End Try
 
             If editResidentID > 0 Then
-                Dim sqlUpdate = "UPDATE residences SET Lastname=@lname, Firstname=@fname, Middlename=@mname, Suffix=@suffix, FullName=@fullname, Address=@address, Birthday=@bday, BirthPlace=@bplace, CivilStatus=@cstatus, Gender=@gender, MobileNumber=@mobile, Email=@email, Nationality=@nat, AccountStatus=@accstat, FatherName=@father, MotherName=@mother, DepartmentID=@deptid, Username=@username, Password=@password"
+                Dim sqlUpdate = "UPDATE residences SET Lastname=@lname, Firstname=@fname, Middlename=@mname, Suffix=@suffix, FullName=@fullname, Address=@address, Birthday=@bday, BirthPlace=@bplace, CivilStatus=@cstatus, Gender=@gender, MobileNumber=@mobile, Email=@email, Nationality=@nat, AccountStatus=@accstat, FatherName=@father, MotherName=@mother, DepartmentID=@deptid, Username=@username, Password=@password, SatelliteOffice=@satoffice, SatelliteOfficeID=@satid"
 
                 If profileImageBytes IsNot Nothing Then sqlUpdate &= ", Picture=@pic"
                 If idFrontBytes IsNot Nothing Then sqlUpdate &= ", IdentificationFront=@idfront"
@@ -851,6 +920,8 @@ Public Class Barangay_Residences
                     cmd.Parameters.AddWithValue("@deptid", adminDeptID)
                     cmd.Parameters.AddWithValue("@username", usernameVal)
                     cmd.Parameters.AddWithValue("@password", passwordVal)
+                    cmd.Parameters.AddWithValue("@satoffice", satOfficeVal)
+                    cmd.Parameters.AddWithValue("@satid", satelliteOfficeIDVal)
 
                     If profileImageBytes IsNot Nothing Then
                         cmd.Parameters.AddWithValue("@pic", profileImageBytes)
@@ -869,11 +940,10 @@ Public Class Barangay_Residences
                 WriteActivityLog("UPDATE_RESIDENT", $"Updated: {fullName}", editResidentID)
                 MsgBox("Record updated successfully!", MsgBoxStyle.Information)
 
-                ' Replace Me.Close() to navigate back to table
                 ReturnToRecordList()
 
             Else
-                Dim sqlInsert = "INSERT INTO residences (ResidentCode, Lastname, Firstname, Middlename, Suffix, FullName, Address, Birthday, BirthPlace, CivilStatus, Gender, MobileNumber, Email, Nationality, FatherName, MotherName, AccountStatus, DepartmentID, Username, Password, Picture, IdentificationFront, IdentificationBack) VALUES (@rcode, @lname, @fname, @mname, @suffix, @fullname, @address, @bday, @bplace, @cstatus, @gender, @mobile, @email, @nat, @father, @mother, @accstat, @deptid, @username, @password, @pic, @idfront, @idback)"
+                Dim sqlInsert = "INSERT INTO residences (ResidentCode, Lastname, Firstname, Middlename, Suffix, FullName, Address, Birthday, BirthPlace, CivilStatus, Gender, MobileNumber, Email, Nationality, FatherName, MotherName, AccountStatus, DepartmentID, Username, Password, SatelliteOffice, SatelliteOfficeID, Picture, IdentificationFront, IdentificationBack) VALUES (@rcode, @lname, @fname, @mname, @suffix, @fullname, @address, @bday, @bplace, @cstatus, @gender, @mobile, @email, @nat, @father, @mother, @accstat, @deptid, @username, @password, @satoffice, @satid, @pic, @idfront, @idback)"
 
                 Using cmd As New MySqlCommand(sqlInsert, cn)
                     cmd.Parameters.AddWithValue("@rcode", freshResidentCode)
@@ -896,6 +966,8 @@ Public Class Barangay_Residences
                     cmd.Parameters.AddWithValue("@accstat", accStatVal)
                     cmd.Parameters.AddWithValue("@username", usernameVal)
                     cmd.Parameters.AddWithValue("@password", passwordVal)
+                    cmd.Parameters.AddWithValue("@satoffice", satOfficeVal)
+                    cmd.Parameters.AddWithValue("@satid", satelliteOfficeIDVal)
 
                     If profileImageBytes IsNot Nothing Then
                         cmd.Parameters.AddWithValue("@pic", profileImageBytes)
@@ -920,7 +992,6 @@ Public Class Barangay_Residences
                     MsgBox("Registered successfully!" & vbCrLf & $"Code: {freshResidentCode}", MsgBoxStyle.Information)
                 End Using
 
-                ' Navigate back to table rather than clearing fields
                 ReturnToRecordList()
             End If
 
@@ -943,6 +1014,7 @@ Public Class Barangay_Residences
         txtBirthPlace.Clear()
         cboCivilStatus.SelectedIndex = -1
         cboGender.SelectedIndex = -1
+        cboSatelliteOffice.SelectedIndex = -1
         txtMobileNumber.Clear()
         txtEmail.Clear()
         txtUsername.Clear()
@@ -966,7 +1038,6 @@ Public Class Barangay_Residences
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         If MsgBox("Are you sure you want to Cancel?", vbYesNo + MsgBoxStyle.Question, "Confirm Cancel") = MsgBoxResult.Yes Then
-            ' Replace ClearForm() and Me.Hide() with table navigation
             ReturnToRecordList()
         End If
     End Sub

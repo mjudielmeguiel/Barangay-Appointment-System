@@ -270,6 +270,12 @@
     <Compile Include="PRESENTATION\ADMIN\frmDocumentServices.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PRESENTATION\RESIDENCE\frmDeleteReason.Designer.vb">
+      <DependentUpon>frmDeleteReason.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PRESENTATION\RESIDENCE\frmDeleteReason.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PRESENTATION\RESIDENCE\frmResidence_Records.Designer.vb">
       <DependentUpon>frmResidence_Records.vb</DependentUpon>
     </Compile>
@@ -300,10 +306,10 @@
     <Compile Include="PRESENTATION\STAFF\frmAppointmentDetails.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PRESENTATION\STAFF\frmBarangayCalendar.Designer.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmBarangayCalendar.Designer.vb">
       <DependentUpon>frmBarangayCalendar.vb</DependentUpon>
     </Compile>
-    <Compile Include="PRESENTATION\STAFF\frmBarangayCalendar.vb">
+    <Compile Include="PRESENTATION\GENERAL FORMS\frmBarangayCalendar.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PRESENTATION\STAFF\frmCouponView.Designer.vb">
@@ -316,12 +322,6 @@
       <DependentUpon>frmCreateAppointment.vb</DependentUpon>
     </Compile>
     <Compile Include="PRESENTATION\CREATE APPOINTMENT\frmCreateAppointment.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PRESENTATION\STAFF\frmDayAppointmentsList.Designer.vb">
-      <DependentUpon>frmDayAppointmentsList.vb</DependentUpon>
-    </Compile>
-    <Compile Include="PRESENTATION\STAFF\frmDayAppointmentsList.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PRESENTATION\STAFF\frmPayments.Designer.vb">
@@ -435,6 +435,9 @@
     <EmbeddedResource Include="PRESENTATION\ADMIN\frmDocumentServices.resx">
       <DependentUpon>frmDocumentServices.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PRESENTATION\RESIDENCE\frmDeleteReason.resx">
+      <DependentUpon>frmDeleteReason.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PRESENTATION\RESIDENCE\frmResidence_Records.resx">
       <DependentUpon>frmResidence_Records.vb</DependentUpon>
     </EmbeddedResource>
@@ -450,7 +453,7 @@
     <EmbeddedResource Include="PRESENTATION\STAFF\frmAppointmentDetails.resx">
       <DependentUpon>frmAppointmentDetails.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PRESENTATION\STAFF\frmBarangayCalendar.resx">
+    <EmbeddedResource Include="PRESENTATION\GENERAL FORMS\frmBarangayCalendar.resx">
       <DependentUpon>frmBarangayCalendar.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PRESENTATION\STAFF\frmCouponView.resx">
@@ -458,9 +461,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PRESENTATION\CREATE APPOINTMENT\frmCreateAppointment.resx">
       <DependentUpon>frmCreateAppointment.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PRESENTATION\STAFF\frmDayAppointmentsList.resx">
-      <DependentUpon>frmDayAppointmentsList.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PRESENTATION\STAFF\frmPayments.resx">
       <DependentUpon>frmPayments.vb</DependentUpon>

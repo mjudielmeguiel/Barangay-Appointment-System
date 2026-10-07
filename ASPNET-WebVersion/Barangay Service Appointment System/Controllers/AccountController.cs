@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace Barangay_Service_Appointment_System.Controllers
 {
@@ -53,7 +54,6 @@ namespace Barangay_Service_Appointment_System.Controllers
 
                             string emailValue = reader["Email"] != DBNull.Value ? reader["Email"].ToString() ?? string.Empty : string.Empty;
 
-                            // Session Mapping para tumugma sa HomeController.cs
                             HttpContext.Session.SetString("UserEmail", emailValue);
                             HttpContext.Session.SetString("Username", reader["Username"]?.ToString() ?? string.Empty);
                             HttpContext.Session.SetString("FullName", string.IsNullOrEmpty(fullName) ? "N/A" : fullName);
@@ -69,6 +69,62 @@ namespace Barangay_Service_Appointment_System.Controllers
                             ModelState.AddModelError(string.Empty, "Invalid username or password.");
                             return View(model);
                         }
+                    }
+                }
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Register(string Firstname, string Lastname, string Email, string Username, string Password)
+        {
+            if (string.IsNullOrWhiteSpace(Firstname) || string.IsNullOrWhiteSpace(Lastname) ||
+                string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(Email))
+            {
+                TempData["ErrorMessage"] = "Please fill in all required fields.";
+                return RedirectToAction("Login", "Account");
+            }
+
+            string connectionString = _configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                // Awtomatikong pinagsasama ang Firstname at Lastname para sa FullName column
+                string fullName = $"{Firstname} {Lastname}".Trim();
+
+                // Pinalitan ang table name papuntang 'residences' at in-update ang mga columns
+                string query = @"INSERT INTO residences 
+                                 (Firstname, Lastname, FullName, Email, Username, Password, CreatedAt, AccountStatus) 
+                                 VALUES (@Firstname, @Lastname, @FullName, @Email, @Username, @Password, NOW(), 'Active')";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Firstname", Firstname);
+                    cmd.Parameters.AddWithValue("@Lastname", Lastname);
+                    cmd.Parameters.AddWithValue("@FullName", fullName);
+                    cmd.Parameters.AddWithValue("@Email", Email);
+                    cmd.Parameters.AddWithValue("@Username", Username);
+                    cmd.Parameters.AddWithValue("@Password", Password);
+
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+
+                        TempData["SuccessMessage"] = "Account created successfully! You can now log in.";
+                        return RedirectToAction("Index", "Home"); // Palitan ang "Home" kung sa ibang page dapat pumunta
+                    }
+                    catch (MySqlException ex)
+                    {
+                        if (ex.Number == 1062)
+                        {
+                            TempData["ErrorMessage"] = "Username or Email is already taken.";
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = "An error occurred while creating the account.";
+                        }
+
+                        return RedirectToAction("Index", "Home");
                     }
                 }
             }

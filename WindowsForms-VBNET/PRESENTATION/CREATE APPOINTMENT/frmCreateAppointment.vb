@@ -62,7 +62,7 @@ Public Class frmCreateAppointment
 
             Select Case currentAppointmentStatus
                 Case "PENDING"
-                    btnCreateRequest.Text = "Review & Approve"
+                    btnCreateRequest.Text = "Proceed to Processing" ' ✅ Binago mula sa "Review & Approve"
                 Case "APPROVE", "APPROVED"
                     btnCreateRequest.Text = "Proceed to Processing"
                 Case "PROCESSING"
@@ -73,7 +73,7 @@ Public Class frmCreateAppointment
         Else
             lblControlNo.Text = GenerateControlNumber()
             LoadLoggedUserDefault()
-            currentAppointmentStatus = "APPROVE" ' ✅ Nagsisimula na sa APPROVE kapag bago
+            currentAppointmentStatus = "PROCESSING" ' ✅ Nagsisimula na sa PROCESSING kapag bago (imbes na APPROVE)
             btnCreateRequest.Text = "Submit Request"
         End If
     End Sub
@@ -422,19 +422,18 @@ Public Class frmCreateAppointment
 
         Dim targetNextStatus As String = currentAppointmentStatus
         If Not IsEditMode Then
-            targetNextStatus = "APPROVE" ' ✅ Kapag bagong gawa, rekta sa APPROVE
+            targetNextStatus = "PROCESSING" ' ✅ Bagong request, deretso na sa PROCESSING
         Else
             If currentAppointmentStatus = "PENDING" Then
-                targetNextStatus = "APPROVE"
+                targetNextStatus = "PROCESSING" ' ✅ PENDING to PROCESSING agad
             ElseIf currentAppointmentStatus = "APPROVE" OrElse currentAppointmentStatus = "APPROVED" Then
-                targetNextStatus = "PROCESSING" ' ✅ Galing Approve papuntang Processing
+                targetNextStatus = "PROCESSING" ' ✅ (Fallback lang ito kung sakaling may natirang Approved data)
             ElseIf currentAppointmentStatus = "PROCESSING" Then
-                ' ✅ Suriin kung libre o may bayad ang dokumento
                 Dim docPrice As Decimal = GetDocumentPrice(cboRequestType.Text.Trim())
                 If docPrice <= 0 Then
-                    targetNextStatus = "TO RELEASE" ' Kapag walang bayad, rekta sa For Pickup / Release
+                    targetNextStatus = "TO RELEASE"
                 Else
-                    targetNextStatus = "UNPAID"     ' Kapag may bayad, dadaan sa Payment
+                    targetNextStatus = "UNPAID"
                 End If
             End If
         End If

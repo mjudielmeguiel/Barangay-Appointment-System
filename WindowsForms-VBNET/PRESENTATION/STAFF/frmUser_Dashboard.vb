@@ -236,6 +236,36 @@ Public Class frmUser_Dashboard
             If lblRejected IsNot Nothing Then lblRejected.Text = rejectedVal.ToString()
             If lblCancelled IsNot Nothing Then lblCancelled.Text = cancelledVal.ToString()
 
+            Dim onlineVal As Integer = 0
+            Dim walkinVal As Integer = 0
+
+            Dim sqlPlatformCounts As String = "SELECT UPPER(AppointmentType) AS AppType, COUNT(*) AS Total FROM appointments WHERE DateSubmitted >= NOW() - INTERVAL 24 HOUR GROUP BY UPPER(AppointmentType)"
+
+            Try
+                Using cmdPlatform As New MySqlCommand(sqlPlatformCounts, cn)
+                    Using drPlatform As MySqlDataReader = cmdPlatform.ExecuteReader()
+                        While drPlatform.Read()
+                            Dim appType As String = drPlatform("AppType").ToString().Trim().Replace("-", "").Replace(" ", "")
+                            Dim count As Integer = Convert.ToInt32(drPlatform("Total"))
+
+                            If appType.Contains("ONLINE") Then
+                                onlineVal += count
+                            ElseIf appType.Contains("WALKIN") Then
+                                walkinVal += count
+                            End If
+                        End While
+                    End Using
+                End Using
+
+                If Me.Controls.Find("lblOnline", True).FirstOrDefault() IsNot Nothing Then
+                    DirectCast(Me.Controls.Find("lblOnline", True).FirstOrDefault(), Label).Text = onlineVal.ToString()
+                End If
+                If Me.Controls.Find("lblWalkIn", True).FirstOrDefault() IsNot Nothing Then
+                    DirectCast(Me.Controls.Find("lblWalkIn", True).FirstOrDefault(), Label).Text = walkinVal.ToString()
+                End If
+            Catch exType As Exception
+            End Try
+
         Catch ex As Exception
         Finally
             CloseConnection()
@@ -251,7 +281,6 @@ Public Class frmUser_Dashboard
 
             Dim upperStatus As String = statusFilter.ToUpper()
 
-            ' Kapag COMPLETE section, isasama ang Pickup Date gamit ang NULLIF para iwas-date error
             If upperStatus = "COMPLETE" OrElse upperStatus = "COMPLETED" Then
                 queryStr = "SELECT ControlNo AS `Control No.`, RequestType AS `Request Type`, Purpose, " &
                            "Department, NULLIF(DateSubmitted, '0000-00-00 00:00:00') AS `Date Submitted`, " &
@@ -262,7 +291,6 @@ Public Class frmUser_Dashboard
                            "AND DateSubmitted >= NOW() - INTERVAL 24 HOUR " &
                            "ORDER BY AppointmentID DESC"
             Else
-                ' Sa ibang sections, walang Pickup Date column para hindi lumitaw
                 queryStr = "SELECT ControlNo AS `Control No.`, RequestType AS `Request Type`, Purpose, " &
                            "Department, NULLIF(DateSubmitted, '0000-00-00 00:00:00') AS `Date Submitted`, " &
                            "NULLIF(AppointmentDate, '0000-00-00 00:00:00') AS `Appointment Date`, Status " &
@@ -364,6 +392,7 @@ Public Class frmUser_Dashboard
             dgvRequests.Columns.Add(btnUnclaimedAction)
         End If
 
+        ' Para sa Cancel / Reject na Button
         If Not dgvRequests.Columns.Contains("colCancel") Then
             Dim btnCancelCol As New DataGridViewButtonColumn()
             btnCancelCol.Name = "colCancel"
@@ -409,7 +438,6 @@ Public Class frmUser_Dashboard
 
         If upperStatus = "UNPAID" OrElse upperStatus = "TO PAY" Then
             dgvRequests.Columns("colPay").Visible = True
-            dgvRequests.Columns("colCancel").Visible = True
         Else
             dgvRequests.Columns("colPay").Visible = False
         End If
@@ -428,10 +456,17 @@ Public Class frmUser_Dashboard
             dgvRequests.Columns("colUnclaimedActionBtn").Visible = False
         End If
 
+        ' I-setup ang Reject / Cancel button logic dito
         If upperStatus = "PENDING" OrElse upperStatus = "APPROVE" OrElse upperStatus = "APPROVED" OrElse upperStatus = "PROCESSING" OrElse upperStatus = "UNPAID" OrElse upperStatus = "TO PAY" Then
             dgvRequests.Columns("colCancel").Visible = True
+            ' Dito babaguhin yung Header Name kung Pending siya 
+            If upperStatus = "PENDING" Then
+                dgvRequests.Columns("colCancel").HeaderText = "Reject"
+            Else
+                dgvRequests.Columns("colCancel").HeaderText = "Cancel"
+            End If
         Else
-            If upperStatus <> "UNPAID" AndAlso upperStatus <> "TO PAY" Then dgvRequests.Columns("colCancel").Visible = False
+            dgvRequests.Columns("colCancel").Visible = False
         End If
     End Sub
 
@@ -489,6 +524,21 @@ Public Class frmUser_Dashboard
         If colName = "colUnclaimedActionBtn" AndAlso currentStatus = "UNCLAIMED" Then
             If MsgBox($"Mark unclaimed appointment [{controlNo}] as COMPLETE?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Release") = MsgBoxResult.Yes Then
                 UpdateRequestStatus(controlNo, "COMPLETE")
+            End If
+        End If
+
+        ' ADDED ACTION PARA SA REJECT AT CANCEL BUTTON
+        If colName = "colCancel" Then
+            If currentStatus = "PENDING" Then
+                ' Kapag Pending, mapupunta ang status sa REJECTED
+                If MsgBox($"Are you sure you want to REJECT request [{controlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Reject") = MsgBoxResult.Yes Then
+                    UpdateRequestStatus(controlNo, "REJECTED")
+                End If
+            Else
+                ' Kapag nasa ibang section (Processing, Unpaid, etc.), mapupunta sa CANCELLED
+                If MsgBox($"Are you sure you want to CANCEL request [{controlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel") = MsgBoxResult.Yes Then
+                    UpdateRequestStatus(controlNo, "CANCELLED")
+                End If
             End If
         End If
     End Sub
@@ -564,13 +614,18 @@ Public Class frmUser_Dashboard
                     e.Handled = True
                 End If
 
+                ' DITO BABAGUHIN YUNG NAKASULAT SA LOOB NG BUTTON
                 If colName = "colCancel" AndAlso (rowStatus = "PENDING" OrElse rowStatus = "APPROVE" OrElse rowStatus = "APPROVED" OrElse rowStatus = "PROCESSING" OrElse rowStatus = "UNPAID" OrElse rowStatus = "TO PAY") Then
                     Using path As GraphicsPath = GetRoundedPath(buttonRect, cornerRadius)
                         Using brush As New SolidBrush(Color.FromArgb(128, 0, 0))
                             e.Graphics.FillPath(brush, path)
                         End Using
                     End Using
-                    TextRenderer.DrawText(e.Graphics, "CANCEL", New Font("Segoe UI", 8.0F, FontStyle.Bold), buttonRect, Color.White, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
+
+                    ' Tukuyin kung "REJECT" o "CANCEL" ang iguguhit base sa status
+                    Dim btnText As String = If(rowStatus = "PENDING", "REJECT", "CANCEL")
+
+                    TextRenderer.DrawText(e.Graphics, btnText, New Font("Segoe UI", 8.0F, FontStyle.Bold), buttonRect, Color.White, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
                     e.Handled = True
                 End If
             End If

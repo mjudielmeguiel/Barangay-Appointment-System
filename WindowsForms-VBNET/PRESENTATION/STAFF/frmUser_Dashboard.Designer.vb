@@ -280,9 +280,9 @@ Partial Class frmUser_Dashboard
         Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Label3.Location = New System.Drawing.Point(12, 51)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(109, 17)
+        Me.Label3.Size = New System.Drawing.Size(47, 17)
         Me.Label3.TabIndex = 164
-        Me.Label3.Text = "Pending (Online)"
+        Me.Label3.Text = "Online"
         '
         'Panel1
         '
@@ -315,9 +315,9 @@ Partial Class frmUser_Dashboard
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(18, 51)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(60, 17)
+        Me.Label1.Size = New System.Drawing.Size(53, 17)
         Me.Label1.TabIndex = 164
-        Me.Label1.Text = "Approve"
+        Me.Label1.Text = "Walk-In"
         '
         'Panel3
         '

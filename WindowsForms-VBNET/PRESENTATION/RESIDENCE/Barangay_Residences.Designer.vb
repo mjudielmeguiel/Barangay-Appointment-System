@@ -52,6 +52,9 @@ Partial Class Barangay_Residences
         Me.btnSubmit = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.cboSatelliteOffice = New System.Windows.Forms.ComboBox()
         Me.lblMiddlenameError = New System.Windows.Forms.Label()
         Me.lblEmailError = New System.Windows.Forms.Label()
         Me.lblMobileError = New System.Windows.Forms.Label()
@@ -394,13 +397,14 @@ Partial Class Barangay_Residences
         '
         'btnSubmit
         '
+        Me.btnSubmit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnSubmit.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.btnSubmit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSubmit.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSubmit.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnSubmit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnSubmit.Location = New System.Drawing.Point(969, 1112)
+        Me.btnSubmit.Location = New System.Drawing.Point(1145, 1114)
         Me.btnSubmit.Name = "btnSubmit"
         Me.btnSubmit.Size = New System.Drawing.Size(161, 37)
         Me.btnSubmit.TabIndex = 678
@@ -410,13 +414,14 @@ Partial Class Barangay_Residences
         '
         'btnCancel
         '
+        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCancel.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCancel.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCancel.ForeColor = System.Drawing.Color.DarkBlue
         Me.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnCancel.Location = New System.Drawing.Point(1149, 1112)
+        Me.btnCancel.Location = New System.Drawing.Point(975, 1114)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(164, 37)
         Me.btnCancel.TabIndex = 695
@@ -429,6 +434,9 @@ Partial Class Barangay_Residences
         Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.Panel3.Controls.Add(Me.Label1)
+        Me.Panel3.Controls.Add(Me.Label8)
+        Me.Panel3.Controls.Add(Me.cboSatelliteOffice)
         Me.Panel3.Controls.Add(Me.lblMiddlenameError)
         Me.Panel3.Controls.Add(Me.lblEmailError)
         Me.Panel3.Controls.Add(Me.lblMobileError)
@@ -475,6 +483,36 @@ Partial Class Barangay_Residences
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(1269, 401)
         Me.Panel3.TabIndex = 706
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(333, 235)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(91, 17)
+        Me.Label1.TabIndex = 722
+        Me.Label1.Text = "Satellite Office"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(332, 286)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(15, 19)
+        Me.Label8.TabIndex = 721
+        Me.Label8.Text = "-"
+        '
+        'cboSatelliteOffice
+        '
+        Me.cboSatelliteOffice.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.cboSatelliteOffice.Font = New System.Drawing.Font("Microsoft YaHei UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboSatelliteOffice.FormattingEnabled = True
+        Me.cboSatelliteOffice.Location = New System.Drawing.Point(336, 255)
+        Me.cboSatelliteOffice.Name = "cboSatelliteOffice"
+        Me.cboSatelliteOffice.Size = New System.Drawing.Size(290, 28)
+        Me.cboSatelliteOffice.TabIndex = 720
         '
         'lblMiddlenameError
         '
@@ -603,7 +641,7 @@ Partial Class Barangay_Residences
         Me.txtStreetAddress.Location = New System.Drawing.Point(29, 254)
         Me.txtStreetAddress.Name = "txtStreetAddress"
         Me.txtStreetAddress.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
-        Me.txtStreetAddress.Size = New System.Drawing.Size(597, 28)
+        Me.txtStreetAddress.Size = New System.Drawing.Size(290, 28)
         Me.txtStreetAddress.TabIndex = 707
         '
         'Label30
@@ -995,4 +1033,7 @@ Partial Class Barangay_Residences
     Friend WithEvents Panel6 As Panel
     Friend WithEvents Label7 As Label
     Friend WithEvents Label10 As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents cboSatelliteOffice As ComboBox
 End Class

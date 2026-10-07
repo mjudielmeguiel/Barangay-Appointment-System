@@ -102,7 +102,7 @@ Partial Class frmBarangayCalendar
         Me.btnAddEvent.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnAddEvent.Image = CType(resources.GetObject("btnAddEvent.Image"), System.Drawing.Image)
         Me.btnAddEvent.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnAddEvent.Location = New System.Drawing.Point(1223, 66)
+        Me.btnAddEvent.Location = New System.Drawing.Point(1223, 68)
         Me.btnAddEvent.Name = "btnAddEvent"
         Me.btnAddEvent.Size = New System.Drawing.Size(131, 37)
         Me.btnAddEvent.TabIndex = 596
