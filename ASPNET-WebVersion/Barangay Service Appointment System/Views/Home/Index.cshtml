@@ -1,26 +1,26 @@
 ﻿@model Barangay_Service_Appointment_System.ViewModels.ResidentDashboardViewModel
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barangay Putatan Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="~/images/PUTATAN.ico" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
             :root {
                 --nav-bg: #131e3d;
-                --sidebar-bg: #f8f9fa;
                 --main-bg: #f5f6f8;
                 --text-dark: #333333;
                 --text-muted: #777777;
                 --border-color: #e3e6f0;
                 --primary-blue: #1a2b56;
-                --sidebar-width: 260px;
-                --sidebar-collapsed-width: 75px;
+                --success-green: #22c55e;
             }
-
+            * {
+                box-sizing: border-box;
+            }
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: var(--main-bg);
@@ -28,12 +28,11 @@
                 padding: 0;
                 overflow-x: hidden;
             }
-
             /* Top Navbar */
             .top-navbar {
                 background-color: var(--nav-bg);
                 color: white;
-                padding: 0 15px;
+                padding: 0 16px;
                 display: flex;
                 align-items: center;
                 height: 60px;
@@ -43,25 +42,21 @@
                 right: 0;
                 z-index: 1050;
             }
-
             .navbar-brand-wrapper {
                 display: flex;
                 align-items: center;
                 width: 100%;
             }
-
             .navbar-logo {
-                height: 38px;
-                width: 38px;
+                height: 36px;
+                width: 36px;
                 border-radius: 50%;
                 object-fit: cover;
                 border: 2px solid #f8c146;
                 background-color: white;
                 margin-right: 10px;
-                margin-left: 5px;
                 flex-shrink: 0;
             }
-
             .navbar-title {
                 font-size: 0.95rem;
                 white-space: nowrap;
@@ -69,300 +64,386 @@
                 text-overflow: ellipsis;
                 margin: 0;
             }
-
-            .sidebar-toggle-btn {
-                background: transparent;
-                border: none;
-                color: white;
-                font-size: 1.25rem;
-                cursor: pointer;
-                padding: 5px 8px;
-                border-radius: 4px;
-                transition: background 0.2s;
-                flex-shrink: 0;
-            }
-
-                .sidebar-toggle-btn:hover {
-                    background: rgba(255,255,255,0.1);
-                }
-
-            /* Sidebar */
-            .sidebar {
-                width: var(--sidebar-width);
-                background-color: var(--sidebar-bg);
-                position: fixed;
-                top: 60px;
-                left: 0;
-                bottom: 0;
-                border-right: 1px solid var(--border-color);
-                display: flex;
-                flex-direction: column;
-                transition: all 0.3s ease;
-                z-index: 1040;
-                overflow-x: hidden;
-            }
-
-            body.sidebar-collapsed .sidebar {
-                width: var(--sidebar-collapsed-width);
-            }
-
-            .sidebar-menu {
-                list-style: none;
-                padding: 10px 12px;
-                margin: 0;
-                flex-grow: 1;
-            }
-
-            .sidebar-link {
-                display: flex;
+            .btn-logout {
+                margin-left: auto;
+                display: inline-flex;
                 align-items: center;
-                padding: 12px 14px;
-                color: var(--primary-blue);
-                text-decoration: none;
-                border-radius: 25px;
-                transition: background-color 0.2s;
-                margin-bottom: 5px;
+                gap: 8px;
+                background: transparent;
+                border: 1px solid rgba(255,255,255,0.35);
+                color: #fff;
+                padding: 6px 14px;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                cursor: pointer;
                 white-space: nowrap;
+                flex-shrink: 0;
+                transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s ease;
             }
-
-                .sidebar-link:hover {
-                    background-color: #e2e6ea;
+                .btn-logout:hover {
+                    background: #fff;
+                    color: var(--nav-bg);
+                    border-color: #fff;
+                    transform: translateY(-1px);
                 }
-
-                .sidebar-link i {
-                    font-size: 1.2rem;
-                    min-width: 30px;
-                    text-align: center;
-                }
-
-                .sidebar-link span {
-                    font-size: 0.9rem;
-                    font-weight: 500;
-                    margin-left: 10px;
-                    transition: opacity 0.3s ease, visibility 0.3s ease;
-                }
-
-            body.sidebar-collapsed .sidebar-link span {
-                opacity: 0;
-                visibility: hidden;
-                width: 0;
-                display: none;
-            }
-
-            .sidebar-footer {
-                padding: 15px 12px;
-                border-top: 1px solid var(--border-color);
-            }
-
-            /* Main Content */
             .main-content {
-                margin-left: var(--sidebar-width);
+                margin-left: 0;
                 margin-top: 60px;
                 min-height: calc(100vh - 60px);
                 background-color: var(--main-bg);
-                transition: margin-left 0.3s ease;
-                padding: 25px 0;
+                padding: 24px 16px;
             }
-
-            body.sidebar-collapsed .main-content {
-                margin-left: var(--sidebar-collapsed-width);
-            }
-
             .content-wrapper {
-                max-width: 1200px;
+                max-width: 1500px;
                 margin: 0 auto;
                 width: 100%;
-                padding: 0 20px;
+                padding: 0 10px;
             }
-
             .profile-card {
                 background: white;
                 border: 1px solid var(--border-color);
-                border-radius: 8px;
-                padding: 25px 15px;
+                border-radius: 10px;
+                padding: 24px 16px;
                 text-align: center;
                 margin-bottom: 20px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             }
-
-            .profile-img {
-                width: 100px;
-                height: 100px;
+            .profile-img-wrapper {
+                width: 120px;
+                height: 120px;
                 border-radius: 50%;
+                overflow: hidden;
+                margin: 0 auto 15px;
+                border: 4px solid #eef2ff;
+            }
+            .profile-img {
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
-                border: 3px solid #f8f9fa;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                margin-bottom: 12px;
             }
-
             .profile-name {
-                font-size: 1.05rem;
-                font-weight: 700;
+                font-size: 1.15rem;
+                font-weight: 750;
                 color: var(--primary-blue);
-                margin-bottom: 2px;
+                margin-bottom: 5px;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                white-space: normal;
+                line-height: 1.3;
             }
-
             .profile-role {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
                 color: var(--text-muted);
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                margin-bottom: 12px;
+                margin-bottom: 15px;
             }
-
             .info-list {
                 list-style: none;
                 padding: 0;
                 margin: 15px 0 0 0;
                 text-align: left;
             }
-
             .info-item {
                 display: flex;
-                align-items: center;
-                padding: 8px 0;
+                align-items: flex-start;
+                padding: 10px 0;
+                border-bottom: 1px dashed #f0f0f0;
             }
-
+                .info-item:last-child {
+                    border-bottom: none;
+                }
             .info-icon {
-                width: 32px;
-                height: 32px;
+                width: 36px;
+                height: 36px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-right: 10px;
-                font-size: 0.85rem;
+                margin-right: 12px;
+                font-size: 0.9rem;
                 flex-shrink: 0;
+                margin-top: 2px;
             }
-
-            .info-text p {
-                margin: 0;
-                line-height: 1.2;
+            .info-text {
+                flex: 1;
+                min-width: 0;
             }
-
+                .info-text p {
+                    margin: 0;
+                    line-height: 1.4;
+                }
             .info-label {
-                font-size: 0.65rem;
+                font-size: 0.75rem;
                 color: #888;
+                margin-bottom: 2px;
             }
-
             .info-value {
-                font-size: 0.8rem;
+                font-size: 0.9rem;
                 color: #333;
                 font-weight: 500;
+                overflow-wrap: anywhere;
+                word-break: normal;
             }
-
             .table-card {
                 background: white;
                 border: 1px solid var(--border-color);
-                border-radius: 8px;
-                padding: 20px;
+                border-radius: 10px;
+                padding: 24px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             }
-
             .table-header-title {
                 color: var(--primary-blue);
-                font-weight: 600;
+                font-weight: 700;
                 font-size: 1.1rem;
             }
-
             .btn-custom-dark {
                 background-color: var(--primary-blue);
                 color: white;
-                font-size: 0.8rem;
+                font-size: 0.85rem;
                 font-weight: 500;
-                border-radius: 4px;
+                border-radius: 6px;
+                white-space: nowrap;
+                padding: 8px 14px;
+                transition: opacity 0.2s;
             }
-
+                .btn-custom-dark:hover {
+                    opacity: 0.9;
+                    color: #fff;
+                }
             .btn-custom-light {
                 background-color: #f8f9fa;
                 border: 1px solid #ddd;
                 color: #333;
-                font-size: 0.8rem;
-                border-radius: 4px;
+                font-size: 0.85rem;
+                border-radius: 6px;
+                padding: 8px 12px;
             }
-
             .custom-table {
                 width: 100%;
-                margin-top: 10px;
+                margin-top: 5px;
             }
-
                 .custom-table th {
-                    font-size: 0.75rem;
+                    font-size: 0.8rem;
                     color: var(--text-dark);
                     font-weight: 700;
-                    padding: 12px 8px;
+                    padding: 12px 10px;
                     border-top: 1px solid var(--border-color);
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 2px solid var(--border-color);
                     background-color: #f8f9fc;
                     white-space: nowrap;
                 }
-
                 .custom-table td {
-                    font-size: 0.8rem;
-                    padding: 10px 8px;
-                    color: #555;
+                    font-size: 0.85rem;
+                    padding: 12px 10px;
+                    color: #444;
                     border-bottom: 1px solid #f0f0f0;
+                    vertical-align: middle;
                 }
-
             .empty-table {
                 text-align: center;
-                padding: 30px 0;
-                color: #999;
-                font-size: 0.85rem;
+                padding: 35px 0;
+                color: #888;
+                font-size: 0.9rem;
             }
-
-            /* Mobile Responsive Adjustments */
-            @@media (max-width: 991.98px) {
-                .sidebar {
-                    transform: translateX(-100%);
-                    width: var(--sidebar-width) !important;
+            .fs-7 {
+                font-size: 0.75rem;
+            }
+            .logout-icon {
+                width: 76px;
+                height: 76px;
+                margin: 0 auto 14px;
+                border-radius: 50%;
+                background: #fdecea;
+                color: #e74c3c;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.9rem;
+            }
+            .btn-edit-profile {
+                background-color: var(--primary-blue);
+                color: white;
+                border-radius: 6px;
+                padding: 8px 12px;
+                font-size: 0.85rem;
+                width: 100%;
+                border: none;
+            }
+                .btn-edit-profile:hover {
+                    opacity: 0.9;
+                    color: white;
                 }
-
-                body.mobile-sidebar-open .sidebar {
-                    transform: translateX(0);
+            /* ========== CLEAN MODAL STYLES — SAME DESIGN ========== */
+            .modal-content {
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            }
+            .modal-header {
+                border-bottom: 1px solid #eee;
+                padding: 16px 24px;
+                background: transparent;
+            }
+            .modal-title {
+                font-weight: 600;
+                font-size: 1rem;
+                color: #111;
+            }
+            .btn-close {
+                filter: none;
+                opacity: 1;
+            }
+            .modal-body {
+                padding: 24px;
+            }
+            .modal-footer {
+                border-top: 1px solid #eee;
+                padding: 16px 24px;
+                background: transparent;
+            }
+            .form-label {
+                font-weight: 500;
+                font-size: 0.875rem;
+                color: #444;
+                margin-bottom: 6px;
+            }
+            .form-control, .form-select {
+                border-radius: 6px;
+                border: 1px solid #ddd;
+                padding: 8px 12px;
+                font-size: 0.875rem;
+            }
+                .form-control:focus, .form-select:focus {
+                    border-color: var(--primary-blue);
+                    box-shadow: 0 0 0 2px rgba(26, 43, 86, 0.1);
                 }
-
-                .main-content {
-                    margin-left: 0 !important;
+            .btn-primary {
+                background-color: var(--primary-blue);
+                border: none;
+                padding: 8px 20px;
+                font-size: 0.875rem;
+                border-radius: 6px;
+            }
+                .btn-primary:hover {
+                    background-color: #152449;
                 }
-
-                .content-wrapper {
-                    padding: 0 15px;
+            .btn-secondary {
+                background-color: #f1f3f5;
+                border: none;
+                color: #444;
+                padding: 8px 20px;
+                font-size: 0.875rem;
+                border-radius: 6px;
+            }
+                .btn-secondary:hover {
+                    background-color: #e5e7eb;
+                    color: #333;
+                }
+            .upload-zone {
+                border: 2px dashed #ddd;
+                border-radius: 8px;
+                padding: 20px;
+                text-align: center;
+                transition: all 0.2s;
+            }
+                .upload-zone:hover {
+                    border-color: var(--primary-blue);
+                    background-color: #f9fafc;
+                }
+            .section-title {
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                margin-bottom: 16px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #eee;
+            }
+            /* ========== ANIMATED SUCCESS CHECK ICON ========== */
+            .success-icon-wrapper {
+                width: 80px;
+                height: 80px;
+                margin: 0 auto 16px;
+            }
+            .success-checkmark {
+                width: 80px;
+                height: 80px;
+            }
+            .checkmark-circle {
+                stroke: var(--success-green);
+                stroke-width: 3;
+                stroke-dasharray: 166;
+                stroke-dashoffset: 166;
+                stroke-linecap: round;
+                animation: fill-circle 0.5s ease-in-out forwards;
+            }
+            .checkmark-check {
+                stroke: #fff;
+                stroke-width: 3;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-dasharray: 48;
+                stroke-dashoffset: 48;
+                animation: draw-check 0.4s ease-in-out 0.4s forwards;
+            }
+            @@keyframes fill-circle {
+                to { stroke-dashoffset: 0; }
+            }
+            @@keyframes draw-check {
+                to { stroke-dashoffset: 0; }
+            }
+            @@media (max-width: 1199.98px) {
+                .profile-name {
+                    font-size: 1.05rem;
+                }
+            }
+            @@media (max-width: 575.98px) {
+                .top-navbar {
+                    padding: 0 10px;
+                }
+                .navbar-logo {
+                    width: 30px;
+                    height: 30px;
+                }
+                .profile-card {
+                    padding: 18px 12px;
+                }
+                .profile-name {
+                    font-size: 1rem;
+                }
+                .table-header-title {
+                    font-size: 1rem;
+                }
+                .btn-logout {
+                    padding: 5px 10px;
+                    font-size: 0.8rem;
+                }
+                .modal-body {
+                    padding: 16px;
                 }
             }
     </style>
 </head>
 <body>
-
     <!-- Top Navbar -->
     <nav class="top-navbar">
         <div class="navbar-brand-wrapper">
-            <button class="sidebar-toggle-btn me-2" id="sidebarToggle" title="Toggle Sidebar">
-                <i class="fa-solid fa-bars"></i>
-            </button>
             <img src="~/images/PUTATAN.ico" alt="Barangay Logo" class="navbar-logo">
             <h5 class="navbar-title fw-medium">Barangay Putatan, City of Muntinlupa</h5>
+            <button type="button" class="btn-logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="fa-solid fa-right-from-bracket"></i><span class="d-none d-sm-inline">Log out</span>
+            </button>
         </div>
     </nav>
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="appSidebar">
-        <ul class="sidebar-menu">
-            <li><a href="#" class="sidebar-link" title="Home"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
-            <li><a href="#" class="sidebar-link" title="Residents"><i class="fa-solid fa-users"></i><span>Residents</span></a></li>
-            <li><a href="#" class="sidebar-link" title="Payments"><i class="fa-solid fa-hand-holding-dollar"></i><span>Payments</span></a></li>
-            <li><a href="#" class="sidebar-link" title="Calendar"><i class="fa-solid fa-calendar-days"></i><span>Calendar</span></a></li>
-            <li><a href="#" class="sidebar-link" title="Offices"><i class="fa-solid fa-building"></i><span>Offices</span></a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <a href="#" class="sidebar-link" title="Settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
-        </div>
-    </aside>
-
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="main-content">
         <div class="content-wrapper">
             <div class="row g-4">
                 <!-- Left Column: Profile Card -->
-                <div class="col-lg-3">
+                <div class="col-xl-3 col-lg-4">
                     <div class="profile-card">
                         <div class="profile-img-wrapper">
                             @if (Model.Resident?.Picture != null)
@@ -376,20 +457,34 @@
                                 <img src="~/images/default-profile.png" alt="Profile" class="profile-img">
                             }
                         </div>
-
-                        <h5 class="profile-name">@Model.Resident?.FullName</h5>
+                        @{
+                            string formattedName = "N/A";
+                            if (!string.IsNullOrEmpty(Model.Resident?.FullName))
+                            {
+                                var nameParts = Model.Resident.FullName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (nameParts.Length > 1)
+                                {
+                                    string lastName = nameParts[nameParts.Length - 1];
+                                    string firstNames = string.Join(" ", nameParts.Take(nameParts.Length - 1));
+                                    formattedName = $"{lastName}, {firstNames}";
+                                }
+                                else
+                                {
+                                    formattedName = Model.Resident.FullName;
+                                }
+                            }
+                        }
+                        <h5 class="profile-name" title="@formattedName">@formattedName</h5>
                         <p class="profile-role">Barangay Resident</p>
-
-                        <hr style="border-color: #eee;">
-
+                        <hr style="border-color: #eee; margin: 10px 0;">
                         <ul class="info-list">
                             <li class="info-item">
                                 <div class="info-icon" style="background-color: #e6f0ff; color: #4d79ff;"><i class="fa-regular fa-envelope"></i></div>
-                                <div class="info-text"><p class="info-label">Email Information</p><p class="info-value text-break">@Model.Resident?.Email</p></div>
+                                <div class="info-text"><p class="info-label">Email</p><p class="info-value">@Model.Resident?.Email</p></div>
                             </li>
                             <li class="info-item">
                                 <div class="info-icon" style="background-color: #fff8e6; color: #ffcc00;"><i class="fa-solid fa-phone"></i></div>
-                                <div class="info-text"><p class="info-label">Contact Number</p><p class="info-value">@Model.Resident?.MobileNumber</p></div>
+                                <div class="info-text"><p class="info-label">Contact No.</p><p class="info-value">@Model.Resident?.MobileNumber</p></div>
                             </li>
                             <li class="info-item">
                                 <div class="info-icon" style="background-color: #ffe6e6; color: #ff4d4d;"><i class="fa-solid fa-location-dot"></i></div>
@@ -412,31 +507,39 @@
                                 <div class="info-text"><p class="info-label">Civil Status</p><p class="info-value">@Model.Resident?.CivilStatus</p></div>
                             </li>
                         </ul>
+                        <button type="button" class="btn btn-edit-profile mt-3" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fa-solid fa-pen-to-square me-2"></i>Edit My Information
+                        </button>
                     </div>
                 </div>
-
-                <!-- Right Column: Table -->
-                <div class="col-lg-9">
+                <!-- Right Column: Tables -->
+                <div class="col-xl-9 col-lg-8">
                     <div class="table-card h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <h5 class="table-header-title mb-0">Appointment Request</h5>
-                            <div>
-                                <button type="button" class="btn btn-custom-dark px-3 me-1" data-bs-toggle="modal" data-bs-target="#createAppointmentModal">
-                                    Create Request
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <h5 class="table-header-title mb-0">Appointment & Reports</h5>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn btn-custom-dark" id="btnCreateRequest">
+                                    <i class="fa-solid fa-calendar-plus me-1"></i><span>Create Request</span>
                                 </button>
-                                <a href="@Url.Action("Index", "Home")" class="btn btn-custom-light px-3 text-decoration-none text-dark">refresh</a>
+                                <button type="button" class="btn btn-custom-dark" id="btnSubmitComplaint">
+                                    <i class="fa-solid fa-flag me-1"></i><span>Submit Complaint</span>
+                                </button>
+                                <a href="@Url.Action("Index", "Home")" class="btn btn-custom-light text-decoration-none text-dark" title="Refresh">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                </a>
                             </div>
                         </div>
-
-                        <div class="table-responsive">
+                        <!-- Appointments Table -->
+                        <h6 class="text-muted small fw-semibold mb-2">Appointment Requests</h6>
+                        <div class="table-responsive mb-4">
                             <table class="custom-table">
                                 <thead>
                                     <tr>
                                         <th>Control No.</th>
-                                        <th>Request Type</th>
+                                        <th>Type</th>
                                         <th>Purpose</th>
-                                        <th>Department</th>
-                                        <th>Date Submitted</th>
+                                        <th class="d-none d-md-table-cell">Dept</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -449,19 +552,49 @@
                                                 <td class="fw-bold text-primary">@item.ControlNo</td>
                                                 <td>@item.RequestType</td>
                                                 <td>@item.Purpose</td>
-                                                <td>@item.Department</td>
-                                                <td>@(item.DateSubmitted.HasValue ? item.DateSubmitted.Value.ToString("MMM dd, yyyy hh:mm tt") : "N/A")</td>
-                                                <td>
-                                                    <span class="badge bg-warning text-dark">@item.Status</span>
-                                                </td>
+                                                <td class="d-none d-md-table-cell">@item.Department</td>
+                                                <td>@(item.DateSubmitted.HasValue ? item.DateSubmitted.Value.ToString("MM/dd") : "N/A")</td>
+                                                <td><span class="badge bg-warning text-dark">@item.Status</span></td>
                                             </tr>
                                         }
                                     }
                                     else
                                     {
-                                        <tr>
-                                            <td colspan="6" class="empty-table">No appointment requests found.</td>
-                                        </tr>
+                                        <tr><td colspan="6" class="empty-table">No appointment requests yet.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Complaints Table -->
+                        <h6 class="text-muted small fw-semibold mb-2">Submitted Complaints</h6>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Control No.</th>
+                                        <th>Type</th>
+                                        <th>Title</th>
+                                        <th class="d-none d-md-table-cell">Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Complaints != null && Model.Complaints.Any())
+                                    {
+                                        foreach (var c in Model.Complaints)
+                                        {
+                                            <tr>
+                                                <td class="fw-bold text-primary">@c.ControlNo</td>
+                                                <td>@c.ComplaintType</td>
+                                                <td>@c.Title</td>
+                                                <td class="d-none d-md-table-cell">@c.DateSubmitted.ToString("MM/dd/yyyy")</td>
+                                                <td><span class="badge bg-warning text-dark">@c.Status</span></td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="5" class="empty-table">No complaints submitted yet.</td></tr>
                                     }
                                 </tbody>
                             </table>
@@ -471,59 +604,183 @@
             </div>
         </div>
     </main>
-
-    <!-- CREATE APPOINTMENT MODAL (POP-UP FORM) -->
+    <!-- EDIT PROFILE MODAL -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Personal Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-controller="Home" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                        <input type="hidden" name="ResidentID" value="@(Model.Resident?.ResidentID ?? 0)" />
+                        <h6 class="section-title">Personal Information</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" name="FirstName" value="@Model.Resident?.Firstname" class="form-control" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Middle Name</label>
+                                <input type="text" name="MiddleName" value="@Model.Resident?.Middlename" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" name="LastName" value="@Model.Resident?.Lastname" class="form-control" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Suffix</label>
+                                <input type="text" name="Suffix" value="@Model.Resident?.Suffix" class="form-control" placeholder="Jr." />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Birthday <span class="text-danger">*</span></label>
+                                <input type="date" name="Birthday" value="@(Model.Resident?.Birthday.HasValue == true ? Model.Resident.Birthday.Value.ToString("yyyy-MM-dd") : "")" class="form-control" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Birthplace <span class="text-danger">*</span></label>
+                                <input type="text" name="BirthPlace" value="@Model.Resident?.BirthPlace" class="form-control" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Gender <span class="text-danger">*</span></label>
+                                @{
+                                    string selectedGender = Model.Resident?.Gender ?? "";
+                                }
+                                <select name="Gender" class="form-select" required>
+                                    <option value="">Select...</option>
+                                    <option value="Male" selected="@(selectedGender == "Male")">Male</option>
+                                    <option value="Female" selected="@(selectedGender == "Female")">Female</option>
+                                    <option value="Other" selected="@(selectedGender == "Other")">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Civil Status <span class="text-danger">*</span></label>
+                                @{
+                                    string selectedCivilStatus = Model.Resident?.CivilStatus ?? "";
+                                }
+                                <select name="CivilStatus" class="form-select" required>
+                                    <option value="">Select...</option>
+                                    <option value="Single" selected="@(selectedCivilStatus == "Single")">Single</option>
+                                    <option value="Married" selected="@(selectedCivilStatus == "Married")">Married</option>
+                                    <option value="Widowed" selected="@(selectedCivilStatus == "Widowed")">Widowed</option>
+                                    <option value="Separated" selected="@(selectedCivilStatus == "Separated")">Separated</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Nationality</label>
+                                <input type="text" name="Nationality" value="@(string.IsNullOrWhiteSpace(Model.Resident?.Nationality) ? "Filipino" : Model.Resident.Nationality)" class="form-control" />
+                            </div>
+                        </div>
+                        <h6 class="section-title">Parents Information</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Father's Full Name</label>
+                                <input type="text" name="FatherName" value="@Model.Resident?.FatherName" class="form-control" placeholder="Juan Dela Cruz" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Mother's Full Name</label>
+                                <input type="text" name="MotherName" value="@Model.Resident?.MotherName" class="form-control" placeholder="Maria Dela Cruz" />
+                            </div>
+                        </div>
+                        <h6 class="section-title">Contact Information</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" name="Email" value="@Model.Resident?.Email" class="form-control" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                                <input type="text" name="MobileNumber" value="@Model.Resident?.MobileNumber" class="form-control" required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Complete Address <span class="text-danger">*</span></label>
+                                <textarea name="Address" class="form-control" rows="2" required>@Model.Resident?.Address</textarea>
+                            </div>
+                        </div>
+                        <h6 class="section-title">Photos & Identification</h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Profile Photo</label>
+                                <input type="file" name="ProfilePicture" class="form-control" accept="image/*" />
+                                <small class="text-muted d-block mt-1">Leave blank to keep current.</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Valid ID (Front)</label>
+                                <input type="file" name="IdentificationFront" class="form-control" accept="image/*" />
+                                <small class="text-muted d-block mt-1">Leave blank to keep current.</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Valid ID (Back)</label>
+                                <input type="file" name="IdentificationBack" class="form-control" accept="image/*" />
+                                <small class="text-muted d-block mt-1">Leave blank to keep current.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- CREATE APPOINTMENT MODAL -->
     <div class="modal fade" id="createAppointmentModal" tabindex="-1" aria-labelledby="createAppointmentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-primary text-white py-3">
-                    <h5 class="modal-title fs-5" id="createAppointmentModalLabel">
-                        <i class="fa-solid fa-calendar-plus me-2"></i>Create Appointment Request
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createAppointmentModalLabel">Create Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form asp-controller="Home" asp-action="CreateAppointment" method="post" enctype="multipart/form-data">
-                    <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
-
+                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
                         <input type="hidden" asp-for="NewAppointment.ResidentID" value="@Model.Resident?.ResidentID" />
-
-                        <!-- REQUEST FOR SELECTION (Nakalagay ang For Myself sa unahan) -->
-                        <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Request For</h6>
-                        <div class="mb-4">
-                            <select asp-for="NewAppointment.RequestFor" id="requestForSelect" class="form-select fw-bold text-primary" required>
-                                <option value="Self" selected>For Myself</option>
-                                <option value="Family Member / Relative">Family Member / Relative</option>
-                                <option value="Representative / On Behalf">Representative / On Behalf</option>
-                            </select>
+                        <h6 class="section-title">Service Information</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Request For</label>
+                                <select asp-for="NewAppointment.RequestFor" id="requestForSelect" class="form-select" required>
+                                    <option value="Self">For Myself</option>
+                                    <option value="Family Member / Relative">Family Member / Relative</option>
+                                    <option value="Representative / On Behalf">Representative / On Behalf</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Request Type</label>
+                                <select asp-for="NewAppointment.RequestType" id="documentServiceSelect" class="form-select" required>
+                                    <option value="">Select...</option>
+                                    @foreach (var service in Model.DocumentServicesList)
+                                    {
+                                        <option value="@service.ServiceName" data-serviceid="@service.ID">@service.ServiceName</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
-
-                        <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Personal Information</h6>
+                        <h6 class="section-title">Personal Information</h6>
                         <div class="row g-3 mb-4">
                             <div class="col-md-12">
-                                <label class="form-label fw-semibold">Full Name</label>
+                                <label class="form-label">Full Name</label>
                                 <input type="text" value="@Model.Resident?.FullName" class="form-control bg-light" disabled />
                                 <input type="hidden" asp-for="NewAppointment.FullName" value="@Model.Resident?.FullName" />
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Email Address</label>
+                                <label class="form-label">Email Address</label>
                                 <input type="text" value="@Model.Resident?.Email" class="form-control bg-light" disabled />
                                 <input type="hidden" asp-for="NewAppointment.EmailAddress" value="@Model.Resident?.Email" />
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Phone Number</label>
+                                <label class="form-label">Phone Number</label>
                                 <input type="text" value="@Model.Resident?.MobileNumber" class="form-control bg-light" disabled />
                                 <input type="hidden" asp-for="NewAppointment.PhoneNumber" value="@Model.Resident?.MobileNumber" />
                             </div>
-                            <div class="col-md-12">
-                                <label class="form-label fw-semibold">Full Address</label>
+                            <div class="col-12">
+                                <label class="form-label">Full Address</label>
                                 <textarea class="form-control bg-light" rows="2" disabled>@Model.Resident?.Address</textarea>
                                 <input type="hidden" asp-for="NewAppointment.FullAddress" value="@Model.Resident?.Address" />
                             </div>
                         </div>
-
-                        <!-- EXPANDABLE FORM PARA SA RELATIVES / OTHERS -->
-                        <div id="relativeFormSection" style="display: none;" class="card p-3 mb-4 bg-light border">
-                            <h6 class="text-primary fw-bold mb-3">Other Person / Relative Information</h6>
+                        <div id="relativeFormSection" style="display: none;" class="p-3 mb-4 bg-light rounded border">
+                            <h6 class="section-title mb-3">Other Person / Relative Information</h6>
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="form-label">First Name</label>
@@ -535,7 +792,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Relationship</label>
-                                    <input type="text" name="RelativeRelationship" class="form-control" placeholder="e.g. Mother, Son" />
+                                    <input type="text" name="RelativeRelationship" class="form-control" placeholder="Mother, Son, etc." />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Mobile Number</label>
@@ -545,173 +802,240 @@
                                     <label class="form-label">Email Address</label>
                                     <input type="text" name="RelativeEmail" class="form-control" />
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-12">
                                     <label class="form-label">Address</label>
                                     <textarea name="RelativeAddress" class="form-control" rows="2"></textarea>
                                 </div>
                             </div>
                         </div>
-
-                        <hr class="mb-4">
-
-                        <h6 class="text-muted fw-bold mb-3 text-uppercase fs-7">Appointment Details</h6>
-                        <div class="row g-3">
-                            <!-- Request Type (Document Service) na may kasamang data-serviceid para sa ID filtering -->
+                        <h6 class="section-title">Appointment Details</h6>
+                        <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Request Type (Document Service)</label>
-                                <select asp-for="NewAppointment.RequestType" id="documentServiceSelect" class="form-select" required>
-                                    <option value="">-- Select Document Service --</option>
-                                    @foreach (var service in Model.DocumentServicesList)
-                                    {
-                                        <option value="@service.ServiceName" data-serviceid="@service.ID">@service.ServiceName</option>
-                                    }
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Department</label>
+                                <label class="form-label">Department</label>
                                 <select asp-for="NewAppointment.Department" class="form-select" required>
-                                    <option value="">-- Select Department --</option>
+                                    <option value="">Select...</option>
                                     <option value="Lupon Tagapamayapa">Lupon Tagapamayapa</option>
                                     <option value="Social Services">Social Services</option>
                                     <option value="Clearance & Certification">Clearance & Certification</option>
                                     <option value="Treasurer Office">Treasurer Office</option>
                                 </select>
                             </div>
-
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Appointment Date</label>
+                                <label class="form-label">Appointment Date</label>
                                 <input type="date" asp-for="NewAppointment.AppointmentDate" class="form-control" required />
                             </div>
-
-                            <!-- Appointment Type (Automatic Online) -->
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Appointment Type</label>
-                                <input type="text" class="form-control bg-light" value="Online" readonly />
-                                <input type="hidden" asp-for="NewAppointment.AppointmentType" value="Online" />
-                            </div>
-
-                            <!-- Purpose galing sa service_details dropdown na mapi-filter gamit ang data-serviceid -->
                             <div class="col-md-12">
-                                <label class="form-label fw-semibold">Purpose</label>
+                                <label class="form-label">Purpose</label>
                                 <select asp-for="NewAppointment.Purpose" id="purposeSelect" class="form-select" required disabled>
-                                    <option value="">-- Select Document Service First --</option>
+                                    <option value="">Select Service First...</option>
                                     @foreach (var detail in Model.ServiceDetailsList)
                                     {
                                         <option value="@detail.Purpose" data-serviceid="@detail.Service_ID" style="display:none;">@detail.Purpose</option>
                                     }
                                 </select>
                             </div>
-
-                            <!-- Proof of Document Upload -->
-                            <div class="col-md-12">
-                                <label class="form-label fw-semibold">Proof of Document / Supporting File</label>
-                                <input type="file" asp-for="NewAppointment.ProofDocument" class="form-control" />
-                            </div>
                         </div>
-
+                        <h6 class="section-title">Proof and Documentation</h6>
+                        <div class="upload-zone">
+                            <input type="file" asp-for="NewAppointment.ProofDocument" class="form-control" style="border: none; padding: 0;" />
+                            <small class="text-muted d-block mt-2">Upload image or document (optional)</small>
+                        </div>
                     </div>
-                    <div class="modal-footer bg-light px-4 py-3">
-                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Submit Request</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- SUCCESS MODAL -->
+    <!-- SUBMIT COMPLAINT MODAL -->
+    <div class="modal fade" id="complaintModal" tabindex="-1" aria-labelledby="complaintModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="complaintModalLabel">Submit Complaint / Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-controller="Home" asp-action="SubmitComplaint" method="post" enctype="multipart/form-data">
+                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                        <input type="hidden" name="ResidentID" value="@(Model.Resident?.ResidentID ?? 0)" />
+                        <input type="hidden" id="hfLatitude" name="Latitude" />
+                        <input type="hidden" id="hfLongitude" name="Longitude" />
+                        <h6 class="section-title">Complaint Information</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Type of Complaint</label>
+                                <select name="ComplaintType" class="form-select" required>
+                                    <option value="">Select...</option>
+                                    <option value="Illegal Parking">Illegal Parking</option>
+                                    <option value="Noise / Disturbance">Noise / Disturbance</option>
+                                    <option value="Garbage / Cleanliness">Garbage / Cleanliness</option>
+                                    <option value="Dispute / Conflict">Dispute / Conflict</option>
+                                    <option value="Threat / Harassment">Threat / Harassment</option>
+                                    <option value="Property Damage">Property Damage</option>
+                                    <option value="Emergency">Emergency</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Short Title</label>
+                                <input type="text" name="Title" class="form-control" placeholder="Brief description..." required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Full Details</label>
+                                <textarea name="Description" class="form-control" rows="4" placeholder="Describe what happened..." required></textarea>
+                            </div>
+                        </div>
+                        <h6 class="section-title">Location & Evidence</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Exact Location</label>
+                                <input type="text" id="txtLocation" name="LocationDetails" class="form-control" placeholder="Enter location or allow GPS..." required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Upload Photo / Evidence</label>
+                                <div class="upload-zone">
+                                    <input type="file" name="ComplaintPhoto" class="form-control" accept="image/*" style="border: none; padding: 0;" />
+                                    <small class="text-muted d-block mt-2">Optional — add photo as proof</small>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="form-check">
+                                    <input type="checkbox" name="IsAnonymous" value="true" id="chkAnonymous" class="form-check-input" />
+                                    <label class="form-check-label" for="chkAnonymous">
+                                        Submit anonymously
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- LOGOUT CONFIRMATION MODAL -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <div class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+                    <h5 class="fw-bold text-dark mb-2" id="logoutModalLabel">Log out?</h5>
+                    <p class="text-muted mb-0">Are you sure you want to log out of your account?</p>
+                </div>
+                <div class="modal-footer justify-content-center border-0 pb-4 gap-2">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm" class="m-0">
+                        <button type="submit" class="btn btn-primary">Yes, Log out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SUCCESS MODAL — WITH ANIMATED CHECK ICON -->
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="successModalLabel">
-                            <i class="fa-solid fa-circle-check me-2"></i>Tagumpay
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                <div class="modal-content">
                     <div class="modal-body text-center py-4">
-                        <i class="fa-solid fa-calendar-check text-success fa-4x mb-3"></i>
-                        <h4 class="fw-bold text-dark">Appointment Submitted Successfully!</h4>
-                        <p class="text-muted mb-2">Ang iyong Appointment Reference / Control Number:</p>
-                        <div class="p-2 bg-light border rounded d-inline-block px-4">
-                            <h3 class="text-primary fw-bold mb-0">@TempData["ControlNo"]</h3>
+                        <!-- Animated Check Icon -->
+                        <div class="success-icon-wrapper">
+                            <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"></circle>
+                                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"></path>
+                            </svg>
                         </div>
+                        @if ((TempData["IsComplaint"] as bool?) == true)
+                        {
+                            <h4 class="fw-bold text-dark">Complaint Submitted!</h4>
+                        }
+                        else if ((TempData["IsProfileUpdate"] as bool?) == true)
+                        {
+                            <h4 class="fw-bold text-dark">Profile Updated!</h4>
+                        }
+                        else
+                        {
+                            <h4 class="fw-bold text-dark">Request Submitted!</h4>
+                        }
+                        @if (TempData["ControlNo"] != null)
+                        {
+                            <p class="text-muted mt-3 mb-1">Reference Number:</p>
+                            <div class="p-3 bg-light rounded d-inline-block px-4">
+                                <h3 class="text-primary fw-bold mb-0">@TempData["ControlNo"]</h3>
+                            </div>
+                        }
+                        <p class="text-muted mt-3">@TempData["SuccessMessage"]</p>
                     </div>
                     <div class="modal-footer justify-content-center border-0 pb-4">
-                        <button type="button" class="btn btn-success px-5" data-bs-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
         </div>
-
         <script>
                 document.addEventListener("DOMContentLoaded", function() {
-                    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                    successModal.show();
+                    new bootstrap.Modal(document.getElementById('successModal')).show();
                 });
         </script>
     }
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const body = document.body;
-
-            toggleBtn.addEventListener('click', () => {
-                if (window.innerWidth <= 991.98) {
-                    body.classList.toggle('mobile-sidebar-open');
+            function checkProfileComplete() {
+                const fields = [
+                    '@Model.Resident?.Firstname',
+                    '@Model.Resident?.Lastname',
+                    '@Model.Resident?.Email',
+                    '@Model.Resident?.MobileNumber',
+                    '@Model.Resident?.Address',
+                    '@Model.Resident?.BirthPlace',
+                    '@Model.Resident?.Gender',
+                    '@Model.Resident?.CivilStatus',
+                    '@(Model.Resident?.Birthday.HasValue)'
+                ];
+                return fields.every(f => f !== '' && f !== 'N/A' && f !== 'False');
+            }
+            document.getElementById('btnCreateRequest').addEventListener('click', function() {
+                if (checkProfileComplete()) {
+                    new bootstrap.Modal(document.getElementById('createAppointmentModal')).show();
                 } else {
-                    body.classList.toggle('sidebar-collapsed');
-                }   
-            });
-
-            // Script para i-toggle ang paglabas ng Relative form kapag hindi "Self" ang pinili
-            document.getElementById('requestForSelect').addEventListener('change', function() {
-                var relativeSection = document.getElementById('relativeFormSection');
-                if (this.value !== 'Self') {
-                    relativeSection.style.display = 'block';
-                } else {
-                    relativeSection.style.display = 'none';
+                    alert('Please complete your profile first before creating a request.');
+                    new bootstrap.Modal(document.getElementById('editProfileModal')).show();
                 }
             });
-
-            // Script para salain ang Purpose dropdown base sa ID ng napiling Document Service
+            document.getElementById('btnSubmitComplaint').addEventListener('click', function() {
+                if (checkProfileComplete()) {
+                    new bootstrap.Modal(document.getElementById('complaintModal')).show();
+                } else {
+                    alert('Please complete your profile first before submitting a complaint.');
+                    new bootstrap.Modal(document.getElementById('editProfileModal')).show();
+                }
+            });
+            document.getElementById('requestForSelect').addEventListener('change', function() {
+                document.getElementById('relativeFormSection').style.display = this.value !== 'Self' ? 'block' : 'none';
+            });
             document.getElementById('documentServiceSelect').addEventListener('change', function() {
-                var selectedOption = this.options[this.selectedIndex];
-                var serviceId = selectedOption.getAttribute('data-serviceid');
-
-                var purposeSelect = document.getElementById('purposeSelect');
-                var purposeOptions = purposeSelect.querySelectorAll('option');
-
+                const serviceId = this.options[this.selectedIndex].getAttribute('data-serviceid');
+                const purposeSelect = document.getElementById('purposeSelect');
                 purposeSelect.value = "";
-
                 if (!serviceId) {
-                    purposeSelect.setAttribute('disabled', 'disabled');
-                    purposeOptions.forEach(function(opt) {
-                        if (opt.value !== "") opt.style.display = 'none';
-                    });
+                    purposeSelect.disabled = true;
+                    purposeSelect.querySelectorAll('option').forEach(o => { if (o.value) o.style.display = 'none'; });
                     return;
                 }
-
-                purposeSelect.removeAttribute('disabled');
-
-                purposeOptions.forEach(function(opt) {
-                    if (opt.value === "") {
-                        opt.style.display = 'block';
-                        return;
-                    }
-
-                    var optServiceId = opt.getAttribute('data-serviceid');
-                    if (optServiceId === serviceId) {
-                        opt.style.display = 'block';
-                    } else {
-                        opt.style.display = 'none';
-                    }
+                purposeSelect.disabled = false;
+                purposeSelect.querySelectorAll('option').forEach(o => {
+                    o.style.display = !o.value || o.getAttribute('data-serviceid') === serviceId ? 'block' : 'none';
                 });
             });
-    </script>
-</body>
+
+            // (optional) other handlers, e.g., geolocation or form defaults
+            // close any remaining event listeners above
+
+        </script>
+    </body>
 </html>

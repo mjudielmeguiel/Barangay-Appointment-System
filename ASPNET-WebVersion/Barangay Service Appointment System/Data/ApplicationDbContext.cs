@@ -10,12 +10,13 @@ namespace Barangay_Service_Appointment_System.Data
         {
         }
 
+        // === DATABASE TABLES / DBSETS ===
         public DbSet<Residence> Residences { get; set; }
         public DbSet<AppointmentModel> Appointments { get; set; }
-
-        // 💡 IDAGDAG ANG MGA ITO PARA MAWALA ANG ERROR SA CONTROLLER:
         public DbSet<DocumentServiceModel> DocumentServices { get; set; }
         public DbSet<ServiceDetailModel> ServiceDetails { get; set; }
         public DbSet<RelativesModel> Relatives { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
+
     }
 }

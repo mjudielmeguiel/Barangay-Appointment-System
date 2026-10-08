@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
-using Barangay_Service_Appointment_System.Models;
+﻿using Barangay_Service_Appointment_System.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Barangay_Service_Appointment_System.ViewModels
 {
     public class ResidentDashboardViewModel
     {
-        public Residence? Resident { get; set; }
-        public List<AppointmentModel> Appointments { get; set; } = new List<AppointmentModel>();
+        // ✅ GANITO LANG — sabihin sa compiler na laging may laman
+        public Residence Resident { get; set; } = null!;
 
-        // Mga listahan para sa ID-based filtering
-        public List<DocumentServiceModel> DocumentServicesList { get; set; } = new List<DocumentServiceModel>();
-        public List<ServiceDetailModel> ServiceDetailsList { get; set; } = new List<ServiceDetailModel>();
+        public List<AppointmentModel> Appointments { get; set; } = new();
+        public List<Complaint> Complaints { get; set; } = new();
+        public List<DocumentServiceModel> DocumentServicesList { get; set; } = new();
+        public List<ServiceDetailModel> ServiceDetailsList { get; set; } = new();
+        public List<RelativesModel> SavedRelatives { get; set; } = new();
 
-        public List<RelativesModel> SavedRelatives { get; set; } = new List<RelativesModel>();
-        public AppointmentModel NewAppointment { get; set; } = new AppointmentModel();
+        public AppointmentModel NewAppointment { get; set; } = new();
     }
 }

@@ -9,6 +9,7 @@ namespace Barangay_Service_Appointment_System.Models
     {
         [Key]
         public int ResidentID { get; set; }
+
         public string? ResidentCode { get; set; }
         public string? Username { get; set; }
         public string? Email { get; set; }
@@ -24,6 +25,22 @@ namespace Barangay_Service_Appointment_System.Models
         public string? Gender { get; set; }
         public string? CivilStatus { get; set; }
         public string? Nationality { get; set; }
+        public string? AccountStatus { get; set; }
         public byte[]? Picture { get; set; }
+        public string? FatherName { get; set; }
+        public string? MotherName { get; set; }
+        public byte[]? IdentificationFront { get; set; }
+        public byte[]? IdentificationBack { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        // Iba pang fields mula sa table mo — kung kailangan
+        public int? DepartmentID { get; set; }
+        public string? SatelliteOffice { get; set; }
+        public int? SatelliteOfficeID { get; set; }
+        public string? Password { get; set; }
+        public DateTime? LockoutExpiry { get; set; }
+        public int? LoginAttempts { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public string? DeleteComment { get; set; }
     }
 }
