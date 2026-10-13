@@ -1,22 +1,25 @@
-﻿Imports System.IO
+﻿Imports System.Drawing.Drawing2D
+Imports System.IO
+Imports System.Net
 Imports MySql.Data.MySqlClient
-Imports System.Drawing.Drawing2D
 
 Public Class frmAdmin_Dashboard
 
+    ' Declare a timer for the real-time clock display
     Private WithEvents clockTimer As New Timer()
 
+    ' Form Load event: Initializes UI elements, timers, and loads data grids
     Private Sub frmAdmin_Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         MakeCircularPictureBox()
         LoadAdminProfile()
         LoadDashboardStats()
 
-        ' ✅ I-setup ang Real-Time Clock Timer
-        clockTimer.Interval = 1000 ' Bawat 1 segundo
+        ' Setup and start the real-time clock timer (ticks every 1 second)
+        clockTimer.Interval = 1000
         clockTimer.Start()
-        UpdateDateTimeDisplay() ' Agad na tawagin para di maghintay ng 1 segundo
+        UpdateDateTimeDisplay() ' Update immediately to avoid 1-second delay
 
-        ' ✅ I-apply ang styling at i-load ang mga data sa tatlong DataGridViews
+        ' Apply styling and load data into DataGridViews if they exist on the form
         If dgvActivityLogs IsNot Nothing Then
             StyleDataGridView(dgvActivityLogs)
             LoadActivityLogs()
@@ -31,21 +34,33 @@ Public Class frmAdmin_Dashboard
             StyleDataGridView(dgvTickets)
             LoadPasswordTickets()
         End If
+
+        ' Setup and load complaints grid (hiding resolved items)
+        If dgvComplaints IsNot Nothing Then
+            StyleDataGridView(dgvComplaints)
+            LoadComplaints()
+        End If
+
+        ' Setup and load appointments grid (default to Total Today)
+        If dgvAppointments IsNot Nothing Then
+            StyleDataGridView(dgvAppointments)
+            LoadAppointments("TOTAL")
+        End If
     End Sub
 
-    ' === TICK EVENT PARA SA REAL-TIME DATE AND TIME ===
+    ' Tick event handler for the real-time clock
     Private Sub clockTimer_Tick(sender As Object, e As EventArgs) Handles clockTimer.Tick
         UpdateDateTimeDisplay()
     End Sub
 
+    ' Updates the time label with the current date and time format
     Private Sub UpdateDateTimeDisplay()
-        ' PALITAN ANG lblTime NG KUNG ANO MAN ANG TAWAG MO SA LABEL SA PROPERTIES MO
         If lblTime IsNot Nothing Then
             lblTime.Text = DateTime.Now.ToString("MMMM dd, yyyy - dddd | hh:mm:ss tt")
         End If
     End Sub
 
-    ' === FUNCTION PARA MAGING BILOG ANG PROFILE PICTURE ===
+    ' Makes the admin profile picture circular using GraphicsPath
     Private Sub MakeCircularPictureBox()
         If PictureBox1 IsNot Nothing Then
             Dim path As New GraphicsPath()
@@ -54,6 +69,7 @@ Public Class frmAdmin_Dashboard
         End If
     End Sub
 
+    ' Loads the logged-in admin's profile details (Name and Image) from the database
     Private Sub LoadAdminProfile()
         Try
             Dim targetID As Integer = If(frmlogin.LoggedInUserID > 0, frmlogin.LoggedInUserID, 1)
@@ -89,7 +105,7 @@ Public Class frmAdmin_Dashboard
                         If lblFullname IsNot Nothing Then
                             lblFullname.Text = "Not Found"
                         End If
-                        MsgBox("Hindi mahanap ang Admin record.", MsgBoxStyle.Exclamation)
+                        MsgBox("Admin record not found.", MsgBoxStyle.Exclamation)
                     End If
                 End Using
             End Using
@@ -100,6 +116,7 @@ Public Class frmAdmin_Dashboard
         End Try
     End Sub
 
+    ' Allows the admin to change their profile picture by double-clicking the PictureBox
     Private Sub PictureBox1_DoubleClick(sender As Object, e As EventArgs) Handles PictureBox1.DoubleClick
         Using openFileDialog As New OpenFileDialog()
             openFileDialog.Title = "Select Profile Picture"
@@ -133,6 +150,7 @@ Public Class frmAdmin_Dashboard
         End Using
     End Sub
 
+    ' Helper function to execute scalar queries safely
     Private Function GetScalarCount(query As String) As Integer
         Try
             Using cmd As New MySqlCommand(query, cn)
@@ -146,45 +164,37 @@ Public Class frmAdmin_Dashboard
         Return 0
     End Function
 
+    ' Loads statistics for appointments, users, and tickets to display on dashboard cards
     Private Sub LoadDashboardStats()
         Try
             connection()
 
-            ' 1. Online: Kasama ang lahat ng pumasok ngayong araw (CURDATE) OR 'pending' ang status kahit luma na.
-            Dim onlineCount As Integer = GetScalarCount("SELECT COUNT(*) FROM appointments WHERE (LOWER(RequestType) LIKE '%online%' OR LOWER(AppointmentType) LIKE '%online%') AND (DATE(DateSubmitted) = CURDATE() OR LOWER(Status) = 'pending')")
+            ' 📊 APPOINTMENT STATS COUNTERS (Today Only)
+            Dim onlineCount As Integer = GetScalarCount("SELECT COUNT(*) FROM appointments WHERE (LOWER(RequestType) LIKE '%online%' OR LOWER(AppointmentType) LIKE '%online%') AND DATE(DateSubmitted) = CURDATE()")
             SafeSetText(lblOnline, onlineCount.ToString())
 
-            ' 2. Walk-in: Magre-reset araw-araw (CURDATE lang)
             Dim walkinCount As Integer = GetScalarCount("SELECT COUNT(*) FROM appointments WHERE (LOWER(RequestType) LIKE '%walk%' OR LOWER(AppointmentType) LIKE '%walk%') AND DATE(DateSubmitted) = CURDATE()")
             SafeSetText(lblWalkIn, walkinCount.ToString())
 
-            ' 3. Total Appointments: Magre-reset araw-araw (CURDATE lang)
             Dim totalAppointments As Integer = GetScalarCount("SELECT COUNT(*) FROM appointments WHERE DATE(DateSubmitted) = CURDATE()")
             SafeSetText(lblTotalAppointments, totalAppointments.ToString())
 
-            ' 4. Cancelled Online: Magre-reset araw-araw (CURDATE lang)
             Dim cancelledOnline As Integer = GetScalarCount("SELECT COUNT(*) FROM appointments WHERE (LOWER(RequestType) LIKE '%online%' OR LOWER(AppointmentType) LIKE '%online%') AND LOWER(Status) LIKE '%cancel%' AND DATE(DateSubmitted) = CURDATE()")
             SafeSetText(lblCancelledOnline, cancelledOnline.ToString())
 
-            ' 5. Cancelled Walk-in: Magre-reset araw-araw (CURDATE lang)
             Dim cancelledWalkin As Integer = GetScalarCount("SELECT COUNT(*) FROM appointments WHERE (LOWER(RequestType) LIKE '%walk%' OR LOWER(AppointmentType) LIKE '%walk%') AND LOWER(Status) LIKE '%cancel%' AND DATE(DateSubmitted) = CURDATE()")
             SafeSetText(lblCancelledWalkIn, cancelledWalkin.ToString())
 
-            ' --- USER STATS ---
-            Dim totalUsers As Integer = GetScalarCount("SELECT COUNT(*) FROM users WHERE IsDeleted = 0")
-            SafeSetText(lblUsers, totalUsers.ToString())
-
+            ' 👥 OTHER SYSTEM STATS
             Dim staffCount As Integer = GetScalarCount("SELECT COUNT(*) FROM users WHERE LOWER(Role) = 'staff' AND IsDeleted = 0")
             SafeSetText(lblStaff, staffCount.ToString())
 
             Dim activeCount As Integer = GetScalarCount("SELECT COUNT(*) FROM users WHERE LOWER(AccountStatus) = 'active' AND IsDeleted = 0")
             SafeSetText(lblActive, activeCount.ToString())
 
-            ' 6. Locked Users Fix: Nilagay sa lblLocked
             Dim lockedCount As Integer = GetScalarCount("SELECT COUNT(*) FROM users WHERE (LOWER(AccountStatus) LIKE '%lock%' OR (LockoutExpiry IS NOT NULL AND LockoutExpiry > NOW())) AND IsDeleted = 0")
             SafeSetText(lblLocked, lockedCount.ToString())
 
-            ' 7. NEW RESIDENCES TODAY LOGIC
             Dim newResCount As Integer = GetScalarCount("SELECT COUNT(*) FROM residences WHERE DATE(CreatedAt) = CURDATE()")
             SafeSetText(lblnewResident, newResCount.ToString())
 
@@ -258,7 +268,129 @@ Public Class frmAdmin_Dashboard
         End Try
     End Sub
 
-    ' === STYLING PARA SA MGA DATAGRIDVIEW ===
+    ' === 4. LOAD COMPLAINTS (HIDES RESOLVED COMPLAINTS & LOADS PENDING COUNT) ===
+    Private Sub LoadComplaints()
+        Try
+            connection()
+            Dim query As String = "SELECT ComplaintID, ControlNo AS 'Control No.', ComplaintType AS 'Type', Title AS 'Subject / Title', " &
+                                  "DateSubmitted AS 'Date Submitted', Status, " &
+                                  "CASE WHEN IsAnonymous = 1 THEN 'Yes' ELSE 'No' END AS 'Anonymous' " &
+                                  "FROM complaints WHERE LOWER(Status) <> 'resolved' ORDER BY DateSubmitted DESC"
+
+            Using cmd As New MySqlCommand(query, cn)
+                Using da As New MySqlDataAdapter(cmd)
+                    Dim dt As New DataTable()
+                    da.Fill(dt)
+                    dgvComplaints.DataSource = dt
+                End Using
+            End Using
+
+            If dgvComplaints.Columns.Contains("ComplaintID") Then
+                dgvComplaints.Columns("ComplaintID").Visible = False
+            End If
+
+            LoadPendingComplaintsCount()
+
+        Catch ex As Exception
+            MsgBox("Error loading complaints: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
+    ' === 5. LOAD APPOINTMENTS RECORDS WITH FILTER (TODAY ONLY) ===
+    Private Sub LoadAppointments(filterType As String)
+        Try
+            connection()
+            Dim whereClause As String = "DATE(DateSubmitted) = CURDATE()"
+
+            Select Case filterType.ToUpper()
+                Case "ONLINE"
+                    whereClause &= " AND (LOWER(RequestType) LIKE '%online%' OR LOWER(AppointmentType) LIKE '%online%')"
+                Case "WALKIN"
+                    whereClause &= " AND (LOWER(RequestType) LIKE '%walk%' OR LOWER(AppointmentType) LIKE '%walk%')"
+                Case "CANCELLED_ONLINE"
+                    whereClause &= " AND (LOWER(RequestType) LIKE '%online%' OR LOWER(AppointmentType) LIKE '%online%') AND LOWER(Status) LIKE '%cancel%'"
+                Case "CANCELLED_WALKIN"
+                    whereClause &= " AND (LOWER(RequestType) LIKE '%walk%' OR LOWER(AppointmentType) LIKE '%walk%') AND LOWER(Status) LIKE '%cancel%'"
+                Case Else
+                    ' TOTAL (Today) - No extra filter needed
+            End Select
+
+            Dim query As String = "SELECT AppointmentID, ControlNo AS 'Control No.', FullName AS 'Full Name', RequestType AS 'Type', " &
+                                  "Department, IFNULL(DATE_FORMAT(AppointmentDate, '%Y-%m-%d'), 'N/A') AS 'Appointment Date', Status " &
+                                  "FROM appointments WHERE " & whereClause & " ORDER BY DateSubmitted DESC"
+
+            Using cmd As New MySqlCommand(query, cn)
+                Using da As New MySqlDataAdapter(cmd)
+                    Dim dt As New DataTable()
+                    da.Fill(dt)
+                    dgvAppointments.DataSource = dt
+                End Using
+            End Using
+
+            If dgvAppointments.Columns.Contains("AppointmentID") Then
+                dgvAppointments.Columns("AppointmentID").Visible = False
+            End If
+
+        Catch ex As Exception
+            MsgBox("Error loading appointments: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            CloseConnection()
+        End Try
+    End Sub
+
+    ' === CLICK EVENTS PARA SA APPOINTMENT STAT CARDS / LABELS ===
+    Private Sub lblOnline_Click(sender As Object, e As EventArgs) Handles lblOnline.Click
+        LoadAppointments("ONLINE")
+    End Sub
+
+    Private Sub lblWalkIn_Click(sender As Object, e As EventArgs) Handles lblWalkIn.Click
+        LoadAppointments("WALKIN")
+    End Sub
+
+    Private Sub lblTotalAppointments_Click(sender As Object, e As EventArgs) Handles lblTotalAppointments.Click
+        LoadAppointments("TOTAL")
+    End Sub
+
+    Private Sub lblCancelledOnline_Click(sender As Object, e As EventArgs) Handles lblCancelledOnline.Click
+        LoadAppointments("CANCELLED_ONLINE")
+    End Sub
+
+    Private Sub lblCancelledWalkIn_Click(sender As Object, e As EventArgs) Handles lblCancelledWalkIn.Click
+        LoadAppointments("CANCELLED_WALKIN")
+    End Sub
+
+    ' Counts pending complaints submitted within the past 24 hours
+    Private Sub LoadPendingComplaintsCount()
+        Try
+            Dim pendingCount As Integer = GetScalarCount("SELECT COUNT(*) FROM complaints WHERE LOWER(Status) = 'pending' AND DateSubmitted >= (NOW() - INTERVAL 24 HOUR)")
+
+            If lblPendingComplaints IsNot Nothing Then
+                lblPendingComplaints.Text = pendingCount.ToString()
+            End If
+
+            If dgvComplaints IsNot Nothing Then
+                Dim activeCount As Integer = 0
+                For Each row As DataGridViewRow In dgvComplaints.Rows
+                    If row.Cells("Status") IsNot Nothing AndAlso row.Cells("Status").Value IsNot Nothing Then
+                        If row.Cells("Status").Value.ToString().ToLower() = "pending" Then
+                            activeCount += 1
+                        End If
+                    End If
+                Next
+
+                If lblPendingComplaints IsNot Nothing Then
+                    lblPendingComplaints.Text = activeCount.ToString()
+                End If
+            End If
+
+        Catch ex As Exception
+            MsgBox("Error counting complaints: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+    End Sub
+
+    ' === STYLING FOR DATAGRIDVIEWS ===
     Private Sub StyleDataGridView(dgv As DataGridView)
         dgv.EnableHeadersVisualStyles = False
         dgv.BorderStyle = BorderStyle.None
@@ -270,7 +402,6 @@ Public Class frmAdmin_Dashboard
         dgv.MultiSelect = False
         dgv.AllowUserToResizeRows = False
 
-        ' Header Style
         Dim headerStyle As New DataGridViewCellStyle()
         headerStyle.BackColor = Color.FromArgb(25, 42, 86)
         headerStyle.ForeColor = Color.White
@@ -282,7 +413,6 @@ Public Class frmAdmin_Dashboard
         dgv.ColumnHeadersHeight = 42
         dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
 
-        ' Default Row Style
         Dim defaultRowStyle As New DataGridViewCellStyle()
         defaultRowStyle.BackColor = Color.White
         defaultRowStyle.ForeColor = Color.FromArgb(30, 41, 59)
@@ -308,4 +438,64 @@ Public Class frmAdmin_Dashboard
             lbl.Text = val
         End If
     End Sub
+
+    Private Sub BtnSignout_Click(sender As Object, e As EventArgs) Handles BtnSignout.Click
+        If MsgBox("Are you sure you want to logout?",
+                MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Logout") = MsgBoxResult.No Then Return
+
+        Try
+            connection()
+            Dim userId As Integer = If(frmlogin.LoggedInUserID > 0, frmlogin.LoggedInUserID, 1)
+            Dim targetTable As String = "admin"
+            Dim idColumnName As String = "AdminID"
+
+            Using cmdUpdate As New MySqlCommand($"UPDATE {targetTable} SET AccountStatus='Offline' WHERE {idColumnName}=@userId", cn)
+                cmdUpdate.Parameters.AddWithValue("@userId", userId)
+                cmdUpdate.ExecuteNonQuery()
+            End Using
+
+            Dim ipAddress As String = GetLocalIPAddress()
+            Dim deviceInfo As String = $"{Environment.MachineName} | {Environment.OSVersion.VersionString}"
+
+            Dim logQuery As String = "INSERT INTO activity_logs (ActionDate, ActionType, Details, DeviceInfo, FullName, IPAddress, Module, UserID, UserRole) " &
+                                     "VALUES (NOW(), @actionType, @details, @device, @fullname, @ip, @module, @userid, @role)"
+
+            Using cmdLog As New MySqlCommand(logQuery, cn)
+                cmdLog.Parameters.AddWithValue("@actionType", "LOGOUT")
+                cmdLog.Parameters.AddWithValue("@details", "Admin logged out successfully")
+                cmdLog.Parameters.AddWithValue("@device", deviceInfo)
+                cmdLog.Parameters.AddWithValue("@fullname", If(Not String.IsNullOrEmpty(frmlogin.LoggedInFullname), frmlogin.LoggedInFullname, "Administrator"))
+                cmdLog.Parameters.AddWithValue("@ip", ipAddress)
+                cmdLog.Parameters.AddWithValue("@module", "AUTHENTICATION")
+                cmdLog.Parameters.AddWithValue("@userid", userId)
+                cmdLog.Parameters.AddWithValue("@role", If(Not String.IsNullOrEmpty(frmlogin.LoggedInRole), frmlogin.LoggedInRole, "Administrator"))
+
+                cmdLog.ExecuteNonQuery()
+            End Using
+
+        Catch ex As Exception
+            MsgBox("Logout error: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            CloseConnection()
+            frmlogin.LoggedInUsername = ""
+            frmlogin.LoggedInFullname = ""
+            frmlogin.LoggedInRole = ""
+            frmlogin.LoggedInUserID = 0
+            Me.Hide()
+            Application.Restart()
+        End Try
+    End Sub
+
+    Private Function GetLocalIPAddress() As String
+        Try
+            Dim host = Dns.GetHostEntry(Dns.GetHostName())
+            For Each ip In host.AddressList
+                If ip.AddressFamily = Sockets.AddressFamily.InterNetwork Then
+                    Return ip.ToString()
+                End If
+            Next
+        Catch
+        End Try
+        Return "Unknown"
+    End Function
 End Class

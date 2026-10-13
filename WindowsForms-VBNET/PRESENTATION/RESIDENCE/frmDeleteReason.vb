@@ -2,44 +2,107 @@
 Imports MySql.Data.MySqlClient
 
 Public Class frmDeleteReason
-
     Public Property DeleteReason As String = String.Empty
+    Public Property IsPermanentDelete As Boolean = False
+
     Private currentResidentID As Integer
     Private currentResidentName As String
 
-    ' Overloaded Constructor na tumatanggap ng ID at mga detalye para sa log
-    Public Sub New(residentID As Integer, residentCode As String, residentName As String, email As String, satelliteOffice As String)
+    ' =========================================================================
+    ' CONSTRUCTOR 1: Para sa normal na "Request Deletion"
+    ' =========================================================================
+    Public Sub New(residentID As Integer)
         InitializeComponent()
+        LoadResidentDetails(residentID)
+    End Sub
 
+    ' =========================================================================
+    ' CONSTRUCTOR 2: Para sa Admin View (Permanent Delete Confirmation na may kumpletong info)
+    ' =========================================================================
+    Public Sub New(residentID As Integer, requestedBy As String, reqDate As String, reason As String)
+        InitializeComponent()
+        LoadResidentDetails(residentID, requestedBy, reqDate)
+
+        IsPermanentDelete = True
+
+        ' I-lock ang textbox para basahin na lang ng Admin ang rason
+        rtfReason.Text = reason
+        rtfReason.ReadOnly = True
+
+        btnConfirm.Text = "CONFIRM PERMANENT DELETE"
+        btnConfirm.BackColor = Color.DarkRed
+        btnConfirm.ForeColor = Color.White
+    End Sub
+
+    ' Kunin ang lahat ng impormasyon direkta sa database maliban sa password
+    Private Sub LoadResidentDetails(residentID As Integer, Optional requestedBy As String = "", Optional reqDate As String = "")
         currentResidentID = residentID
-        currentResidentName = residentName
-
-        ' I-display ang Information sa RichTextBox
         rtfInfo.ReadOnly = True
-        rtfInfo.BackColor = Color.FromArgb(245, 247, 252)
-        rtfInfo.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular)
-        rtfInfo.Text = $"=== RESIDENT INFORMATION ===" & vbCrLf &
-                       $"• Resident Code: {residentCode}" & vbCrLf &
-                       $"• Full Name: {residentName}" & vbCrLf &
-                       $"• Email Address: {email}" & vbCrLf &
-                       $"• Satellite Office: {satelliteOffice}"
+
+        Try
+            If cn.State <> ConnectionState.Open Then connection()
+            Dim query As String = "SELECT * FROM residences WHERE ResidentID = @id"
+            Using cmd As New MySqlCommand(query, cn)
+                cmd.Parameters.AddWithValue("@id", residentID)
+                Using dr As MySqlDataReader = cmd.ExecuteReader()
+                    If dr.Read() Then
+                        currentResidentName = If(Not IsDBNull(dr("FullName")), dr("FullName").ToString(), "")
+
+                        Dim infoText As String = "=== RESIDENT INFORMATION ===" & vbCrLf &
+                            $"• Resident Code: {If(Not IsDBNull(dr("ResidentCode")), dr("ResidentCode"), "")}" & vbCrLf &
+                            $"• Full Name: {currentResidentName}" & vbCrLf &
+                            $"• First Name: {If(Not IsDBNull(dr("Firstname")), dr("Firstname"), "")}" & vbCrLf &
+                            $"• Middle Name: {If(Not IsDBNull(dr("Middlename")), dr("Middlename"), "")}" & vbCrLf &
+                            $"• Last Name: {If(Not IsDBNull(dr("Lastname")), dr("Lastname"), "")}" & vbCrLf &
+                            $"• Suffix: {If(Not IsDBNull(dr("Suffix")), dr("Suffix"), "")}" & vbCrLf &
+                            $"• Gender: {If(Not IsDBNull(dr("Gender")), dr("Gender"), "")}" & vbCrLf &
+                            $"• Birthday: {If(Not IsDBNull(dr("Birthday")), Convert.ToDateTime(dr("Birthday")).ToShortDateString(), "")}" & vbCrLf &
+                            $"• Birth Place: {If(Not IsDBNull(dr("BirthPlace")), dr("BirthPlace"), "")}" & vbCrLf &
+                            $"• Civil Status: {If(Not IsDBNull(dr("CivilStatus")), dr("CivilStatus"), "")}" & vbCrLf &
+                            $"• Nationality: {If(Not IsDBNull(dr("Nationality")), dr("Nationality"), "")}" & vbCrLf &
+                            $"• Mobile Number: {If(Not IsDBNull(dr("MobileNumber")), dr("MobileNumber"), "")}" & vbCrLf &
+                            $"• Email: {If(Not IsDBNull(dr("Email")), dr("Email"), "")}" & vbCrLf &
+                            $"• Address: {If(Not IsDBNull(dr("Address")), dr("Address"), "")}" & vbCrLf &
+                            $"• Satellite Office: {If(Not IsDBNull(dr("SatelliteOffice")), dr("SatelliteOffice"), "")}" & vbCrLf &
+                            $"• Father's Name: {If(Not IsDBNull(dr("FatherName")), dr("FatherName"), "")}" & vbCrLf &
+                            $"• Mother's Name: {If(Not IsDBNull(dr("MotherName")), dr("MotherName"), "")}" & vbCrLf &
+                            $"• Account Status: {If(Not IsDBNull(dr("AccountStatus")), dr("AccountStatus"), "")}" & vbCrLf &
+                            $"• Username: {If(Not IsDBNull(dr("Username")), dr("Username"), "")}" & vbCrLf &
+                            $"• Date Registered: {If(Not IsDBNull(dr("CreatedAt")), dr("CreatedAt"), "")}"
+
+                        ' Kung Admin View, idagdag sa ibaba ang Deletion Request Details
+                        If Not String.IsNullOrEmpty(requestedBy) Then
+                            infoText &= vbCrLf & vbCrLf & "=== DELETION REQUEST DETAILS ===" & vbCrLf &
+                                        $"• Requested By: {requestedBy}" & vbCrLf &
+                                        $"• Request Date/Time: {reqDate}"
+                        End If
+
+                        rtfInfo.Text = infoText
+                    End If
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Error loading resident info: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            CloseConnection()
+        End Try
     End Sub
 
     Private Sub frmDeleteReason_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular)
         Me.StartPosition = FormStartPosition.CenterParent
         Me.FormBorderStyle = FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Text = "Delete Reason & Resident Information"
+        Me.Text = If(IsPermanentDelete, "Admin: Confirm Permanent Deletion", "Request Deletion")
 
-        rtfReason.Clear()
-        rtfReason.Focus()
+        If Not IsPermanentDelete Then
+            rtfReason.Clear()
+            rtfReason.Focus()
+        End If
     End Sub
 
     Private Sub btnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
-        ' Validation: Bawal i-submit kung walang laman o puro spaces
-        If String.IsNullOrWhiteSpace(rtfReason.Text) Then
+        If Not IsPermanentDelete AndAlso String.IsNullOrWhiteSpace(rtfReason.Text) Then
             MessageBox.Show("Kinakailangan ang rason o comment bago i-delete ang record.", "Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             rtfReason.Focus()
             Return
@@ -47,26 +110,45 @@ Public Class frmDeleteReason
 
         DeleteReason = rtfReason.Text.Trim()
 
-        ' Isulat agad sa activity_logs para secure at malaman kung sino ang nag-delete
+        Dim currentFullName As String = If(String.IsNullOrWhiteSpace(frmlogin.LoggedInFullname), "Admin", frmlogin.LoggedInFullname)
+        Dim currentRole As String = If(String.IsNullOrWhiteSpace(frmlogin.LoggedInRole), "Administrator", frmlogin.LoggedInRole)
+        Dim currentUserID As Integer = frmlogin.LoggedInUserID
+
         Try
             connection()
+
+            ' 📌 Kung Permanent Delete na ginawa ng Admin, tuluyan nang burahin sa database
+            If IsPermanentDelete Then
+                Dim deleteSql As String = "DELETE FROM residences WHERE ResidentID = @id"
+                Using cmdDelete As New MySqlCommand(deleteSql, cn)
+                    cmdDelete.Parameters.AddWithValue("@id", currentResidentID)
+                    cmdDelete.ExecuteNonQuery()
+                End Using
+            End If
+
+            ' Isulat sa activity_logs
             Dim logSql As String = "INSERT INTO activity_logs (ActionDate, ActionType, Details, DeviceInfo, FullName, IPAddress, Module, UserID, UserRole) " &
                                    "VALUES (NOW(), @actionType, @details, @device, @fullname, @ip, @module, @userid, @role)"
 
             Using cmdLog As New MySqlCommand(logSql, cn)
-                cmdLog.Parameters.AddWithValue("@actionType", "DELETE_RESIDENT")
-                cmdLog.Parameters.AddWithValue("@details", $"Removed resident: {currentResidentName} | Reason: {DeleteReason}")
+                cmdLog.Parameters.AddWithValue("@actionType", If(IsPermanentDelete, "PERMANENT_DELETE_RESIDENT", "REQUEST_DELETE_RESIDENT"))
+                cmdLog.Parameters.AddWithValue("@details", $"Resident: {currentResidentName} | Reason: {DeleteReason}")
                 cmdLog.Parameters.AddWithValue("@device", Environment.MachineName)
-                cmdLog.Parameters.AddWithValue("@fullname", If(String.IsNullOrWhiteSpace(LoggedFullname), "Admin", LoggedFullname))
+                cmdLog.Parameters.AddWithValue("@fullname", currentFullName)
                 cmdLog.Parameters.AddWithValue("@ip", GetLocalIPAddress())
                 cmdLog.Parameters.AddWithValue("@module", "RESIDENCE_RECORDS")
-                cmdLog.Parameters.AddWithValue("@userid", currentResidentID)
-                cmdLog.Parameters.AddWithValue("@role", If(String.IsNullOrWhiteSpace(LoggedRole), "Admin", LoggedRole))
+                cmdLog.Parameters.AddWithValue("@userid", currentUserID)
+                cmdLog.Parameters.AddWithValue("@role", currentRole)
 
                 cmdLog.ExecuteNonQuery()
             End Using
+
+            If IsPermanentDelete Then
+                MessageBox.Show("Permanently deleted from system.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+
         Catch ex As Exception
-            MessageBox.Show("Error saving activity log: " & ex.Message, "Log Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error processing deletion: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             CloseConnection()
         End Try
@@ -80,7 +162,6 @@ Public Class frmDeleteReason
         Me.Close()
     End Sub
 
-    ' Helper function para makuha ang IP Address
     Private Function GetLocalIPAddress() As String
         Try
             Dim host = Dns.GetHostEntry(Dns.GetHostName())
@@ -93,5 +174,4 @@ Public Class frmDeleteReason
         End Try
         Return "Unknown"
     End Function
-
 End Class

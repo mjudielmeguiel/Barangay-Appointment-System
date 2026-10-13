@@ -521,9 +521,9 @@ Partial Class frmcreateuser
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(12, 30)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(114, 19)
+        Me.Label1.Size = New System.Drawing.Size(172, 19)
         Me.Label1.TabIndex = 520
-        Me.Label1.Text = "Role Mangement"
+        Me.Label1.Text = "User Add and Mangement"
         '
         'Label2
         '
@@ -532,9 +532,9 @@ Partial Class frmcreateuser
         Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Label2.Location = New System.Drawing.Point(12, 9)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(50, 21)
+        Me.Label2.Size = New System.Drawing.Size(43, 21)
         Me.Label2.TabIndex = 519
-        Me.Label2.Text = "Roles"
+        Me.Label2.Text = "User"
         '
         'frmcreateuser
         '

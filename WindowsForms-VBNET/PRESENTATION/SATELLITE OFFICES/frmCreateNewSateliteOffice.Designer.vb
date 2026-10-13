@@ -64,6 +64,7 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblFacilityNameError = New System.Windows.Forms.Label()
         Me.txtLocationDetails = New System.Windows.Forms.TextBox()
         Me.lblLocationDetailsError = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.Panel5.SuspendLayout()
@@ -136,6 +137,7 @@ Partial Class frmCreateNewSateliteOffice
         Me.Panel5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.Panel5.Controls.Add(Me.Button1)
         Me.Panel5.Controls.Add(Me.txtSearchResident)
         Me.Panel5.Location = New System.Drawing.Point(0, 61)
         Me.Panel5.Name = "Panel5"
@@ -551,6 +553,23 @@ Partial Class frmCreateNewSateliteOffice
         Me.lblLocationDetailsError.TabIndex = 522
         Me.lblLocationDetailsError.Text = "-"
         '
+        'Button1
+        '
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button1.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.Font = New System.Drawing.Font("Segoe UI Emoji", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Button1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Button1.Location = New System.Drawing.Point(275, 5)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(36, 28)
+        Me.Button1.TabIndex = 553
+        Me.Button1.Text = "..."
+        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Button1.UseVisualStyleBackColor = False
+        '
         'frmCreateNewSateliteOffice
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -620,4 +639,5 @@ Partial Class frmCreateNewSateliteOffice
     Friend WithEvents dgvSatelliteResidents As DataGridView
     Friend WithEvents btnSubmit As Button
     Friend WithEvents Label3 As Label
+    Friend WithEvents Button1 As Button
 End Class

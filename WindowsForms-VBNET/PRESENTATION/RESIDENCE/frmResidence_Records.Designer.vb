@@ -31,20 +31,24 @@ Partial Class frmResidence_Records
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.dgvResidences = New System.Windows.Forms.DataGridView()
-        Me.btnCreateRequest = New System.Windows.Forms.Button()
+        Me.btnCreateNew = New System.Windows.Forms.Button()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.lblNewToday = New System.Windows.Forms.Label()
+        Me.lblNewResident = New System.Windows.Forms.Label()
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
-        Me.lblTotalRecords = New System.Windows.Forms.Label()
+        Me.lblTotalRecord = New System.Windows.Forms.Label()
         Me.Panel14 = New System.Windows.Forms.Panel()
         Me.Label16 = New System.Windows.Forms.Label()
-        Me.lblActiveResidents = New System.Windows.Forms.Label()
+        Me.lblActive = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.lblRequestForDeletion = New System.Windows.Forms.Label()
         Me.Panel7.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.dgvResidences, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -52,6 +56,7 @@ Partial Class frmResidence_Records
         Me.Panel4.SuspendLayout()
         Me.Panel12.SuspendLayout()
         Me.Panel14.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Timer1
@@ -63,7 +68,7 @@ Partial Class frmResidence_Records
         Me.lblDateTime.AutoSize = True
         Me.lblDateTime.Font = New System.Drawing.Font("Microsoft YaHei UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblDateTime.ForeColor = System.Drawing.Color.Navy
-        Me.lblDateTime.Location = New System.Drawing.Point(897, 132)
+        Me.lblDateTime.Location = New System.Drawing.Point(913, 116)
         Me.lblDateTime.Name = "lblDateTime"
         Me.lblDateTime.Size = New System.Drawing.Size(17, 22)
         Me.lblDateTime.TabIndex = 607
@@ -79,7 +84,7 @@ Partial Class frmResidence_Records
         Me.Panel7.Controls.Add(Me.btnRefresh)
         Me.Panel7.Controls.Add(Me.Panel2)
         Me.Panel7.Controls.Add(Me.dgvResidences)
-        Me.Panel7.Controls.Add(Me.btnCreateRequest)
+        Me.Panel7.Controls.Add(Me.btnCreateNew)
         Me.Panel7.Location = New System.Drawing.Point(12, 236)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(1342, 520)
@@ -151,22 +156,22 @@ Partial Class frmResidence_Records
         Me.dgvResidences.Size = New System.Drawing.Size(1342, 421)
         Me.dgvResidences.TabIndex = 508
         '
-        'btnCreateRequest
+        'btnCreateNew
         '
-        Me.btnCreateRequest.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCreateRequest.BackColor = System.Drawing.Color.Navy
-        Me.btnCreateRequest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnCreateRequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCreateRequest.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCreateRequest.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.btnCreateRequest.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnCreateRequest.Location = New System.Drawing.Point(1060, 12)
-        Me.btnCreateRequest.Name = "btnCreateRequest"
-        Me.btnCreateRequest.Size = New System.Drawing.Size(131, 37)
-        Me.btnCreateRequest.TabIndex = 506
-        Me.btnCreateRequest.Text = "Create new"
-        Me.btnCreateRequest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnCreateRequest.UseVisualStyleBackColor = False
+        Me.btnCreateNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCreateNew.BackColor = System.Drawing.Color.Navy
+        Me.btnCreateNew.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnCreateNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnCreateNew.Font = New System.Drawing.Font("Microsoft YaHei UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCreateNew.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnCreateNew.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnCreateNew.Location = New System.Drawing.Point(1060, 12)
+        Me.btnCreateNew.Name = "btnCreateNew"
+        Me.btnCreateNew.Size = New System.Drawing.Size(131, 37)
+        Me.btnCreateNew.TabIndex = 506
+        Me.btnCreateNew.Text = "Create new"
+        Me.btnCreateNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnCreateNew.UseVisualStyleBackColor = False
         '
         'Panel9
         '
@@ -206,7 +211,7 @@ Partial Class frmResidence_Records
         Me.Panel4.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel4.Controls.Add(Me.Label1)
-        Me.Panel4.Controls.Add(Me.lblNewToday)
+        Me.Panel4.Controls.Add(Me.lblNewResident)
         Me.Panel4.Location = New System.Drawing.Point(12, 102)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(170, 86)
@@ -223,18 +228,18 @@ Partial Class frmResidence_Records
         Me.Label1.TabIndex = 164
         Me.Label1.Text = "New Resident"
         '
-        'lblNewToday
+        'lblNewResident
         '
-        Me.lblNewToday.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lblNewResident.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblNewToday.AutoSize = True
-        Me.lblNewToday.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblNewToday.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblNewToday.Location = New System.Drawing.Point(10, 10)
-        Me.lblNewToday.Name = "lblNewToday"
-        Me.lblNewToday.Size = New System.Drawing.Size(20, 25)
-        Me.lblNewToday.TabIndex = 524
-        Me.lblNewToday.Text = "-"
+        Me.lblNewResident.AutoSize = True
+        Me.lblNewResident.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNewResident.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblNewResident.Location = New System.Drawing.Point(10, 10)
+        Me.lblNewResident.Name = "lblNewResident"
+        Me.lblNewResident.Size = New System.Drawing.Size(20, 25)
+        Me.lblNewResident.TabIndex = 524
+        Me.lblNewResident.Text = "-"
         '
         'Panel12
         '
@@ -242,7 +247,7 @@ Partial Class frmResidence_Records
         Me.Panel12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel12.Controls.Add(Me.Label23)
         Me.Panel12.Controls.Add(Me.Label13)
-        Me.Panel12.Controls.Add(Me.lblTotalRecords)
+        Me.Panel12.Controls.Add(Me.lblTotalRecord)
         Me.Panel12.Location = New System.Drawing.Point(387, 102)
         Me.Panel12.Name = "Panel12"
         Me.Panel12.Size = New System.Drawing.Size(170, 86)
@@ -270,25 +275,25 @@ Partial Class frmResidence_Records
         Me.Label13.TabIndex = 164
         Me.Label13.Text = "Total Record"
         '
-        'lblTotalRecords
+        'lblTotalRecord
         '
-        Me.lblTotalRecords.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lblTotalRecord.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblTotalRecords.AutoSize = True
-        Me.lblTotalRecords.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblTotalRecords.Location = New System.Drawing.Point(16, 10)
-        Me.lblTotalRecords.Name = "lblTotalRecords"
-        Me.lblTotalRecords.Size = New System.Drawing.Size(20, 25)
-        Me.lblTotalRecords.TabIndex = 527
-        Me.lblTotalRecords.Text = "-"
+        Me.lblTotalRecord.AutoSize = True
+        Me.lblTotalRecord.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalRecord.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblTotalRecord.Location = New System.Drawing.Point(16, 10)
+        Me.lblTotalRecord.Name = "lblTotalRecord"
+        Me.lblTotalRecord.Size = New System.Drawing.Size(20, 25)
+        Me.lblTotalRecord.TabIndex = 527
+        Me.lblTotalRecord.Text = "-"
         '
         'Panel14
         '
         Me.Panel14.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Panel14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel14.Controls.Add(Me.Label16)
-        Me.Panel14.Controls.Add(Me.lblActiveResidents)
+        Me.Panel14.Controls.Add(Me.lblActive)
         Me.Panel14.Location = New System.Drawing.Point(200, 102)
         Me.Panel14.Name = "Panel14"
         Me.Panel14.Size = New System.Drawing.Size(170, 86)
@@ -305,24 +310,72 @@ Partial Class frmResidence_Records
         Me.Label16.TabIndex = 164
         Me.Label16.Text = "Active"
         '
-        'lblActiveResidents
+        'lblActive
         '
-        Me.lblActiveResidents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lblActive.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblActiveResidents.AutoSize = True
-        Me.lblActiveResidents.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblActiveResidents.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.lblActiveResidents.Location = New System.Drawing.Point(10, 10)
-        Me.lblActiveResidents.Name = "lblActiveResidents"
-        Me.lblActiveResidents.Size = New System.Drawing.Size(20, 25)
-        Me.lblActiveResidents.TabIndex = 524
-        Me.lblActiveResidents.Text = "-"
+        Me.lblActive.AutoSize = True
+        Me.lblActive.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblActive.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblActive.Location = New System.Drawing.Point(10, 10)
+        Me.lblActive.Name = "lblActive"
+        Me.lblActive.Size = New System.Drawing.Size(20, 25)
+        Me.lblActive.TabIndex = 524
+        Me.lblActive.Text = "-"
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.Label4)
+        Me.Panel1.Controls.Add(Me.Label5)
+        Me.Panel1.Controls.Add(Me.lblRequestForDeletion)
+        Me.Panel1.Location = New System.Drawing.Point(574, 102)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(170, 86)
+        Me.Panel1.TabIndex = 650
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label4.Location = New System.Drawing.Point(732, 10)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(77, 21)
+        Me.Label4.TabIndex = 164
+        Me.Label4.Text = "Cancelled"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.Label5.Location = New System.Drawing.Point(18, 51)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(132, 17)
+        Me.Label5.TabIndex = 164
+        Me.Label5.Text = "Request for Deletion"
+        '
+        'lblRequestForDeletion
+        '
+        Me.lblRequestForDeletion.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblRequestForDeletion.AutoSize = True
+        Me.lblRequestForDeletion.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblRequestForDeletion.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.lblRequestForDeletion.Location = New System.Drawing.Point(16, 10)
+        Me.lblRequestForDeletion.Name = "lblRequestForDeletion"
+        Me.lblRequestForDeletion.Size = New System.Drawing.Size(20, 25)
+        Me.lblRequestForDeletion.TabIndex = 527
+        Me.lblRequestForDeletion.Text = "-"
         '
         'frmResidence_Records
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1366, 768)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel12)
         Me.Controls.Add(Me.Panel14)
@@ -345,6 +398,8 @@ Partial Class frmResidence_Records
         Me.Panel12.PerformLayout()
         Me.Panel14.ResumeLayout(False)
         Me.Panel14.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -356,19 +411,23 @@ Partial Class frmResidence_Records
     Friend WithEvents Panel2 As Panel
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents dgvResidences As DataGridView
-    Friend WithEvents btnCreateRequest As Button
+    Friend WithEvents btnCreateNew As Button
     Friend WithEvents Panel9 As Panel
     Friend WithEvents Label2 As Label
     Friend WithEvents Label10 As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents Label1 As Label
-    Friend WithEvents lblNewToday As Label
+    Friend WithEvents lblNewResident As Label
     Friend WithEvents Panel12 As Panel
     Friend WithEvents Label23 As Label
     Friend WithEvents Label13 As Label
-    Friend WithEvents lblTotalRecords As Label
+    Friend WithEvents lblTotalRecord As Label
     Friend WithEvents Panel14 As Panel
     Friend WithEvents Label16 As Label
-    Friend WithEvents lblActiveResidents As Label
+    Friend WithEvents lblActive As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents lblRequestForDeletion As Label
 End Class

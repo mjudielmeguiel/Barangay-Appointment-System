@@ -106,7 +106,6 @@ Partial Class frmResidencelist
         Me.ClientSize = New System.Drawing.Size(1032, 598)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Panel5)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmResidencelist"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

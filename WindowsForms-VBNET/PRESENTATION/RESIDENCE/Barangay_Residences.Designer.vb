@@ -53,7 +53,7 @@ Partial Class Barangay_Residences
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
+        Me.lblSatelliteOfficeError = New System.Windows.Forms.Label()
         Me.cboSatelliteOffice = New System.Windows.Forms.ComboBox()
         Me.lblMiddlenameError = New System.Windows.Forms.Label()
         Me.lblEmailError = New System.Windows.Forms.Label()
@@ -75,10 +75,10 @@ Partial Class Barangay_Residences
         Me.Label32 = New System.Windows.Forms.Label()
         Me.Label29 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
-        Me.Label24 = New System.Windows.Forms.Label()
+        Me.lblCivilStatusError = New System.Windows.Forms.Label()
         Me.cboCivilStatus = New System.Windows.Forms.ComboBox()
         Me.Label21 = New System.Windows.Forms.Label()
-        Me.Label22 = New System.Windows.Forms.Label()
+        Me.lblGenderError = New System.Windows.Forms.Label()
         Me.cboGender = New System.Windows.Forms.ComboBox()
         Me.txtBirthPlace = New System.Windows.Forms.TextBox()
         Me.lblBirthPlaceError = New System.Windows.Forms.Label()
@@ -435,7 +435,7 @@ Partial Class Barangay_Residences
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(246, Byte), Integer))
         Me.Panel3.Controls.Add(Me.Label1)
-        Me.Panel3.Controls.Add(Me.Label8)
+        Me.Panel3.Controls.Add(Me.lblSatelliteOfficeError)
         Me.Panel3.Controls.Add(Me.cboSatelliteOffice)
         Me.Panel3.Controls.Add(Me.lblMiddlenameError)
         Me.Panel3.Controls.Add(Me.lblEmailError)
@@ -457,10 +457,10 @@ Partial Class Barangay_Residences
         Me.Panel3.Controls.Add(Me.Label32)
         Me.Panel3.Controls.Add(Me.Label29)
         Me.Panel3.Controls.Add(Me.Label23)
-        Me.Panel3.Controls.Add(Me.Label24)
+        Me.Panel3.Controls.Add(Me.lblCivilStatusError)
         Me.Panel3.Controls.Add(Me.cboCivilStatus)
         Me.Panel3.Controls.Add(Me.Label21)
-        Me.Panel3.Controls.Add(Me.Label22)
+        Me.Panel3.Controls.Add(Me.lblGenderError)
         Me.Panel3.Controls.Add(Me.cboGender)
         Me.Panel3.Controls.Add(Me.txtBirthPlace)
         Me.Panel3.Controls.Add(Me.lblBirthPlaceError)
@@ -494,15 +494,15 @@ Partial Class Barangay_Residences
         Me.Label1.TabIndex = 722
         Me.Label1.Text = "Satellite Office"
         '
-        'Label8
+        'lblSatelliteOfficeError
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(332, 286)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(15, 19)
-        Me.Label8.TabIndex = 721
-        Me.Label8.Text = "-"
+        Me.lblSatelliteOfficeError.AutoSize = True
+        Me.lblSatelliteOfficeError.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSatelliteOfficeError.Location = New System.Drawing.Point(332, 286)
+        Me.lblSatelliteOfficeError.Name = "lblSatelliteOfficeError"
+        Me.lblSatelliteOfficeError.Size = New System.Drawing.Size(15, 19)
+        Me.lblSatelliteOfficeError.TabIndex = 721
+        Me.lblSatelliteOfficeError.Text = "-"
         '
         'cboSatelliteOffice
         '
@@ -714,15 +714,15 @@ Partial Class Barangay_Residences
         Me.Label23.TabIndex = 697
         Me.Label23.Text = "Civil Status"
         '
-        'Label24
+        'lblCivilStatusError
         '
-        Me.Label24.AutoSize = True
-        Me.Label24.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label24.Location = New System.Drawing.Point(919, 199)
-        Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(15, 19)
-        Me.Label24.TabIndex = 696
-        Me.Label24.Text = "-"
+        Me.lblCivilStatusError.AutoSize = True
+        Me.lblCivilStatusError.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCivilStatusError.Location = New System.Drawing.Point(919, 199)
+        Me.lblCivilStatusError.Name = "lblCivilStatusError"
+        Me.lblCivilStatusError.Size = New System.Drawing.Size(15, 19)
+        Me.lblCivilStatusError.TabIndex = 696
+        Me.lblCivilStatusError.Text = "-"
         '
         'cboCivilStatus
         '
@@ -744,15 +744,15 @@ Partial Class Barangay_Residences
         Me.Label21.TabIndex = 694
         Me.Label21.Text = "Gender"
         '
-        'Label22
+        'lblGenderError
         '
-        Me.Label22.AutoSize = True
-        Me.Label22.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label22.Location = New System.Drawing.Point(640, 195)
-        Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(15, 19)
-        Me.Label22.TabIndex = 693
-        Me.Label22.Text = "-"
+        Me.lblGenderError.AutoSize = True
+        Me.lblGenderError.Font = New System.Drawing.Font("Microsoft YaHei UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblGenderError.Location = New System.Drawing.Point(640, 195)
+        Me.lblGenderError.Name = "lblGenderError"
+        Me.lblGenderError.Size = New System.Drawing.Size(15, 19)
+        Me.lblGenderError.TabIndex = 693
+        Me.lblGenderError.Text = "-"
         '
         'cboGender
         '
@@ -996,10 +996,10 @@ Partial Class Barangay_Residences
     Friend WithEvents lblBirthPlaceError As Label
     Friend WithEvents Label20 As Label
     Friend WithEvents Label23 As Label
-    Friend WithEvents Label24 As Label
+    Friend WithEvents lblCivilStatusError As Label
     Friend WithEvents cboCivilStatus As ComboBox
     Friend WithEvents Label21 As Label
-    Friend WithEvents Label22 As Label
+    Friend WithEvents lblGenderError As Label
     Friend WithEvents cboGender As ComboBox
     Friend WithEvents Label29 As Label
     Friend WithEvents Label33 As Label
@@ -1027,13 +1027,13 @@ Partial Class Barangay_Residences
     Friend WithEvents picUser As PictureBox
     Friend WithEvents lblEmailError As Label
     Friend WithEvents lblMobileError As Label
-    Friend WithEvents lblPictureError As Label
     Friend WithEvents lblMiddlenameError As Label
     Friend WithEvents lblUsernameError As Label
     Friend WithEvents Panel6 As Panel
     Friend WithEvents Label7 As Label
     Friend WithEvents Label10 As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents Label8 As Label
+    Friend WithEvents lblSatelliteOfficeError As Label
     Friend WithEvents cboSatelliteOffice As ComboBox
+    Friend WithEvents lblPictureError As Label
 End Class

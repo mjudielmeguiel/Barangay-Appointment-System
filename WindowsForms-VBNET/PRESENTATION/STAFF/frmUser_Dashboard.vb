@@ -392,7 +392,6 @@ Public Class frmUser_Dashboard
             dgvRequests.Columns.Add(btnUnclaimedAction)
         End If
 
-        ' Para sa Cancel / Reject na Button
         If Not dgvRequests.Columns.Contains("colCancel") Then
             Dim btnCancelCol As New DataGridViewButtonColumn()
             btnCancelCol.Name = "colCancel"
@@ -456,10 +455,8 @@ Public Class frmUser_Dashboard
             dgvRequests.Columns("colUnclaimedActionBtn").Visible = False
         End If
 
-        ' I-setup ang Reject / Cancel button logic dito
         If upperStatus = "PENDING" OrElse upperStatus = "APPROVE" OrElse upperStatus = "APPROVED" OrElse upperStatus = "PROCESSING" OrElse upperStatus = "UNPAID" OrElse upperStatus = "TO PAY" Then
             dgvRequests.Columns("colCancel").Visible = True
-            ' Dito babaguhin yung Header Name kung Pending siya 
             If upperStatus = "PENDING" Then
                 dgvRequests.Columns("colCancel").HeaderText = "Reject"
             Else
@@ -527,15 +524,12 @@ Public Class frmUser_Dashboard
             End If
         End If
 
-        ' ADDED ACTION PARA SA REJECT AT CANCEL BUTTON
         If colName = "colCancel" Then
             If currentStatus = "PENDING" Then
-                ' Kapag Pending, mapupunta ang status sa REJECTED
                 If MsgBox($"Are you sure you want to REJECT request [{controlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Reject") = MsgBoxResult.Yes Then
                     UpdateRequestStatus(controlNo, "REJECTED")
                 End If
             Else
-                ' Kapag nasa ibang section (Processing, Unpaid, etc.), mapupunta sa CANCELLED
                 If MsgBox($"Are you sure you want to CANCEL request [{controlNo}]?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Confirm Cancel") = MsgBoxResult.Yes Then
                     UpdateRequestStatus(controlNo, "CANCELLED")
                 End If
@@ -614,7 +608,6 @@ Public Class frmUser_Dashboard
                     e.Handled = True
                 End If
 
-                ' DITO BABAGUHIN YUNG NAKASULAT SA LOOB NG BUTTON
                 If colName = "colCancel" AndAlso (rowStatus = "PENDING" OrElse rowStatus = "APPROVE" OrElse rowStatus = "APPROVED" OrElse rowStatus = "PROCESSING" OrElse rowStatus = "UNPAID" OrElse rowStatus = "TO PAY") Then
                     Using path As GraphicsPath = GetRoundedPath(buttonRect, cornerRadius)
                         Using brush As New SolidBrush(Color.FromArgb(128, 0, 0))
@@ -622,9 +615,7 @@ Public Class frmUser_Dashboard
                         End Using
                     End Using
 
-                    ' Tukuyin kung "REJECT" o "CANCEL" ang iguguhit base sa status
                     Dim btnText As String = If(rowStatus = "PENDING", "REJECT", "CANCEL")
-
                     TextRenderer.DrawText(e.Graphics, btnText, New Font("Segoe UI", 8.0F, FontStyle.Bold), buttonRect, Color.White, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
                     e.Handled = True
                 End If
@@ -670,18 +661,10 @@ Public Class frmUser_Dashboard
         End Try
     End Sub
 
+    ' Tinanggal na ang frmAppointmentDetails sa pamamagitan ng pag-alis ng laman o pag-return kaagad sa double click event handler
     Private Sub dgvRequests_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvRequests.CellDoubleClick
-        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
-            Dim colName As String = dgvRequests.Columns(e.ColumnIndex).Name
-            If colName = "colView" OrElse colName = "colCancel" OrElse colName = "colEdit" OrElse colName = "colPay" OrElse colName = "colReleaseBtn" OrElse colName = "colMarkUnclaimed" OrElse colName = "colUnclaimedActionBtn" Then Return
-
-            Dim controlNo As String = dgvRequests.Rows(e.RowIndex).Cells("Control No.").Value.ToString()
-            Using frmDetails As New frmAppointmentDetails(controlNo)
-                If frmDetails.ShowDialog() = DialogResult.OK Then
-                    RefreshDashboardData()
-                End If
-            End Using
-        End If
+        ' Wala nang gagawin kapag nag-double click sa row
+        Return
     End Sub
 
     Private Sub lblPending_Click(sender As Object, e As EventArgs) Handles lblPending.Click

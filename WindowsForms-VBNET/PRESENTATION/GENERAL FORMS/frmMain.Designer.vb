@@ -27,8 +27,9 @@ Partial Class frmMain
         Me.lblFullname = New System.Windows.Forms.Label()
         Me.panelIcons = New System.Windows.Forms.Panel()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.btnCalendar = New System.Windows.Forms.Button()
         Me.btnPayments = New System.Windows.Forms.Button()
+        Me.btnCalendar = New System.Windows.Forms.Button()
+        Me.BtnComplain = New System.Windows.Forms.Button()
         Me.btnUsers = New System.Windows.Forms.Button()
         Me.btnResidents = New System.Windows.Forms.Button()
         Me.btnToggleSidebar = New System.Windows.Forms.Button()
@@ -71,8 +72,9 @@ Partial Class frmMain
         '
         Me.panelIcons.BackColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(221, Byte), Integer), CType(CType(225, Byte), Integer))
         Me.panelIcons.Controls.Add(Me.Button4)
-        Me.panelIcons.Controls.Add(Me.btnCalendar)
         Me.panelIcons.Controls.Add(Me.btnPayments)
+        Me.panelIcons.Controls.Add(Me.btnCalendar)
+        Me.panelIcons.Controls.Add(Me.BtnComplain)
         Me.panelIcons.Controls.Add(Me.btnUsers)
         Me.panelIcons.Controls.Add(Me.btnResidents)
         Me.panelIcons.Controls.Add(Me.btnToggleSidebar)
@@ -94,13 +96,31 @@ Partial Class frmMain
         Me.Button4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
         Me.Button4.Image = CType(resources.GetObject("Button4.Image"), System.Drawing.Image)
-        Me.Button4.Location = New System.Drawing.Point(0, 366)
+        Me.Button4.Location = New System.Drawing.Point(0, 427)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 61)
         Me.Button4.TabIndex = 157
         Me.Button4.Text = "Offices"
         Me.Button4.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.Button4.UseVisualStyleBackColor = False
+        '
+        'btnPayments
+        '
+        Me.btnPayments.BackColor = System.Drawing.Color.Transparent
+        Me.btnPayments.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.btnPayments.Dock = System.Windows.Forms.DockStyle.Top
+        Me.btnPayments.FlatAppearance.BorderSize = 0
+        Me.btnPayments.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPayments.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPayments.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.btnPayments.Image = CType(resources.GetObject("btnPayments.Image"), System.Drawing.Image)
+        Me.btnPayments.Location = New System.Drawing.Point(0, 366)
+        Me.btnPayments.Name = "btnPayments"
+        Me.btnPayments.Size = New System.Drawing.Size(75, 61)
+        Me.btnPayments.TabIndex = 153
+        Me.btnPayments.Text = "Payments"
+        Me.btnPayments.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnPayments.UseVisualStyleBackColor = False
         '
         'btnCalendar
         '
@@ -120,23 +140,23 @@ Partial Class frmMain
         Me.btnCalendar.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.btnCalendar.UseVisualStyleBackColor = False
         '
-        'btnPayments
+        'BtnComplain
         '
-        Me.btnPayments.BackColor = System.Drawing.Color.Transparent
-        Me.btnPayments.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.btnPayments.Dock = System.Windows.Forms.DockStyle.Top
-        Me.btnPayments.FlatAppearance.BorderSize = 0
-        Me.btnPayments.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPayments.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPayments.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
-        Me.btnPayments.Image = CType(resources.GetObject("btnPayments.Image"), System.Drawing.Image)
-        Me.btnPayments.Location = New System.Drawing.Point(0, 244)
-        Me.btnPayments.Name = "btnPayments"
-        Me.btnPayments.Size = New System.Drawing.Size(75, 61)
-        Me.btnPayments.TabIndex = 153
-        Me.btnPayments.Text = "Payments"
-        Me.btnPayments.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnPayments.UseVisualStyleBackColor = False
+        Me.BtnComplain.BackColor = System.Drawing.Color.Transparent
+        Me.BtnComplain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.BtnComplain.Dock = System.Windows.Forms.DockStyle.Top
+        Me.BtnComplain.FlatAppearance.BorderSize = 0
+        Me.BtnComplain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.BtnComplain.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnComplain.ForeColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(86, Byte), Integer))
+        Me.BtnComplain.Image = CType(resources.GetObject("BtnComplain.Image"), System.Drawing.Image)
+        Me.BtnComplain.Location = New System.Drawing.Point(0, 244)
+        Me.BtnComplain.Name = "BtnComplain"
+        Me.BtnComplain.Size = New System.Drawing.Size(75, 61)
+        Me.BtnComplain.TabIndex = 158
+        Me.BtnComplain.Text = "Complaint"
+        Me.BtnComplain.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.BtnComplain.UseVisualStyleBackColor = False
         '
         'btnUsers
         '
@@ -513,4 +533,5 @@ Partial Class frmMain
     Friend WithEvents Button4 As Button
     Friend WithEvents picProfile As PictureBox
     Friend WithEvents Panel3 As Panel
+    Friend WithEvents BtnComplain As Button
 End Class

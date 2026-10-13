@@ -33,7 +33,6 @@ Public Class frmCreateNewSateliteOffice
             btnClearAll.Text = "Delete Office"
             LoadOfficeData()
 
-            ' I-load ang mga residente sa DataGridView kung ito ay nag-eexist sa form
             If dgvSatelliteResidents IsNot Nothing Then
                 StyleDataGridView(dgvSatelliteResidents)
                 LoadResidentsForThisOffice(editingOfficeID.Value)
@@ -50,7 +49,6 @@ Public Class frmCreateNewSateliteOffice
             btnClearAll.Text = "Clear All"
             GenerateOfficeNumber()
 
-            ' Itago muna ang listahan ng residente at search box kapag bago pa lang ginagawa ang office
             If dgvSatelliteResidents IsNot Nothing Then
                 dgvSatelliteResidents.Visible = False
             End If
@@ -141,12 +139,7 @@ Public Class frmCreateNewSateliteOffice
                 End Using
             End Using
 
-            ClearAllValidationLabels()
-            txtFacilityName_TextChanged(Nothing, Nothing)
-            txtLocationDetails_TextChanged(Nothing, Nothing)
-            txtServingArea_TextChanged(Nothing, Nothing)
-            cboFacilityType_SelectedIndexChanged(Nothing, Nothing)
-            cboOperationStatus_SelectedIndexChanged(Nothing, Nothing)
+            ValidateAllFields()
 
         Catch ex As Exception
             MsgBox("Error loading data: " & ex.Message, MsgBoxStyle.Critical)
@@ -155,7 +148,6 @@ Public Class frmCreateNewSateliteOffice
         End Try
     End Sub
 
-    ' --- LOAD NG MGA RESIDENTE SA ILALIM NG SATELLITE OFFICE NA MAY SEARCH SUPPORT ---
     Private Sub LoadResidentsForThisOffice(officeID As Integer, Optional searchKeyword As String = "")
         Try
             connection()
@@ -182,7 +174,6 @@ Public Class frmCreateNewSateliteOffice
 
                 dgvSatelliteResidents.DataSource = dt
 
-                ' Optional label para ipakita ang total count kung mayroon kang lblResidentCount
                 If Me.Controls.ContainsKey("lblResidentCount") Then
                     DirectCast(Me.Controls("lblResidentCount"), Label).Text = $"Kabuuang Residente: {dt.Rows.Count}"
                 End If
@@ -198,14 +189,12 @@ Public Class frmCreateNewSateliteOffice
         End Try
     End Sub
 
-    ' --- EVENT HANDLER PARA SA SEARCH TEXTBOX NG MGA RESIDENTE ---
     Private Sub txtSearchResident_TextChanged(sender As Object, e As EventArgs) Handles txtSearchResident.TextChanged
         If editingOfficeID.HasValue Then
             LoadResidentsForThisOffice(editingOfficeID.Value, txtSearchResident.Text)
         End If
     End Sub
 
-    ' --- DESIGN PARA SA DATAGRIDVIEW NG MGA RESIDENTE ---
     Private Sub StyleDataGridView(dgv As DataGridView)
         If dgv Is Nothing Then Return
 
@@ -323,6 +312,28 @@ Public Class frmCreateNewSateliteOffice
         SetFeedbackLabel(lblServingAreaError, If(String.IsNullOrWhiteSpace(txtServingArea.Text), "Serving area is required.", "✓ OK"), String.IsNullOrWhiteSpace(txtServingArea.Text))
     End Sub
 
+    Private Sub ValidateAllFields()
+        txtFacilityName_TextChanged(Nothing, Nothing)
+        cboFacilityType_SelectedIndexChanged(Nothing, Nothing)
+        txtLocationDetails_TextChanged(Nothing, Nothing)
+        cboOperationStatus_SelectedIndexChanged(Nothing, Nothing)
+        txtServingArea_TextChanged(Nothing, Nothing)
+    End Sub
+
+    Private Function IsFormValid() As Boolean
+        ValidateAllFields()
+
+        If String.IsNullOrWhiteSpace(txtFacilityName.Text) OrElse
+           cboFacilityType.SelectedIndex = -1 OrElse
+           String.IsNullOrWhiteSpace(txtLocationDetails.Text) OrElse
+           cboOperationStatus.SelectedIndex = -1 OrElse
+           String.IsNullOrWhiteSpace(txtServingArea.Text) Then
+            Return False
+        End If
+
+        Return True
+    End Function
+
     Private Sub btnClearAll_Click(sender As Object, e As EventArgs) Handles btnClearAll.Click
         If editingOfficeID.HasValue Then
             Dim result = MsgBox("Are you sure you want to DELETE this Satellite Office?" & vbCrLf & vbCrLf &
@@ -396,12 +407,8 @@ Public Class frmCreateNewSateliteOffice
     End Sub
 
     Private Sub btnSubmit_Click_1(sender As Object, e As EventArgs) Handles btnSubmit.Click
-        If lblFacilityNameError.ForeColor = Color.Red OrElse
-            lblFacilityTypeError.ForeColor = Color.Red OrElse
-            lblLocationDetailsError.ForeColor = Color.Red OrElse
-            lblOperationStatusError.ForeColor = Color.Red OrElse
-            lblServingAreaError.ForeColor = Color.Red Then
-            MsgBox("Please fix all required fields before saving!", MsgBoxStyle.Exclamation)
+        ' Suriin ang mga detalye gamit ang validation labels ngunit walang popup MsgBox ng error
+        If Not IsFormValid() Then
             Return
         End If
 
@@ -474,5 +481,4 @@ Public Class frmCreateNewSateliteOffice
             CloseConnection()
         End Try
     End Sub
-
 End Class
