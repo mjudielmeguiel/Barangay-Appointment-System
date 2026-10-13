@@ -1,13 +1,21 @@
 ﻿@model AppointmentSystem.Models.UserLoginModel
 @{
     Layout = null;
-    var openModal = !ViewData.ModelState.IsValid;
+    var openLoginModal = !ViewData.ModelState.IsValid && !(ViewBag.OpenRegister ?? false);
+    var openRegisterModal = (bool)(ViewBag.OpenRegister ?? false);
+    var registerError = ViewBag.RegisterError as string ?? string.Empty;
+    string regFirstname = ViewBag.RegFirstname as string ?? string.Empty;
+    string regLastname = ViewBag.RegLastname as string ?? string.Empty;
+    string regEmail = ViewBag.RegEmail as string ?? string.Empty;
+    string regUsername = ViewBag.RegUsername as string ?? string.Empty;
+    int selectedOfficeId = -1;
+    if (ViewBag.SelectedOfficeId != null) { selectedOfficeId = Convert.ToInt32(ViewBag.SelectedOfficeId); }
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#111d3c" />
     <title>Barangay Service Management System</title>
     <link rel="icon" type="image/x-icon" href="~/images/PUTATAN.ico" />
@@ -27,40 +35,30 @@
         body { background: var(--bg); color: #2f3640; overflow-x: hidden; }
         img { max-width: 100%; }
         .container { width: 90%; max-width: 1240px; margin: 0 auto; }
-
-        /* ===== Header (blends into hero: same starting color) ===== */
         header { background: var(--brand-dark); position: sticky; top: 0; z-index: 50; transition: box-shadow .35s var(--ease), background .35s var(--ease); }
         header.scrolled { box-shadow: 0 6px 24px rgba(10, 18, 40, .35); background: rgba(17, 29, 60, .96); backdrop-filter: blur(8px); }
         .nav { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 16px; }
-
-        /* Logo: borderless, no background, no frame */
         .brand { display: flex; align-items: center; gap: 14px; color: #fff; text-decoration: none; min-width: 0; transition: opacity .3s var(--ease); }
         .brand:hover { opacity: .88; }
         .brand img { width: 52px; height: 52px; object-fit: contain; border: 0; outline: 0; background: none; padding: 0; border-radius: 0; flex-shrink: 0; transition: transform .35s var(--ease); }
         .brand:hover img { transform: scale(1.06); }
         .brand strong { display: block; font-size: 19px; font-weight: 700; line-height: 1.2; }
         .brand span { display: block; font-size: 11.5px; font-weight: 500; color: #c9d1e6; }
-
         .nav-right { display: flex; align-items: center; gap: 26px; }
         .nav-links { display: flex; align-items: center; gap: 26px; }
         .nav-links a { position: relative; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 6px 0; transition: color .3s var(--ease); }
         .nav-links a::after { content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: #fff; border-radius: 2px; transition: width .35s var(--ease); }
         .nav-links a:hover::after { width: 100%; }
-
         .btn-open-login { background: #fff; color: var(--brand); border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease), color .3s var(--ease); }
         .btn-open-login i { margin-right: 7px; transition: transform .3s var(--ease); }
         .btn-open-login:hover { background: #e8ecf8; transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0, 0, 0, .25); }
         .btn-open-login:hover i { transform: translateX(3px); }
         .btn-open-login:active { transform: translateY(0); }
-
         .btn-open-register { background: transparent; color: #fff; border: 2px solid #fff; padding: 8px 22px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background .3s var(--ease), color .3s var(--ease); }
         .btn-open-register i { margin-right: 7px; }
         .btn-open-register:hover { background: #fff; color: var(--brand); }
-
         .menu-toggle { display: none; background: none; border: none; color: #fff; font-size: 22px; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; transition: background .3s var(--ease); }
         .menu-toggle:hover { background: rgba(255, 255, 255, .12); }
-
-        /* ===== Hero (soft blended gradient, fades into page) ===== */
         .hero { position: relative; color: #fff; padding: clamp(48px, 8vw, 84px) 0 clamp(70px, 10vw, 110px); overflow: hidden;
             background:
                 radial-gradient(circle at 85% 20%, rgba(61, 90, 158, .45), transparent 45%),
@@ -73,8 +71,6 @@
         .btn-hero { display: inline-block; margin-top: 28px; background: #fff; color: var(--brand); padding: 13px 24px; border-radius: 6px; font-weight: 700; font-size: 15px; border: none; cursor: pointer; transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease); }
         .btn-hero:hover { background: #e8ecf8; transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0, 0, 0, .25); }
         .btn-hero:active { transform: translateY(0); }
-
-        /* ===== Services ===== */
         .section { padding: clamp(36px, 6vw, 56px) 0 30px; text-align: center; }
         .section h2 { font-size: clamp(21px, 3.4vw, 27px); color: var(--brand); font-weight: 700; }
         .section .sub { font-size: 13px; color: #718093; margin: 8px 0 32px; }
@@ -86,8 +82,6 @@
         .card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(25, 42, 86, .18); border-color: var(--brand-light); }
         .card:hover i { transform: scale(1.15) rotate(-4deg); color: var(--brand-light); }
         .card:hover h3 { color: var(--brand-light); }
-
-        /* ===== Contact Us (blends softly from page background) ===== */
         .contact { background: linear-gradient(180deg, var(--bg) 0%, #f3f3f3 100%); padding: 28px 0 clamp(40px, 6vw, 64px); text-align: left; }
         .contact-title { font-size: clamp(21px, 3vw, 24px); font-weight: 600; color: #ffc700; margin-bottom: 26px; }
         .contact-top { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 6vw, 70px); margin-bottom: 40px; }
@@ -124,15 +118,9 @@
         .hot-pager .pg:hover { color: var(--brand); transform: scale(1.25); }
         .hot-pager .cur { background: #e8f1fd; color: #1a73e8; width: 43px; height: 43px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background .3s var(--ease), color .3s var(--ease); }
         .hot-pager .cur:hover { background: #1a73e8; color: #fff; }
-
-        /* ===== Footer (blended gradient) ===== */
         footer { background: linear-gradient(135deg, var(--brand-dark), var(--brand)); color: #c9d1e6; text-align: center; padding: 22px 16px; font-size: 12px; }
-
-        /* ===== Scroll reveal ===== */
         .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
         .reveal.show { opacity: 1; transform: none; }
-
-        /* ===== Modals ===== */
         .modal-backdrop { position: fixed; inset: 0; background: rgba(10, 18, 40, .6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility .35s var(--ease); overflow-y: auto; }
         .modal-backdrop.open { opacity: 1; visibility: visible; }
         .login-card { position: relative; width: 100%; max-width: 380px; max-height: 94vh; overflow-y: auto; background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%); border-radius: 14px; padding: 34px 32px 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, .4); text-align: left; transform: translateY(-18px) scale(.97); transition: transform .4s var(--ease); }
@@ -143,15 +131,15 @@
         .avatar img { width: 100%; height: 100%; object-fit: contain; border: 0; background: none; padding: 0; border-radius: 0; transition: transform .4s var(--ease); }
         .login-card:hover .avatar img { transform: scale(1.06); }
         .login-card h2 { text-align: center; font-size: 22px; font-weight: 300; color: #2f3640; margin-bottom: 24px; }
-        
         .form-row { display: flex; gap: 10px; margin-bottom: 14px; }
         .form-row .form-group { margin-bottom: 0; flex: 1; }
-        
         .form-group { margin-bottom: 14px; }
         .form-control { width: 100%; padding: 12px; background: #fff; border: 1px solid #dfe4ea; border-radius: 6px; font-size: 14px; color: #2f3640; outline: none; transition: border-color .3s var(--ease), box-shadow .3s var(--ease); }
         .form-control::placeholder { color: #a4b0be; }
         .form-control:hover { border-color: #a9b4cc; }
         .form-control:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(25, 42, 86, .13); }
+        .inline-error { display: none; color: #e74c3c; font-size: 12px; margin-top: 5px; }
+        .server-error-box { margin-bottom: 14px; padding: 10px 12px; background: #fdecea; border: 1px solid #e74c3c; border-radius: 6px; color: #c0392b; font-size: 13px; text-align: center; line-height: 1.5; }
         .btn-login { width: 100%; padding: 12px; margin-top: 6px; background: linear-gradient(135deg, var(--brand), var(--brand-soft)); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform .3s var(--ease), box-shadow .3s var(--ease), filter .3s var(--ease); }
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(25, 42, 86, .3); filter: brightness(1.1); }
         .btn-login:active { transform: translateY(0); }
@@ -162,8 +150,7 @@
         .login-options a:hover { color: var(--brand-light); text-decoration: underline; }
         .text-danger { color: #e74c3c; font-size: 12px; margin-top: 4px; display: block; }
         .validation-summary { margin-bottom: 12px; text-align: center; }
-
-        /* ===== Tablet ===== */
+        
         @@media (max-width: 992px) {
             .cards { grid-template-columns: repeat(2, 1fr); }
             .nav-right { gap: 12px; }
@@ -174,8 +161,6 @@
             .nav-links a::after { display: none; }
             .nav-links a:hover { color: #aebbe0; }
         }
-
-        /* ===== Phone ===== */
         @@media (max-width: 768px) {
             .nav { height: 70px; }
             .brand img { width: 42px; height: 42px; }
@@ -186,8 +171,6 @@
             .hot-search input { width: 100%; }
             .btn-open-login { padding: 9px 16px; font-size: 13px; }
             .btn-open-register { padding: 9px 16px; font-size: 13px; }
-
-            /* table becomes stacked cards */
             .hot-table thead { display: none; }
             .hot-table, .hot-table tbody { display: block; }
             .hot-table tbody tr { display: block; border: 1px solid #e9ecef; border-radius: 8px; margin: 12px 0; padding: 6px 0; }
@@ -200,7 +183,9 @@
             .btn-hero { width: 100%; text-align: center; }
             .brand strong { font-size: 13.5px; max-width: 150px; }
             .btn-open-login i, .btn-open-register i { display: none; }
-            .login-card { padding: 28px 22px 22px; }
+            .login-card { padding: 28px 22px 22px; width: 100%; margin: auto; }
+            /* ✅ Fixed form-row spacing for mobile so inputs don't stick together */
+            .form-row { flex-direction: column; gap: 14px; margin-bottom: 14px; }
         }
         @@media (hover: none) {
             .card:hover, .btn-hero:hover, .btn-open-login:hover, .btn-open-register:hover, .btn-login:hover { transform: none; }
@@ -212,8 +197,6 @@
     </style>
 </head>
 <body>
-
-    <!-- ===== Header ===== -->
     <header id="siteHeader">
         <div class="container nav">
             <a href="#home" class="brand">
@@ -236,8 +219,6 @@
             </div>
         </div>
     </header>
-
-    <!-- ===== Hero ===== -->
     <section class="hero" id="home">
         <div class="container reveal">
             <h1>Barangay Services Made Easier</h1>
@@ -245,8 +226,6 @@
             <button type="button" class="btn-hero" id="requestDoc">Request a Document</button>
         </div>
     </section>
-
-    <!-- ===== Services ===== -->
     <section class="section" id="services">
         <div class="container reveal">
             <h2>Available Barangay Services</h2>
@@ -275,12 +254,9 @@
             </div>
         </div>
     </section>
-
-    <!-- ===== Contact Us ===== -->
     <section class="contact" id="contact">
         <div class="container reveal">
             <div class="contact-title">Contact Us!</div>
-
             <div class="contact-top">
                 <div class="contact-left">
                     <h2>Don't hesitate to<br />contact us if you need<br />more help!</h2>
@@ -294,7 +270,6 @@
                     <p>Barangay Putatan Muntinlupa<br />facebook.com/putatanmuntinlupa.official</p>
                 </div>
             </div>
-
             <div class="hotlines-title">Hotlines</div>
             <div class="hot-card">
                 <div class="hot-tabs">
@@ -303,7 +278,6 @@
                 </div>
                 <div class="hot-body">
                     <div class="hot-search"><input type="text" id="hotSearch" placeholder="Search for.." /></div>
-
                     <table class="hot-table" id="tbl-emergency">
                         <thead><tr><th>Agency Name</th><th>Phone Number</th><th>Specialization</th><th>Coverage</th></tr></thead>
                         <tbody>
@@ -313,7 +287,6 @@
                             <tr><td data-label="Agency Name">Barangay Police</td><td data-label="Phone Number"><a href="tel:86600287">86600287</a></td><td data-label="Specialization">Safety &amp; Security</td><td data-label="Coverage">Barangay Putatan</td></tr>
                         </tbody>
                     </table>
-
                     <table class="hot-table" id="tbl-general" style="display:none">
                         <thead><tr><th>Agency Name</th><th>Phone Number</th><th>Specialization</th><th>Coverage</th></tr></thead>
                         <tbody>
@@ -321,7 +294,6 @@
                             <tr><td data-label="Agency Name">Violence Against Women &amp; Children</td><td data-label="Phone Number"><a href="tel:86600135">86600135</a></td><td data-label="Specialization">Protection &amp; Support for Women &amp; Children</td><td data-label="Coverage">Barangay Putatan</td></tr>
                         </tbody>
                     </table>
-
                     <div class="hot-pager">
                         <span>1 of 1</span>
                         <span class="pg">&laquo;</span>
@@ -334,35 +306,27 @@
             </div>
         </div>
     </section>
-
     <footer>&copy; 2026 BSMS All rights reserved.</footer>
-
+    
     <!-- ===== Login Modal ===== -->
-    <div class="modal-backdrop @(openModal ? "open" : "")" id="loginModal">
+    <div class="modal-backdrop @(openLoginModal ? "open" : "")" id="loginModal">
         <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
             <button type="button" class="modal-close" id="closeLogin" aria-label="Close">&times;</button>
-
             <div class="avatar">
                 <img src="~/images/PUTATAN.ico" alt="PUTATAN logo" />
             </div>
             <h2 id="loginTitle">Sign In</h2>
-
-            <!-- In-update ang Login Form para magkaroon din ng asp-controller -->
             <form asp-action="Login" asp-controller="Account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger validation-summary"></div>
-
                 <div class="form-group">
                     <input asp-for="Username" class="form-control" placeholder="Username" autocomplete="off" />
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
-
                 <div class="form-group">
-                    <input asp-for="Password" class="form-control" placeholder="Password" />
+                    <input asp-for="Password" class="form-control" placeholder="Password" type="password" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-
                 <button type="submit" class="btn-login">Login</button>
-
                 <div class="login-options">
                     <label class="remember"><input type="checkbox" name="RememberMe" value="true" /> Remember Me</label>
                     <a href="#">Forgot Password</a>
@@ -370,50 +334,68 @@
             </form>
         </div>
     </div>
-
+    
     <!-- ===== Register Modal ===== -->
-    <div class="modal-backdrop" id="registerModal">
+    <div class="modal-backdrop @(openRegisterModal ? "open" : "")" id="registerModal">
         <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
             <button type="button" class="modal-close" id="closeRegister" aria-label="Close">&times;</button>
-
             <div class="avatar">
                 <img src="~/images/PUTATAN.ico" alt="PUTATAN logo" />
             </div>
             <h2 id="registerTitle">Create Account</h2>
-
-            <!-- In-update ang Register Form (Ito ang hiniling mo) -->
+            
+            @if (!string.IsNullOrEmpty(registerError))
+            {
+                <div class="server-error-box" id="registerErrorBox">@registerError</div>
+            }
+            else
+            {
+                <div class="server-error-box" id="registerErrorBox" style="display:none;"></div>
+            }
+            
+            <!-- Tinanggal na ang enctype="multipart/form-data" kasi wala ng file upload -->
             <form asp-action="Register" asp-controller="Account" method="post" id="registerForm">
-                
                 <div class="form-row">
                     <div class="form-group">
-                        <input name="Firstname" class="form-control" placeholder="First Name" required />
+                        <input name="Firstname" class="form-control" placeholder="First Name" required value="@regFirstname" />
                     </div>
                     <div class="form-group">
-                        <input name="Lastname" class="form-control" placeholder="Last Name" required />
+                        <input name="Lastname" class="form-control" placeholder="Last Name" required value="@regLastname" />
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <input name="Email" type="email" class="form-control" placeholder="Email Address" required />
+                    <select name="SatelliteOfficeId" class="form-control" required style="cursor: pointer; appearance: auto;">
+                        <option value="" disabled selected="@(selectedOfficeId == -1)">-- Select Satellite Office --</option>
+                        @if (ViewBag.SatelliteOffices != null)
+                        {
+                            foreach (var office in ViewBag.SatelliteOffices)
+                            {
+                                <option value="@office.id" selected="@(selectedOfficeId == office.id)">@office.facility_name</option>
+                            }
+                        }
+                    </select>
                 </div>
-                
                 <div class="form-group">
-                    <input name="Username" class="form-control" placeholder="Username" required minlength="4" />
+                    <input name="Email" type="email" class="form-control" placeholder="Email Address" required value="@regEmail" />
                 </div>
-
+                <div class="form-group">
+                    <input name="Username" class="form-control" placeholder="Username" required minlength="4" value="@regUsername" />
+                </div>
                 <div class="form-group">
                     <input name="Password" type="password" id="regPassword" class="form-control" placeholder="Password" required minlength="6" />
                 </div>
-                
                 <div class="form-group">
                     <input type="password" id="regConfirmPassword" class="form-control" placeholder="Confirm Password" required />
-                    <span id="passwordError" class="text-danger" style="display:none; margin-top:5px;">Passwords do not match</span>
+                    <span id="passwordError" class="inline-error">Passwords do not match</span>
                 </div>
-
+                
                 <button type="submit" class="btn-login" id="btnRegister">Register Account</button>
             </form>
         </div>
     </div>
+
+    <!-- TempData carried safely via data attributes -->
+    <div id="tempDataStore" data-success="@TempData["SuccessMessage"]" data-error="@TempData["ErrorMessage"]" style="display:none"></div>
 
     <script>
         (function () {
@@ -422,53 +404,75 @@
             var header = document.getElementById('siteHeader');
             var nav = document.getElementById('navLinks');
             var toggle = document.getElementById('menuToggle');
-
-            function openLoginModal() { closeMenu(); registerModal.classList.remove('open'); loginModal.classList.add('open'); document.body.style.overflow = 'hidden'; var u = loginModal.querySelector('input[name="Username"]'); if (u) setTimeout(function () { u.focus(); }, 350); }
-            function closeLoginModal() { loginModal.classList.remove('open'); checkBodyOverflow(); }
             
-            function openRegisterModal() { closeMenu(); loginModal.classList.remove('open'); registerModal.classList.add('open'); document.body.style.overflow = 'hidden'; var f = registerModal.querySelector('input[name="Firstname"]'); if (f) setTimeout(function () { f.focus(); }, 350); }
+            function checkBodyOverflow() {
+                if (!loginModal.classList.contains('open') && !registerModal.classList.contains('open')) {
+                    document.body.style.overflow = '';
+                }
+            }
+            function closeMenu() {
+                nav.classList.remove('open');
+                toggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+            function openLoginModal() {
+                closeMenu(); registerModal.classList.remove('open'); loginModal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                var u = loginModal.querySelector('input[name="Username"]');
+                if (u) setTimeout(function () { u.focus(); }, 350);
+            }
+            function closeLoginModal() { loginModal.classList.remove('open'); checkBodyOverflow(); }
+            function openRegisterModal() {
+                closeMenu(); loginModal.classList.remove('open'); registerModal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                var f = registerModal.querySelector('input[name="Firstname"]');
+                if (f) setTimeout(function () { f.focus(); }, 350);
+            }
             function closeRegisterModal() { registerModal.classList.remove('open'); checkBodyOverflow(); }
             
-            function checkBodyOverflow() { if(!loginModal.classList.contains('open') && !registerModal.classList.contains('open')){ document.body.style.overflow = ''; } }
-            function closeMenu() { nav.classList.remove('open'); toggle.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
-
-            // Trigger Modal Logics
             document.getElementById('openLogin').addEventListener('click', openLoginModal);
             document.getElementById('requestDoc').addEventListener('click', openLoginModal);
             document.getElementById('closeLogin').addEventListener('click', closeLoginModal);
-            
             document.getElementById('openRegister').addEventListener('click', openRegisterModal);
             document.getElementById('closeRegister').addEventListener('click', closeRegisterModal);
-
+            
             loginModal.addEventListener('click', function (e) { if (e.target === loginModal) closeLoginModal(); });
             registerModal.addEventListener('click', function (e) { if (e.target === registerModal) closeRegisterModal(); });
             
-            document.addEventListener('keydown', function (e) { 
-                if (e.key === 'Escape') { closeLoginModal(); closeRegisterModal(); } 
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') { closeLoginModal(); closeRegisterModal(); }
             });
-            if (loginModal.classList.contains('open')) document.body.style.overflow = 'hidden';
+            
+            if (loginModal.classList.contains('open') || registerModal.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            }
 
-            // Registration Form Password Validation
+            // ===== Register submit: validate password before anything is sent =====
             var regForm = document.getElementById('registerForm');
             var pw = document.getElementById('regPassword');
             var confirmPw = document.getElementById('regConfirmPassword');
             var pwError = document.getElementById('passwordError');
             
-            regForm.addEventListener('submit', function(e) {
+            regForm.addEventListener('submit', function (e) {
+                var ok = true;
                 if (pw.value !== confirmPw.value) {
-                    e.preventDefault();
                     pwError.style.display = 'block';
                     confirmPw.style.borderColor = '#e74c3c';
+                    ok = false;
                 } else {
                     pwError.style.display = 'none';
                     confirmPw.style.borderColor = '';
                 }
+                
+                if (!ok) {
+                    e.preventDefault(); 
+                    var errBox = document.getElementById('registerErrorBox');
+                    if (errBox) { errBox.style.display = 'none'; }
+                }
             });
             
-            // Clear Validation warnings on Input change
-            confirmPw.addEventListener('input', function() {
-                 pwError.style.display = 'none';
-                 confirmPw.style.borderColor = '';
+            confirmPw.addEventListener('input', function () {
+                pwError.style.display = 'none';
+                confirmPw.style.borderColor = '';
             });
 
             // Mobile menu
@@ -477,11 +481,11 @@
                 toggle.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
             });
             nav.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
-
+            
             // Header shadow on scroll
             function onScroll() { header.classList.toggle('scrolled', window.scrollY > 10); }
             window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
-
+            
             // Scroll reveal
             var items = document.querySelectorAll('.reveal');
             if ('IntersectionObserver' in window) {
@@ -490,17 +494,19 @@
                 }, { threshold: 0.12 });
                 items.forEach(function (el) { io.observe(el); });
             } else { items.forEach(function (el) { el.classList.add('show'); }); }
-
+            
             // Hotlines tabs + search
             var tabs = document.querySelectorAll('.hot-tab');
             var search = document.getElementById('hotSearch');
             var current = 'emergency';
+            
             function filter() {
                 var q = search.value.toLowerCase();
                 document.querySelectorAll('#tbl-' + current + ' tbody tr').forEach(function (r) {
                     r.style.display = r.textContent.toLowerCase().indexOf(q) > -1 ? '' : 'none';
                 });
             }
+            
             tabs.forEach(function (t) {
                 t.addEventListener('click', function () {
                     tabs.forEach(function (x) { x.classList.remove('active'); });
@@ -511,19 +517,15 @@
                     filter();
                 });
             });
+            
             search.addEventListener('input', filter);
             
-            // Simple Alert if there are messages from Controller
-            window.onload = function() {
-                var successMsg = '@(TempData["SuccessMessage"])';
-                var errorMsg = '@(TempData["ErrorMessage"])';
-                
-                if(successMsg) {
-                    alert(successMsg);
-                } else if(errorMsg) {
-                    alert(errorMsg);
-                }
-            };
+            // TempData alerts 
+            var tdStore = document.getElementById('tempDataStore');
+            var successMsg = tdStore ? (tdStore.getAttribute('data-success') || '') : '';
+            var errorMsg = tdStore ? (tdStore.getAttribute('data-error') || '') : '';
+            if (successMsg) { alert(successMsg); }
+            else if (errorMsg) { alert(errorMsg); }
         })();
     </script>
 </body>

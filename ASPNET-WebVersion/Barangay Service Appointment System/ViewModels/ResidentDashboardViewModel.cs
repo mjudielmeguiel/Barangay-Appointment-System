@@ -6,7 +6,6 @@ namespace Barangay_Service_Appointment_System.ViewModels
 {
     public class ResidentDashboardViewModel
     {
-        // ✅ GANITO LANG — sabihin sa compiler na laging may laman
         public Residence Resident { get; set; } = null!;
 
         public List<AppointmentModel> Appointments { get; set; } = new();
@@ -14,6 +13,7 @@ namespace Barangay_Service_Appointment_System.ViewModels
         public List<DocumentServiceModel> DocumentServicesList { get; set; } = new();
         public List<ServiceDetailModel> ServiceDetailsList { get; set; } = new();
         public List<RelativesModel> SavedRelatives { get; set; } = new();
+        public List<SatelliteOffice> SatelliteOffices { get; set; } = new();   // was DbSet<> (wrong)
 
         public AppointmentModel NewAppointment { get; set; } = new();
     }

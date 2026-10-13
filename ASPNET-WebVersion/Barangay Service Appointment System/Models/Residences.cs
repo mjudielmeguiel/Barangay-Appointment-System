@@ -26,14 +26,14 @@ namespace Barangay_Service_Appointment_System.Models
         public string? CivilStatus { get; set; }
         public string? Nationality { get; set; }
         public string? AccountStatus { get; set; }
-        public byte[]? Picture { get; set; }
+        public byte[]? Picture { get; set; } // VB.NET
+        public string? ProfileImagePath { get; set; }
         public string? FatherName { get; set; }
         public string? MotherName { get; set; }
         public byte[]? IdentificationFront { get; set; }
         public byte[]? IdentificationBack { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // Iba pang fields mula sa table mo — kung kailangan
         public int? DepartmentID { get; set; }
         public string? SatelliteOffice { get; set; }
         public int? SatelliteOfficeID { get; set; }

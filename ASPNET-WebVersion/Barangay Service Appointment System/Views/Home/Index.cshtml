@@ -1,4 +1,17 @@
 ﻿@model Barangay_Service_Appointment_System.ViewModels.ResidentDashboardViewModel
+@{
+    // Existing Profile Picture logic
+    bool hasPicture = Model.Resident?.Picture != null && Model.Resident.Picture.Length > 0;
+    string pictureUrl = Url.Action("GetProfilePicture", "Home", new { v = Model.Resident?.UpdatedAt?.Ticks ?? 0 })!;
+    string defaultPictureUrl = Url.Content("~/images/default-profile.png");
+
+    // NEW Valid ID logic
+    bool hasIdFront = Model.Resident?.IdentificationFront != null && Model.Resident.IdentificationFront.Length > 0;
+    string idFrontUrl = Url.Action("GetIdentificationFront", "Home", new { v = Model.Resident?.UpdatedAt?.Ticks ?? 0 })!;
+
+    bool hasIdBack = Model.Resident?.IdentificationBack != null && Model.Resident.IdentificationBack.Length > 0;
+    string idBackUrl = Url.Action("GetIdentificationBack", "Home", new { v = Model.Resident?.UpdatedAt?.Ticks ?? 0 })!;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +31,11 @@
                 --primary-blue: #1a2b56;
                 --success-green: #22c55e;
             }
+
             * {
                 box-sizing: border-box;
             }
+
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: var(--main-bg);
@@ -28,6 +43,7 @@
                 padding: 0;
                 overflow-x: hidden;
             }
+
             /* Top Navbar */
             .top-navbar {
                 background-color: var(--nav-bg);
@@ -42,11 +58,13 @@
                 right: 0;
                 z-index: 1050;
             }
+
             .navbar-brand-wrapper {
                 display: flex;
                 align-items: center;
                 width: 100%;
             }
+
             .navbar-logo {
                 height: 36px;
                 width: 36px;
@@ -57,6 +75,7 @@
                 margin-right: 10px;
                 flex-shrink: 0;
             }
+
             .navbar-title {
                 font-size: 0.95rem;
                 white-space: nowrap;
@@ -64,6 +83,7 @@
                 text-overflow: ellipsis;
                 margin: 0;
             }
+
             .btn-logout {
                 margin-left: auto;
                 display: inline-flex;
@@ -81,12 +101,14 @@
                 flex-shrink: 0;
                 transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s ease;
             }
+
                 .btn-logout:hover {
                     background: #fff;
                     color: var(--nav-bg);
                     border-color: #fff;
                     transform: translateY(-1px);
                 }
+
             .main-content {
                 margin-left: 0;
                 margin-top: 60px;
@@ -94,12 +116,14 @@
                 background-color: var(--main-bg);
                 padding: 24px 16px;
             }
+
             .content-wrapper {
                 max-width: 1500px;
                 margin: 0 auto;
                 width: 100%;
                 padding: 0 10px;
             }
+
             .profile-card {
                 background: white;
                 border: 1px solid var(--border-color);
@@ -109,6 +133,7 @@
                 margin-bottom: 20px;
                 box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             }
+
             .profile-img-wrapper {
                 width: 120px;
                 height: 120px;
@@ -117,11 +142,13 @@
                 margin: 0 auto 15px;
                 border: 4px solid #eef2ff;
             }
+
             .profile-img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
+
             .profile-name {
                 font-size: 1.15rem;
                 font-weight: 750;
@@ -132,6 +159,7 @@
                 white-space: normal;
                 line-height: 1.3;
             }
+
             .profile-role {
                 font-size: 0.75rem;
                 color: var(--text-muted);
@@ -139,21 +167,25 @@
                 letter-spacing: 0.5px;
                 margin-bottom: 15px;
             }
+
             .info-list {
                 list-style: none;
                 padding: 0;
                 margin: 15px 0 0 0;
                 text-align: left;
             }
+
             .info-item {
                 display: flex;
                 align-items: flex-start;
                 padding: 10px 0;
                 border-bottom: 1px dashed #f0f0f0;
             }
+
                 .info-item:last-child {
                     border-bottom: none;
                 }
+
             .info-icon {
                 width: 36px;
                 height: 36px;
@@ -166,19 +198,23 @@
                 flex-shrink: 0;
                 margin-top: 2px;
             }
+
             .info-text {
                 flex: 1;
                 min-width: 0;
             }
+
                 .info-text p {
                     margin: 0;
                     line-height: 1.4;
                 }
+
             .info-label {
                 font-size: 0.75rem;
                 color: #888;
                 margin-bottom: 2px;
             }
+
             .info-value {
                 font-size: 0.9rem;
                 color: #333;
@@ -186,6 +222,7 @@
                 overflow-wrap: anywhere;
                 word-break: normal;
             }
+
             .table-card {
                 background: white;
                 border: 1px solid var(--border-color);
@@ -193,11 +230,13 @@
                 padding: 24px;
                 box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             }
+
             .table-header-title {
                 color: var(--primary-blue);
                 font-weight: 700;
                 font-size: 1.1rem;
             }
+
             .btn-custom-dark {
                 background-color: var(--primary-blue);
                 color: white;
@@ -208,10 +247,12 @@
                 padding: 8px 14px;
                 transition: opacity 0.2s;
             }
+
                 .btn-custom-dark:hover {
                     opacity: 0.9;
                     color: #fff;
                 }
+
             .btn-custom-light {
                 background-color: #f8f9fa;
                 border: 1px solid #ddd;
@@ -220,10 +261,12 @@
                 border-radius: 6px;
                 padding: 8px 12px;
             }
+
             .custom-table {
                 width: 100%;
                 margin-top: 5px;
             }
+
                 .custom-table th {
                     font-size: 0.8rem;
                     color: var(--text-dark);
@@ -234,6 +277,7 @@
                     background-color: #f8f9fc;
                     white-space: nowrap;
                 }
+
                 .custom-table td {
                     font-size: 0.85rem;
                     padding: 12px 10px;
@@ -241,15 +285,14 @@
                     border-bottom: 1px solid #f0f0f0;
                     vertical-align: middle;
                 }
+
             .empty-table {
                 text-align: center;
                 padding: 35px 0;
                 color: #888;
                 font-size: 0.9rem;
             }
-            .fs-7 {
-                font-size: 0.75rem;
-            }
+
             .logout-icon {
                 width: 76px;
                 height: 76px;
@@ -262,6 +305,7 @@
                 justify-content: center;
                 font-size: 1.9rem;
             }
+
             .btn-edit-profile {
                 background-color: var(--primary-blue);
                 color: white;
@@ -271,54 +315,59 @@
                 width: 100%;
                 border: none;
             }
+
                 .btn-edit-profile:hover {
                     opacity: 0.9;
                     color: white;
                 }
-            /* ========== CLEAN MODAL STYLES — SAME DESIGN ========== */
+
             .modal-content {
                 border: none;
                 border-radius: 12px;
                 box-shadow: 0 10px 40px rgba(0,0,0,0.08);
             }
+
             .modal-header {
                 border-bottom: 1px solid #eee;
                 padding: 16px 24px;
                 background: transparent;
             }
+
             .modal-title {
                 font-weight: 600;
                 font-size: 1rem;
                 color: #111;
             }
-            .btn-close {
-                filter: none;
-                opacity: 1;
-            }
+
             .modal-body {
                 padding: 24px;
             }
+
             .modal-footer {
                 border-top: 1px solid #eee;
                 padding: 16px 24px;
                 background: transparent;
             }
+
             .form-label {
                 font-weight: 500;
                 font-size: 0.875rem;
                 color: #444;
                 margin-bottom: 6px;
             }
+
             .form-control, .form-select {
                 border-radius: 6px;
                 border: 1px solid #ddd;
                 padding: 8px 12px;
                 font-size: 0.875rem;
             }
+
                 .form-control:focus, .form-select:focus {
                     border-color: var(--primary-blue);
                     box-shadow: 0 0 0 2px rgba(26, 43, 86, 0.1);
                 }
+
             .btn-primary {
                 background-color: var(--primary-blue);
                 border: none;
@@ -326,9 +375,11 @@
                 font-size: 0.875rem;
                 border-radius: 6px;
             }
+
                 .btn-primary:hover {
                     background-color: #152449;
                 }
+
             .btn-secondary {
                 background-color: #f1f3f5;
                 border: none;
@@ -337,21 +388,21 @@
                 font-size: 0.875rem;
                 border-radius: 6px;
             }
+
                 .btn-secondary:hover {
                     background-color: #e5e7eb;
                     color: #333;
                 }
+
             .upload-zone {
                 border: 2px dashed #ddd;
                 border-radius: 8px;
                 padding: 20px;
                 text-align: center;
                 transition: all 0.2s;
+                background-color: #f9fafc;
             }
-                .upload-zone:hover {
-                    border-color: var(--primary-blue);
-                    background-color: #f9fafc;
-                }
+
             .section-title {
                 font-size: 0.875rem;
                 font-weight: 600;
@@ -362,16 +413,37 @@
                 padding-bottom: 8px;
                 border-bottom: 1px solid #eee;
             }
-            /* ========== ANIMATED SUCCESS CHECK ICON ========== */
+
+            /* Valid ID thumbnails (same look as the profile photo preview) */
+            .id-thumb {
+                width: 160px;
+                height: 100px;
+                object-fit: cover;
+                display: block;
+            }
+
+            .id-thumb-empty {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px dashed #ddd;
+                border-radius: 8px;
+                background: #f9fafc;
+                color: #bbb;
+                font-size: 1.8rem;
+            }
+
             .success-icon-wrapper {
                 width: 80px;
                 height: 80px;
                 margin: 0 auto 16px;
             }
+
             .success-checkmark {
                 width: 80px;
                 height: 80px;
             }
+
             .checkmark-circle {
                 stroke: var(--success-green);
                 stroke-width: 3;
@@ -380,6 +452,7 @@
                 stroke-linecap: round;
                 animation: fill-circle 0.5s ease-in-out forwards;
             }
+
             .checkmark-check {
                 stroke: #fff;
                 stroke-width: 3;
@@ -389,40 +462,16 @@
                 stroke-dashoffset: 48;
                 animation: draw-check 0.4s ease-in-out 0.4s forwards;
             }
+
             @@keyframes fill-circle {
-                to { stroke-dashoffset: 0; }
+                to {
+                    stroke-dashoffset: 0;
+                }
             }
+
             @@keyframes draw-check {
-                to { stroke-dashoffset: 0; }
-            }
-            @@media (max-width: 1199.98px) {
-                .profile-name {
-                    font-size: 1.05rem;
-                }
-            }
-            @@media (max-width: 575.98px) {
-                .top-navbar {
-                    padding: 0 10px;
-                }
-                .navbar-logo {
-                    width: 30px;
-                    height: 30px;
-                }
-                .profile-card {
-                    padding: 18px 12px;
-                }
-                .profile-name {
-                    font-size: 1rem;
-                }
-                .table-header-title {
-                    font-size: 1rem;
-                }
-                .btn-logout {
-                    padding: 5px 10px;
-                    font-size: 0.8rem;
-                }
-                .modal-body {
-                    padding: 16px;
+                to {
+                    stroke-dashoffset: 0;
                 }
             }
     </style>
@@ -438,19 +487,32 @@
             </button>
         </div>
     </nav>
+
     <!-- Main Content -->
     <main class="main-content">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mx-3" role="alert" style="max-width:1500px; margin:0 auto 16px;">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>@TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
         <div class="content-wrapper">
             <div class="row g-4">
                 <!-- Left Column: Profile Card -->
                 <div class="col-xl-3 col-lg-4">
                     <div class="profile-card">
                         <div class="profile-img-wrapper">
-                            @if (Model.Resident?.Picture != null)
+                            @if (hasPicture)
                             {
-                                var base64 = Convert.ToBase64String(Model.Resident.Picture);
-                                var imgSrc = $"data:image/jpeg;base64,{base64}";
-                                <img src="@imgSrc" alt="Profile" class="profile-img">
+                                <img src="@pictureUrl" alt="Profile" class="profile-img"
+                                     onerror="this.onerror=null;this.src='@defaultPictureUrl';" />
+                            }
+                            else if (!string.IsNullOrEmpty(Model.Resident?.ProfileImagePath))
+                            {
+                                <img src="@Model.Resident.ProfileImagePath" alt="Profile" class="profile-img"
+                                     onerror="this.onerror=null;this.src='@defaultPictureUrl';" />
                             }
                             else
                             {
@@ -512,6 +574,7 @@
                         </button>
                     </div>
                 </div>
+
                 <!-- Right Column: Tables -->
                 <div class="col-xl-9 col-lg-8">
                     <div class="table-card h-100">
@@ -529,6 +592,7 @@
                                 </a>
                             </div>
                         </div>
+
                         <!-- Appointments Table -->
                         <h6 class="text-muted small fw-semibold mb-2">Appointment Requests</h6>
                         <div class="table-responsive mb-4">
@@ -550,10 +614,10 @@
                                         {
                                             <tr>
                                                 <td class="fw-bold text-primary">@item.ControlNo</td>
-                                                <td>@item.RequestType</td>
+                                                <td>@item.AppointmentType</td>
                                                 <td>@item.Purpose</td>
                                                 <td class="d-none d-md-table-cell">@item.Department</td>
-                                                <td>@(item.DateSubmitted.HasValue ? item.DateSubmitted.Value.ToString("MM/dd") : "N/A")</td>
+                                                <td>@(item.PickupDate.HasValue ? item.PickupDate.Value.ToString("MM/dd/yyyy") : (item.DateSubmitted.HasValue ? item.DateSubmitted.Value.ToString("MM/dd/yyyy") : "N/A"))</td>
                                                 <td><span class="badge bg-warning text-dark">@item.Status</span></td>
                                             </tr>
                                         }
@@ -565,6 +629,7 @@
                                 </tbody>
                             </table>
                         </div>
+
                         <!-- Complaints Table -->
                         <h6 class="text-muted small fw-semibold mb-2">Submitted Complaints</h6>
                         <div class="table-responsive">
@@ -604,45 +669,49 @@
             </div>
         </div>
     </main>
+
     <!-- EDIT PROFILE MODAL -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editProfileModalLabel">Edit Personal Information</h5>
+                    <h5 class="modal-title" id="editProfileModalLabel">
+                        <i class="fa-solid fa-user-pen me-2"></i>Edit Personal Information
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form asp-controller="Home" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
-                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                    <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
                         <input type="hidden" name="ResidentID" value="@(Model.Resident?.ResidentID ?? 0)" />
-                        <h6 class="section-title">Personal Information</h6>
+
+                        <h6 class="text-primary fw-bold mb-3">Personal Information</h6>
                         <div class="row g-3 mb-4">
                             <div class="col-md-3">
-                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
                                 <input type="text" name="FirstName" value="@Model.Resident?.Firstname" class="form-control" required />
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Middle Name</label>
+                                <label class="form-label fw-semibold">Middle Name</label>
                                 <input type="text" name="MiddleName" value="@Model.Resident?.Middlename" class="form-control" />
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
                                 <input type="text" name="LastName" value="@Model.Resident?.Lastname" class="form-control" required />
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Suffix</label>
-                                <input type="text" name="Suffix" value="@Model.Resident?.Suffix" class="form-control" placeholder="Jr." />
+                                <label class="form-label fw-semibold">Suffix</label>
+                                <input type="text" name="Suffix" value="@Model.Resident?.Suffix" class="form-control" placeholder="Jr., III" />
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Birthday <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Birthday <span class="text-danger">*</span></label>
                                 <input type="date" name="Birthday" value="@(Model.Resident?.Birthday.HasValue == true ? Model.Resident.Birthday.Value.ToString("yyyy-MM-dd") : "")" class="form-control" required />
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Birthplace <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Birthplace <span class="text-danger">*</span></label>
                                 <input type="text" name="BirthPlace" value="@Model.Resident?.BirthPlace" class="form-control" required />
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Gender <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
                                 @{
                                     string selectedGender = Model.Resident?.Gender ?? "";
                                 }
@@ -654,7 +723,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Civil Status <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Civil Status <span class="text-danger">*</span></label>
                                 @{
                                     string selectedCivilStatus = Model.Resident?.CivilStatus ?? "";
                                 }
@@ -667,149 +736,115 @@
                                 </select>
                             </div>
                             <div class="col-md-12">
-                                <label class="form-label">Nationality</label>
+                                <label class="form-label fw-semibold">Nationality</label>
                                 <input type="text" name="Nationality" value="@(string.IsNullOrWhiteSpace(Model.Resident?.Nationality) ? "Filipino" : Model.Resident.Nationality)" class="form-control" />
                             </div>
                         </div>
-                        <h6 class="section-title">Parents Information</h6>
+
+                        <h6 class="text-primary fw-bold mb-3">Parents Information</h6>
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <label class="form-label">Father's Full Name</label>
+                                <label class="form-label fw-semibold">Father's Full Name</label>
                                 <input type="text" name="FatherName" value="@Model.Resident?.FatherName" class="form-control" placeholder="Juan Dela Cruz" />
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Mother's Full Name</label>
+                                <label class="form-label fw-semibold">Mother's Full Name</label>
                                 <input type="text" name="MotherName" value="@Model.Resident?.MotherName" class="form-control" placeholder="Maria Dela Cruz" />
                             </div>
                         </div>
-                        <h6 class="section-title">Contact Information</h6>
+
+                        <h6 class="text-primary fw-bold mb-3">Contact Information</h6>
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" name="Email" value="@Model.Resident?.Email" class="form-control" required />
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Mobile Number <span class="text-danger">*</span></label>
                                 <input type="text" name="MobileNumber" value="@Model.Resident?.MobileNumber" class="form-control" required />
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Complete Address <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Complete Address <span class="text-danger">*</span></label>
                                 <textarea name="Address" class="form-control" rows="2" required>@Model.Resident?.Address</textarea>
                             </div>
                         </div>
-                        <h6 class="section-title">Photos & Identification</h6>
+
+                        <h6 class="text-primary fw-bold mb-3">Photos & Identification</h6>
                         <div class="row g-3">
+                            <!-- Profile Photo -->
                             <div class="col-md-4">
-                                <label class="form-label">Profile Photo</label>
-                                <input type="file" name="ProfilePicture" class="form-control" accept="image/*" />
-                                <small class="text-muted d-block mt-1">Leave blank to keep current.</small>
+                                <label class="form-label fw-semibold">Profile Photo</label>
+                                <input type="file" name="ProfilePicture" class="form-control bg-light" accept="image/png,image/jpeg,image/webp" />
+                                <small class="text-muted d-block mt-1">Upload your profile picture (Max 5MB)</small>
+                                <small id="pictureError" class="text-danger fw-semibold d-block mt-1"></small>
+                                <img id="picturePreview"
+                                     src="@(hasPicture ? pictureUrl : defaultPictureUrl)"
+                                     alt="Current Profile" class="mt-2 rounded"
+                                     style="width: 100px; height: 100px; object-fit: cover;"
+                                     onerror="this.onerror=null;this.src='@defaultPictureUrl';" />
                             </div>
+
+                            <!-- Valid ID (Front) -->
                             <div class="col-md-4">
-                                <label class="form-label">Valid ID (Front)</label>
-                                <input type="file" name="IdentificationFront" class="form-control" accept="image/*" />
-                                <small class="text-muted d-block mt-1">Leave blank to keep current.</small>
+                                <label class="form-label fw-semibold">Valid ID (Front)</label>
+                                <input type="file" name="IdentificationFront" class="form-control bg-light" accept="image/png,image/jpeg,image/webp" />
+                                <small class="text-muted d-block mt-1">Upload front of valid ID (Max 5MB)</small>
+                                <small id="idFrontError" class="text-danger fw-semibold d-block mt-1"></small>
+                                <img id="idFrontPreview"
+                                     src="@(hasIdFront ? idFrontUrl : "")"
+                                     alt="Front ID" class="mt-2 rounded @(hasIdFront ? "" : "d-none")"
+                                     style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ddd;" />
                             </div>
+
+                            <!-- Valid ID (Back) -->
                             <div class="col-md-4">
-                                <label class="form-label">Valid ID (Back)</label>
-                                <input type="file" name="IdentificationBack" class="form-control" accept="image/*" />
-                                <small class="text-muted d-block mt-1">Leave blank to keep current.</small>
+                                <label class="form-label fw-semibold">Valid ID (Back)</label>
+                                <input type="file" name="IdentificationBack" class="form-control bg-light" accept="image/png,image/jpeg,image/webp" />
+                                <small class="text-muted d-block mt-1">Upload back of valid ID (Max 5MB)</small>
+                                <small id="idBackError" class="text-danger fw-semibold d-block mt-1"></small>
+                                <img id="idBackPreview"
+                                     src="@(hasIdBack ? idBackUrl : "")"
+                                     alt="Back ID" class="mt-2 rounded @(hasIdBack ? "" : "d-none")"
+                                     style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ddd;" />
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <div class="modal-footer bg-light px-4 py-3">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
     <!-- CREATE APPOINTMENT MODAL -->
     <div class="modal fade" id="createAppointmentModal" tabindex="-1" aria-labelledby="createAppointmentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createAppointmentModalLabel">Create Request</h5>
+                    <h5 class="modal-title" id="createAppointmentModalLabel"><i class="fa-solid fa-calendar-plus me-2"></i>Create Appointment Request</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form asp-controller="Home" asp-action="CreateAppointment" method="post" enctype="multipart/form-data">
                     <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
-                        <input type="hidden" asp-for="NewAppointment.ResidentID" value="@Model.Resident?.ResidentID" />
-                        <h6 class="section-title">Service Information</h6>
+                        <input type="hidden" name="NewAppointment.ResidentID" value="@(Model.Resident?.ResidentID ?? 0)" />
+
+                        <h6 class="section-title">Appointment & Pickup Details</h6>
                         <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Request For</label>
-                                <select asp-for="NewAppointment.RequestFor" id="requestForSelect" class="form-select" required>
-                                    <option value="Self">For Myself</option>
-                                    <option value="Family Member / Relative">Family Member / Relative</option>
-                                    <option value="Representative / On Behalf">Representative / On Behalf</option>
-                                </select>
-                            </div>
                             <div class="col-md-6">
                                 <label class="form-label">Request Type</label>
                                 <select asp-for="NewAppointment.RequestType" id="documentServiceSelect" class="form-select" required>
                                     <option value="">Select...</option>
-                                    @foreach (var service in Model.DocumentServicesList)
+                                    @if (Model.DocumentServicesList != null)
                                     {
-                                        <option value="@service.ServiceName" data-serviceid="@service.ID">@service.ServiceName</option>
+                                        foreach (var service in Model.DocumentServicesList)
+                                        {
+                                            <option value="@service.ServiceName" data-serviceid="@service.ID">@service.ServiceName</option>
+                                        }
                                     }
                                 </select>
                             </div>
-                        </div>
-                        <h6 class="section-title">Personal Information</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-12">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" value="@Model.Resident?.FullName" class="form-control bg-light" disabled />
-                                <input type="hidden" asp-for="NewAppointment.FullName" value="@Model.Resident?.FullName" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Email Address</label>
-                                <input type="text" value="@Model.Resident?.Email" class="form-control bg-light" disabled />
-                                <input type="hidden" asp-for="NewAppointment.EmailAddress" value="@Model.Resident?.Email" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Phone Number</label>
-                                <input type="text" value="@Model.Resident?.MobileNumber" class="form-control bg-light" disabled />
-                                <input type="hidden" asp-for="NewAppointment.PhoneNumber" value="@Model.Resident?.MobileNumber" />
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Full Address</label>
-                                <textarea class="form-control bg-light" rows="2" disabled>@Model.Resident?.Address</textarea>
-                                <input type="hidden" asp-for="NewAppointment.FullAddress" value="@Model.Resident?.Address" />
-                            </div>
-                        </div>
-                        <div id="relativeFormSection" style="display: none;" class="p-3 mb-4 bg-light rounded border">
-                            <h6 class="section-title mb-3">Other Person / Relative Information</h6>
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" name="RelativeFirstname" class="form-control" />
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" name="RelativeLastname" class="form-control" />
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Relationship</label>
-                                    <input type="text" name="RelativeRelationship" class="form-control" placeholder="Mother, Son, etc." />
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Mobile Number</label>
-                                    <input type="text" name="RelativeMobileNumber" class="form-control" />
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="text" name="RelativeEmail" class="form-control" />
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">Address</label>
-                                    <textarea name="RelativeAddress" class="form-control" rows="2"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <h6 class="section-title">Appointment Details</h6>
-                        <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label">Department</label>
                                 <select asp-for="NewAppointment.Department" class="form-select" required>
@@ -821,24 +856,57 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Appointment Date</label>
-                                <input type="date" asp-for="NewAppointment.AppointmentDate" class="form-control" required />
+                                <label class="form-label">Pickup Date</label>
+                                <input type="date" asp-for="NewAppointment.PickupDate" id="txtPickupDate" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
+                                <small class="text-muted">Weekends and Admin Holidays are disabled.</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Pickup Time</label>
+                                <input type="time" asp-for="NewAppointment.PickupTime" class="form-control" required />
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label">Purpose</label>
                                 <select asp-for="NewAppointment.Purpose" id="purposeSelect" class="form-select" required disabled>
                                     <option value="">Select Service First...</option>
-                                    @foreach (var detail in Model.ServiceDetailsList)
+                                    @if (Model.ServiceDetailsList != null)
                                     {
-                                        <option value="@detail.Purpose" data-serviceid="@detail.Service_ID" style="display:none;">@detail.Purpose</option>
+                                        foreach (var detail in Model.ServiceDetailsList)
+                                        {
+                                            <option value="@detail.Purpose" data-serviceid="@detail.Service_ID">@detail.Purpose</option>
+                                        }
                                     }
                                 </select>
                             </div>
                         </div>
+
+                        <h6 class="section-title">Personal Information</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" value="@Model.Resident?.FullName" class="form-control bg-light" disabled />
+                                <input type="hidden" name="NewAppointment.FullName" value="@Model.Resident?.FullName" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="text" value="@Model.Resident?.Email" class="form-control bg-light" disabled />
+                                <input type="hidden" name="NewAppointment.EmailAddress" value="@Model.Resident?.Email" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" value="@Model.Resident?.MobileNumber" class="form-control bg-light" disabled />
+                                <input type="hidden" name="NewAppointment.PhoneNumber" value="@Model.Resident?.MobileNumber" />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Full Address</label>
+                                <textarea class="form-control bg-light" rows="2" disabled>@Model.Resident?.Address</textarea>
+                                <input type="hidden" name="NewAppointment.FullAddress" value="@Model.Resident?.Address" />
+                            </div>
+                        </div>
+
                         <h6 class="section-title">Proof and Documentation</h6>
                         <div class="upload-zone">
-                            <input type="file" asp-for="NewAppointment.ProofDocument" class="form-control" style="border: none; padding: 0;" />
-                            <small class="text-muted d-block mt-2">Upload image or document (optional)</small>
+                            <input type="file" name="AppointmentProofPicture" class="form-control bg-light" accept="image/png,image/jpeg,image/webp" />
+                            <small class="text-muted d-block mt-2">Upload any required supporting document or receipt photo (Max 5MB)</small>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -849,6 +917,7 @@
             </div>
         </div>
     </div>
+
     <!-- SUBMIT COMPLAINT MODAL -->
     <div class="modal fade" id="complaintModal" tabindex="-1" aria-labelledby="complaintModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -896,8 +965,8 @@
                             <div class="col-12">
                                 <label class="form-label">Upload Photo / Evidence</label>
                                 <div class="upload-zone">
-                                    <input type="file" name="ComplaintPhoto" class="form-control" accept="image/*" style="border: none; padding: 0;" />
-                                    <small class="text-muted d-block mt-2">Optional — add photo as proof</small>
+                                    <input type="file" name="ComplaintPhoto" class="form-control bg-light" accept="image/*" style="border: none; padding: 0;" />
+                                    <small class="text-muted d-block mt-2">Optional evidence upload (Max 5MB)</small>
                                 </div>
                             </div>
                             <div class="col-12 mt-2">
@@ -918,6 +987,7 @@
             </div>
         </div>
     </div>
+
     <!-- LOGOUT CONFIRMATION MODAL -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
@@ -936,14 +1006,14 @@
             </div>
         </div>
     </div>
-    <!-- SUCCESS MODAL — WITH ANIMATED CHECK ICON -->
+
+    <!-- SUCCESS MODAL -->
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body text-center py-4">
-                        <!-- Animated Check Icon -->
                         <div class="success-icon-wrapper">
                             <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
                                 <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"></circle>
@@ -983,8 +1053,85 @@
                 });
         </script>
     }
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+            // Load admin holidays passed from backend ViewBag securely
+            const adminHolidays = @Html.Raw(Json.Serialize(ViewBag.HolidayDates ?? new List<string>()));
+
+            document.addEventListener("DOMContentLoaded", function() {
+                // --- BULLETPROOF DROPDOWN FILTERING ---
+                const serviceSelect = document.getElementById('documentServiceSelect');
+                const purposeSelect = document.getElementById('purposeSelect');
+
+                if (serviceSelect && purposeSelect) {
+                    const purposeData = [];
+                    Array.from(purposeSelect.options).forEach(opt => {
+                        if (opt.value) {
+                            purposeData.push({
+                                value: opt.value,
+                                text: opt.text,
+                                serviceId: opt.getAttribute('data-serviceid')
+                            });
+                        }
+                    });
+
+                    serviceSelect.addEventListener('change', function() {
+                        const selectedServiceId = this.options[this.selectedIndex].getAttribute('data-serviceid');
+
+                        purposeSelect.value = "";
+                        purposeSelect.innerHTML = '';
+
+                        const defaultOpt = document.createElement('option');
+                        defaultOpt.value = '';
+                        defaultOpt.text = selectedServiceId ? 'Select Purpose...' : 'Select Service First...';
+                        purposeSelect.appendChild(defaultOpt);
+
+                        if (!selectedServiceId) {
+                            purposeSelect.disabled = true;
+                            return;
+                        }
+
+                        purposeSelect.disabled = false;
+
+                        purposeData.forEach(data => {
+                            if (data.serviceId === selectedServiceId) {
+                                const opt = document.createElement('option');
+                                opt.value = data.value;
+                                opt.text = data.text;
+                                purposeSelect.appendChild(opt);
+                            }
+                        });
+                    });
+                }
+
+                // --- WEEKEND & HOLIDAY BLOCKING FOR APPOINTMENTS ---
+                const pickupDateInput = document.getElementById('txtPickupDate');
+                if (pickupDateInput) {
+                    pickupDateInput.addEventListener('change', function() {
+                        const selectedDateStr = this.value;
+                        if (!selectedDateStr) return;
+
+                        const selectedDate = new Date(selectedDateStr);
+                        const dayOfWeek = selectedDate.getDay();
+
+                        // 0 = Sunday, 6 = Saturday
+                        if (dayOfWeek === 0 || dayOfWeek === 6) {
+                            alert('Appointments cannot be scheduled on weekends.');
+                            this.value = '';
+                            return;
+                        }
+
+                        // Check against admin holidays
+                        if (adminHolidays.includes(selectedDateStr)) {
+                            alert('This date has been marked as a Holiday by the administrator and is unavailable for appointments.');
+                            this.value = '';
+                            return;
+                        }
+                    });
+                }
+            });
+
             function checkProfileComplete() {
                 const fields = [
                     '@Model.Resident?.Firstname',
@@ -999,6 +1146,7 @@
                 ];
                 return fields.every(f => f !== '' && f !== 'N/A' && f !== 'False');
             }
+
             document.getElementById('btnCreateRequest').addEventListener('click', function() {
                 if (checkProfileComplete()) {
                     new bootstrap.Modal(document.getElementById('createAppointmentModal')).show();
@@ -1007,35 +1155,51 @@
                     new bootstrap.Modal(document.getElementById('editProfileModal')).show();
                 }
             });
+
             document.getElementById('btnSubmitComplaint').addEventListener('click', function() {
-                if (checkProfileComplete()) {
+                if (checkProfileComplete()) { 
                     new bootstrap.Modal(document.getElementById('complaintModal')).show();
                 } else {
                     alert('Please complete your profile first before submitting a complaint.');
                     new bootstrap.Modal(document.getElementById('editProfileModal')).show();
                 }
             });
-            document.getElementById('requestForSelect').addEventListener('change', function() {
-                document.getElementById('relativeFormSection').style.display = this.value !== 'Self' ? 'block' : 'none';
-            });
-            document.getElementById('documentServiceSelect').addEventListener('change', function() {
-                const serviceId = this.options[this.selectedIndex].getAttribute('data-serviceid');
-                const purposeSelect = document.getElementById('purposeSelect');
-                purposeSelect.value = "";
-                if (!serviceId) {
-                    purposeSelect.disabled = true;
-                    purposeSelect.querySelectorAll('option').forEach(o => { if (o.value) o.style.display = 'none'; });
-                    return;
+
+            // Generic function to handle image previews
+            function setupImagePreview(inputId, errorId, previewId) {
+                const input = document.querySelector(`input[name="${inputId}"]`);
+                if (input) {
+                    input.addEventListener('change', function() {
+                        const err = document.getElementById(errorId);
+                        const preview = document.getElementById(previewId);
+
+                        if (err) err.textContent = '';
+
+                        const file = this.files[0];
+                        if (!file) return;
+
+                        if (!file.type.startsWith('image/')) {
+                            if (err) err.textContent = 'Please choose an image file (JPG or PNG).';
+                            this.value = '';
+                            return;
+                        }
+                        if (file.size > 5 * 1024 * 1024) {
+                            if (err) err.textContent = 'Photo is too large. Maximum is 5MB.';
+                            this.value = '';
+                            return;
+                        }
+                        if (preview) {
+                            preview.src = URL.createObjectURL(file);
+                            preview.classList.remove('d-none'); // Reveal the img tag if it was hidden
+                        }
+                    });
                 }
-                purposeSelect.disabled = false;
-                purposeSelect.querySelectorAll('option').forEach(o => {
-                    o.style.display = !o.value || o.getAttribute('data-serviceid') === serviceId ? 'block' : 'none';
-                });
-            });
+            }
 
-            // (optional) other handlers, e.g., geolocation or form defaults
-            // close any remaining event listeners above
-
-        </script>
-    </body>
+            // Initialize previews for all 3 file inputs
+            setupImagePreview('ProfilePicture', 'pictureError', 'picturePreview');
+            setupImagePreview('IdentificationFront', 'idFrontError', 'idFrontPreview');
+            setupImagePreview('IdentificationBack', 'idBackError', 'idBackPreview');
+    </script>
+</body>
 </html>
